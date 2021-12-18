@@ -625,6 +625,11 @@ export function isCakeDay(published: string): boolean {
   );
 }
 
+export function isAccountNew(published: string): boolean {
+  let accountCreated = moment(published);
+  return accountCreated.isAfter(moment().subtract(14, "days"));
+}
+
 export function toast(text: string, background = "success") {
   if (isBrowser()) {
     let backgroundColor = `var(--${background})`;

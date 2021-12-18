@@ -1,9 +1,10 @@
 import { Component } from "inferno";
 import { Link } from "inferno-router";
 import { PersonSafe } from "lemmy-js-client";
-import { hostname, isCakeDay, showAvatars } from "../../utils";
+import { hostname, isAccountNew, isCakeDay, showAvatars } from "../../utils";
 import { PictrsImage } from "../common/pictrs-image";
 import { CakeDay } from "./cake-day";
+import { Sprout } from "./sprout";
 
 interface PersonListingProps {
   person: PersonSafe;
@@ -65,6 +66,7 @@ export class PersonListing extends Component<PersonListingProps, any> {
           </a>
         )}
 
+        {isAccountNew(person.published) && <Sprout />}
         {isCakeDay(person.published) && <CakeDay creatorName={apubName} />}
       </>
     );
