@@ -240,25 +240,30 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                 <Icon icon="shield" inline classes={`text-danger mr-2`} />
               )}
               {isMod_ && (
-                <div className="badge badge-light d-none d-sm-inline mr-2">
-                  {i18n.t("mod")}
+                <div className="badge badge-light d-sm-inline mr-1 mod-badge">
+                  M
                 </div>
               )}
               {isAdmin_ && (
-                <div className="badge badge-light d-none d-sm-inline mr-2">
-                  {i18n.t("admin")}
+                <div className="badge badge-light d-sm-inline mr-1 admin-badge">
+                  A
                 </div>
               )}
               {this.isPostCreator && (
-                <div className="badge badge-light d-none d-sm-inline mr-2">
-                  {i18n.t("creator")}
+                <div className="badge badge-light d-sm-inline mr-1 creator-badge">
+                  <Icon icon="hexagon" inline />
                 </div>
               )}
               {cv.creator.bot_account && (
-                <div className="badge badge-light d-none d-sm-inline mr-2">
+                <div className="badge badge-light d-sm-inline mr-1">
                   {i18n.t("bot_account").toLowerCase()}
                 </div>
               )}
+              {/* {(cv.creator_banned_from_community || isBanned(cv.creator)) && (
+                <div className="badge badge-danger mr-1">
+                  {i18n.t("banned")}
+                </div>
+              )} */}
               {this.props.showCommunity && (
                 <>
                   <span className="mx-1">{i18n.t("to")}</span>
@@ -270,7 +275,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                 </>
               )}
               <button
-                className="btn btn-sm text-muted"
+                className="btn btn-sm text-muted hexbear-collapse"
                 onClick={linkEvent(this, this.handleCommentCollapse)}
                 aria-label={this.expandText}
                 data-tippy-content={this.expandText}
@@ -290,7 +295,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                 }
               </span>
               {/* This is an expanding spacer for mobile */}
-              <div className="mr-lg-5 flex-grow-1 flex-lg-grow-0 unselectable pointer mx-2" />
+              {/* <div className="mr-lg-5 flex-grow-1 flex-lg-grow-0 unselectable pointer mx-2"></div> */}
               {showScores() && (
                 <>
                   <a
@@ -305,6 +310,10 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                         formattedCount: numToSI(this.state.score),
                       })}
                     >
+                      <Icon
+                        icon="hexbear"
+                        classes="icon-inline mr-1 mb-1 hexbear-score-icon"
+                      />
                       {numToSI(this.state.score)}
                     </span>
                   </a>
@@ -1060,11 +1069,6 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
         >
           <Icon icon="link" classes="icon-inline" />
         </Link>
-        {
-          <a className={classnames} title={title} href={cv.comment.ap_id}>
-            <Icon icon="fedilink" classes="icon-inline" />
-          </a>
-        }
       </>
     );
   }

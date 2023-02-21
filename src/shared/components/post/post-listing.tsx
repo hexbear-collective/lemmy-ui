@@ -155,11 +155,28 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
         {!this.state.showEdit ? (
           <>
             {this.listing()}
-            {this.state.imageExpanded && !this.props.hideImage && this.img}
-            {post.url && this.showBody && post.embed_title && (
-              <MetadataCard post={post} />
-            )}
-            {this.showBody && this.body()}
+            {/* Hide for mobile view*/}
+            <div className="d-none d-sm-block">
+              {this.state.imageExpanded &&
+                !this.props.hideImage &&
+                !post.embed_video_url &&
+                this.img}
+              {post.url &&
+                this.showBody &&
+                post.embed_title &&
+                !post.embed_video_url && <MetadataCard post={post} />}
+              {post.url && this.showBody && post.embed_video_url && (
+                <div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 75%;">
+                  <iframe
+                    src={post.embed_video_url}
+                    style="border: 0; top: 0; left: 0; width: 100%; height: 100%; position: absolute;"
+                    scrolling="no"
+                    allow="encrypted-media; accelerometer; clipboard-write; gyroscope; picture-in-picture; web-share"
+                  ></iframe>
+                </div>
+              )}
+              {this.showBody && this.body()}
+            </div>
           </>
         ) : (
           <div className="col-12">
@@ -317,6 +334,170 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     }
   }
 
+  hexbear_thumbnail() {
+    let post = this.props.post_view.post;
+    let url = post.url;
+    let thumbnail = post.thumbnail_url;
+
+    if (!this.props.hideImage && url && isImage(url) && this.imageSrc) {
+      return (
+        <a
+          href={this.imageSrc}
+          className="text-body d-inline-block position-relative mb-2"
+          data-tippy-content={i18n.t("expand_here")}
+          onClick={linkEvent(this, this.handleImageExpandClick)}
+          aria-label={i18n.t("expand_here")}
+        >
+          {this.imgThumb(this.imageSrc)}
+          <Icon icon="image" classes="mini-overlay" />
+        </a>
+      );
+    } else if (!this.props.hideImage && url && thumbnail && this.imageSrc) {
+      return (
+        <a
+          className="text-body d-inline-block position-relative mb-2"
+          href={url}
+          onClick={linkEvent(this, this.handleImageExpandClick)}
+          rel={relTags}
+          title={url}
+        >
+          {this.imgThumb(this.imageSrc)}
+          <Icon icon="external-link" classes="mini-overlay" />
+        </a>
+      );
+    } else if (url) {
+      if (!this.props.hideImage && isVideo(url)) {
+        return (
+          <div className="embed-responsive embed-responsive-16by9">
+            <video
+              playsInline
+              muted
+              loop
+              controls
+              className="embed-responsive-item"
+            >
+              <source src={url} type="video/mp4" />
+            </video>
+          </div>
+        );
+      } else {
+        return (
+          <a className="text-body" href={url} title={url} rel={relTags}>
+            <div className="thumbnail rounded bg-light d-flex justify-content-center">
+              <Icon icon="external-link" classes="d-flex align-items-center" />
+            </div>
+          </a>
+        );
+      }
+    } else {
+      return (
+        <div
+          className="thumbnail rounded bg-light d-flex justify-content-center pointer"
+          data-tippy-content={i18n.t("expand_here")}
+          onClick={linkEvent(this, this.handleImageExpandClick)}
+        >
+          <Icon icon="message-square" classes="d-flex align-items-center" />
+        </div>
+      );
+    }
+  }
+
+  hexbear_mobileBody() {
+    let body = this.props.post_view.post.body;
+    const longPost = body && body.length > 300;
+    return body ? (
+      <div
+        className={`col-12 card my-2 p-2 collapsed-content ${
+          this.showBody || !longPost ? "expanded" : ""
+        }`}
+      >
+        {this.state.viewSource ? (
+          <pre>{body}</pre>
+        ) : (
+          <div className="md-div" dangerouslySetInnerHTML={mdToHtml(body)} />
+        )}
+      </div>
+    ) : (
+      <></>
+    );
+  }
+
+  hexbear_mobileActionLine() {
+    return (
+      <div className="d-flex flex-wrap hexbear-mobileActionLine">
+        {!this.props.viewOnly && this.mobileVotes}
+        {UserService.Instance.myUserInfo && !this.props.viewOnly && (
+          <div>{this.saveButton}</div>
+        )}
+        {this.commentsButton(true)}
+        {this.showMoreButton}
+        {this.state.showAdvanced && (
+          <>
+            {!this.myPost && (
+              <>
+                {this.reportButton}
+                {this.blockButton}
+              </>
+            )}
+            {this.myPost && (this.showBody || this.state.showAdvanced) && (
+              <>
+                {this.editButton}
+                {this.deleteButton}
+              </>
+            )}
+            {this.canModOnSelf_ && (
+              <>
+                {this.lockButton}
+                {this.featureButton}
+              </>
+            )}
+            {(this.canMod_ || this.canAdmin_) && <>{this.modRemoveButton}</>}
+          </>
+        )}
+      </div>
+    );
+  }
+
+  hexbear_mobileContent() {
+    let post = this.props.post_view.post;
+    return (
+      <div className="row">
+        <div className="col-12">
+          {this.createdLine()}
+
+          {/* If it has a thumbnail, do a right aligned thumbnail */}
+          <span onClick={linkEvent(this, this.handleImageExpandClick)}>
+            {this.mobileThumbnail()}
+          </span>
+
+          {/* Show a preview of the post body */}
+          {!post.embed_video_url && (
+            <div
+              className={`collapsed-image collapsed-content ${
+                this.showBody ? "expanded" : ""
+              }`}
+            >
+              {this.img}
+            </div>
+          )}
+          {post.embed_video_url && (
+            <div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 75%;">
+              <iframe
+                src={post.embed_video_url}
+                style="border: 0; top: 0; left: 0; width: 100%; height: 100%; position: absolute;"
+                scrolling="no"
+                allow="encrypted-media; accelerometer; clipboard-write; gyroscope; picture-in-picture; web-share"
+              ></iframe>
+            </div>
+          )}
+          {this.hexbear_mobileBody()}
+
+          {this.hexbear_mobileActionLine()}
+        </div>
+      </div>
+    );
+  }
+
   createdLine() {
     let post_view = this.props.post_view;
     let url = post_view.post.url;
@@ -327,15 +508,22 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
           <PersonListing person={post_view.creator} />
 
           {this.creatorIsMod_ && (
-            <span className="mx-1 badge badge-light">{i18n.t("mod")}</span>
+            <span className="mx-1 badge badge-light mod-badge">M</span>
           )}
           {this.creatorIsAdmin_ && (
-            <span className="mx-1 badge badge-light">{i18n.t("admin")}</span>
+            <span className="mx-1 badge badge-light admin-badge">A</span>
           )}
           {post_view.creator.bot_account && (
             <span className="mx-1 badge badge-light">
               {i18n.t("bot_account").toLowerCase()}
             </span>
+          )}
+          {/* {(post_view.creator_banned_from_community ||
+            isBanned(post_view.creator)) && (
+            <span className="mx-1 badge badge-danger">{i18n.t("banned")}</span>
+          )} */}
+          {post_view.creator_blocked && (
+            <span className="mx-1 badge badge-danger">{"blocked"}</span>
           )}
           {this.props.showCommunity && (
             <span>
@@ -483,6 +671,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
           ) : (
             this.postLink
           )}
+          {/* Removed for HexBear
           {(url && isImage(url)) ||
             (post.thumbnail_url && (
               <button
@@ -498,6 +687,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
                 />
               </button>
             ))}
+             */}
           {post.removed && (
             <small className="ml-2 text-muted font-italic">
               {i18n.t("removed")}
@@ -572,7 +762,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
 
     return (
       <div className="d-flex justify-content-start flex-wrap text-muted font-weight-bold mb-1">
-        {this.commentsButton}
+        {this.commentsButton(false)}
         {canShare() && (
           <button
             className="btn btn-link"
@@ -642,7 +832,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     );
   }
 
-  get commentsButton() {
+  commentsButton(isMobile = false) {
     let post_view = this.props.post_view;
     return (
       <button className="btn btn-link text-muted py-0 pl-0">
@@ -652,17 +842,20 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
             count: Number(post_view.counts.comments),
             formattedCount: Number(post_view.counts.comments),
           })}
-          to={`/post/${post_view.post.id}?scrollToComments=true`}
+          to={`/post/${post_view.post.id}`}
         >
           <Icon icon="message-square" classes="mr-1" inline />
-          <span className="mr-2">
-            {i18n.t("number_of_comments", {
-              count: Number(post_view.counts.comments),
-              formattedCount: numToSI(post_view.counts.comments),
-            })}
-          </span>
+          {!isMobile && (
+            <span className="mr-2">
+              {i18n.t("number_of_comments", {
+                count:  Number(post_view.counts.comments),
+                formattedCount: numToSI(post_view.counts.comments),
+              })}
+            </span>
+          )}
+          {isMobile && <span>{post_view.counts.comments}</span>}
           {this.unreadCount && (
-            <span className="small text-warning">
+            <span className={`small text-info ${isMobile ? "ml-2" : ""}`}>
               ({this.unreadCount} {i18n.t("new")})
             </span>
           )}
@@ -1242,13 +1435,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     let post = this.props.post_view.post;
     return post.thumbnail_url || (post.url && isImage(post.url)) ? (
       <div className="row">
-        <div className={`${this.state.imageExpanded ? "col-12" : "col-8"}`}>
-          {this.postTitleLine()}
-        </div>
-        <div className="col-4">
-          {/* Post body prev or thumbnail */}
-          {!this.state.imageExpanded && this.thumbnail()}
-        </div>
+        <div className="col-12">{this.postTitleLine()}</div>
       </div>
     ) : (
       this.postTitleLine()
@@ -1268,33 +1455,16 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     return (
       <>
         {/* The mobile view*/}
-        <div className="d-block d-sm-none">
-          <div className="row">
-            <div className="col-12">
-              {this.createdLine()}
-
-              {/* If it has a thumbnail, do a right aligned thumbnail */}
-              {this.mobileThumbnail()}
-
-              {/* Show a preview of the post body */}
-              {this.showMobilePreview()}
-
-              {this.commentsLine(true)}
-              {this.userActionsLine()}
-              {this.duplicatesLine()}
-              {this.removeAndBanDialogs()}
-            </div>
-          </div>
-        </div>
+        <div className="d-block d-sm-none">{this.hexbear_mobileContent()}</div>
 
         {/* The larger view*/}
         <div className="d-none d-sm-block">
-          <div className="row">
+          <div className="row hexbear-row">
             {!this.props.viewOnly && this.voteBar()}
-            <div className="col-sm-2 pr-0">
-              <div className="">{this.thumbnail()}</div>
+            <div className="col-sm-2 pr-0 hexbear-thumbnail-wrapper">
+              <div className="">{this.hexbear_thumbnail()}</div>
             </div>
-            <div className="col-12 col-sm-9">
+            <div className="col-12 col-sm-9 hexbear-post-content">
               <div className="row">
                 <div className="col-12">
                   {this.postTitleLine()}
@@ -1776,7 +1946,10 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
 
   handleImageExpandClick(i: PostListing, event: any) {
     event.preventDefault();
-    i.setState({ imageExpanded: !i.state.imageExpanded });
+    i.setState({
+      imageExpanded: !i.state.imageExpanded,
+      showBody: !i.state.showBody,
+    });
     setupTippy();
   }
 

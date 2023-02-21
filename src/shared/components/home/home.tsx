@@ -249,6 +249,7 @@ export class Home extends Component<any, HomeState> {
     loading: true,
     posts: [],
     comments: [],
+    tagline: ""
   };
 
   constructor(props: any, context: any) {
@@ -261,6 +262,16 @@ export class Home extends Component<any, HomeState> {
 
     this.parseMessage = this.parseMessage.bind(this);
     this.subscription = wsSubscribe(this.parseMessage);
+
+    if (isBrowser()) {
+      const taglines = this.state?.siteRes?.taglines ?? [];
+      this.state = {
+        ...this.state,
+        tagline: this.hexbear_setupTagline(
+          getRandomFromList(taglines)?.content ?? ""
+        ),
+      };
+    }
 
     // Only fetch the data if coming from another route
     if (this.isoData.path === this.context.router.route.match.url) {
@@ -287,12 +298,10 @@ export class Home extends Component<any, HomeState> {
           wsClient.communityJoin({ community_id: 0 })
         );
       }
-      const taglines = this.state?.siteRes?.taglines ?? [];
       this.state = {
         ...this.state,
         trendingCommunities: trendingRes?.communities ?? [],
         loading: false,
-        tagline: getRandomFromList(taglines)?.content,
       };
     } else {
       fetchTrendingCommunities();
@@ -388,7 +397,7 @@ export class Home extends Component<any, HomeState> {
         />
         {site_setup && (
           <div className="row">
-            <main role="main" className="col-12 col-md-8">
+            <main role="main" className="col-12 col-md-8 hexbear-main">
               {tagline && (
                 <div
                   id="tagline"
@@ -398,7 +407,7 @@ export class Home extends Component<any, HomeState> {
               <div className="d-block d-md-none">{this.mobileView}</div>
               {this.posts()}
             </main>
-            <aside className="d-none d-md-block col-md-4">
+            <aside className="d-none d-md-block col-md-4 hexbear-aside">
               {this.mySidebar}
             </aside>
           </div>
@@ -720,6 +729,39 @@ export class Home extends Component<any, HomeState> {
     window.scrollTo(0, 0);
   }
 
+  hexbear_setupTagline(tagline: string): string {
+    return tagline
+      .replace("<MOSCOW_TIME>", getMoscowTime())
+      .replace("<CURRENT_USER>", getCurrentUsername())
+      .replace("<CURRENT_YEAR>", getCurrentYear())
+      .replace(
+        /<RANDOM:(\d+):(\d+)>/,
+        (_value, min, max) => `${getRandomNumber(min, max)}`
+      );
+    function getRandomNumber(minimum: number, maximum: number): number {
+      return (Math.random() * (maximum - minimum + 1)) << 0;
+    }
+    function getMoscowTime(): string {
+      const localDate = new Date();
+
+      const utc = localDate.getTime() + localDate.getTimezoneOffset() * 60000;
+
+      // create new Date object for different city
+      // using supplied offset
+      const moscowTime = new Date(utc + 3600000 * 3);
+      return moscowTime.toLocaleString().split(", ")[1];
+    }
+    function getCurrentYear(): string {
+      const localYear = new Date().getFullYear();
+      return localYear.toString();
+    }
+    function getCurrentUsername(): string {
+      return (
+        UserService.Instance?.myUserInfo?.local_user_view.person.name ??
+        "Someone"
+      );
+    }
+  }
   parseMessage(msg: any) {
     const op = wsUserOp(msg);
     console.log(msg);

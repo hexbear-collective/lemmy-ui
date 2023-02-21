@@ -3,6 +3,8 @@ import { T } from "inferno-i18next-dess";
 import { Link } from "inferno-router";
 import { Language, PostView } from "lemmy-js-client";
 import { i18n } from "../../i18next";
+import { isBrowser } from "../../utils";
+import { Icon } from "../common/icon";
 import { PostListing } from "./post-listing";
 
 interface PostListingsProps {
@@ -13,13 +15,30 @@ interface PostListingsProps {
   removeDuplicates?: boolean;
   enableDownvotes?: boolean;
   enableNsfw?: boolean;
+  communityId?: number;
 }
 
-export class PostListings extends Component<PostListingsProps, any> {
+interface PostListingsState {
+  showFeaturedPosts: boolean;
+}
+
+export class PostListings extends Component<
+  PostListingsProps,
+  PostListingsState
+> {
   duplicatesMap = new Map<number, PostView[]>();
 
   constructor(props: any, context: any) {
     super(props, context);
+
+    let showFeaturedPosts = false;
+    if (isBrowser()) {
+      showFeaturedPosts =
+        localStorage.getItem("featuredPostToggle") == "true" ?? true;
+    }
+    this.state = {
+      showFeaturedPosts: showFeaturedPosts,
+    };
   }
 
   get posts() {
@@ -29,10 +48,57 @@ export class PostListings extends Component<PostListingsProps, any> {
   }
 
   render() {
+    const featuredPosts = this.posts.filter(
+      x =>
+        (x.post.featured_local && this.props.communityId === undefined) ||
+        (x.post.featured_community &&
+          x.post.community_id === this.props.communityId)
+    );
+    const normalPosts = this.posts.filter(
+      x =>
+        !x.post.featured_local &&
+        ((x.post.featured_community &&
+          this.props.communityId != x.post.community_id) ||
+          !x.post.featured_community)
+    );
     return (
       <div>
-        {this.posts.length > 0 ? (
-          this.posts.map(post_view => (
+        {featuredPosts.length > 0 && (
+          <div className="featured-posts">
+            <div
+              className="featured-posts-toggle"
+              onClick={this.toggleFeaturedPosts}
+            >
+              <div>
+                <Icon icon="broadcast" classes={`icon-inline`} />
+                <span>Featured Posts</span>
+              </div>
+              {!this.state?.showFeaturedPosts && (
+                <Icon icon="plus" classes={`icon-inline`} />
+              )}
+              {this.state?.showFeaturedPosts && (
+                <Icon icon="minus" classes={`icon-inline`} />
+              )}
+            </div>
+            {this.state?.showFeaturedPosts &&
+              featuredPosts.map(post_view => (
+                <>
+                  <PostListing
+                    post_view={post_view}
+                    duplicates={this.duplicatesMap.get(post_view.post.id)}
+                    showCommunity={this.props.showCommunity}
+                    enableDownvotes={this.props.enableDownvotes}
+                    enableNsfw={this.props.enableNsfw}
+                    allLanguages={this.props.allLanguages}
+                    siteLanguages={this.props.siteLanguages}
+                  />
+                  <hr className="hexbear-divider" />
+                </>
+              ))}
+          </div>
+        )}
+        {normalPosts.length > 0 ? (
+          normalPosts.map(post_view => (
             <>
               <PostListing
                 post_view={post_view}
@@ -43,7 +109,7 @@ export class PostListings extends Component<PostListingsProps, any> {
                 allLanguages={this.props.allLanguages}
                 siteLanguages={this.props.siteLanguages}
               />
-              <hr className="my-3" />
+              <hr className="hexbear-divider" />
             </>
           ))
         ) : (
@@ -59,6 +125,12 @@ export class PostListings extends Component<PostListingsProps, any> {
       </div>
     );
   }
+
+  toggleFeaturedPosts = () => {
+    const newValue = (!this.state?.showFeaturedPosts).toString();
+    localStorage.setItem("featuredPostToggle", newValue);
+    this.setState({ showFeaturedPosts: newValue === "true" });
+  };
 
   removeDuplicates(): PostView[] {
     // Must use a spread to clone the props, because splice will fail below otherwise.

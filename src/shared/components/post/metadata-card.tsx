@@ -1,7 +1,6 @@
-import { Component, linkEvent } from "inferno";
+import { Component } from "inferno";
 import { Post } from "lemmy-js-client";
 import * as sanitizeHtml from "sanitize-html";
-import { i18n } from "../../i18next";
 import { relTags } from "../../utils";
 import { Icon } from "../common/icon";
 
@@ -61,6 +60,7 @@ export class MetadataCard extends Component<
                       }}
                     />
                   )}
+                  {/*               Remove for Hexbear    
                   {post.embed_video_url && (
                     <button
                       className="mt-2 btn btn-secondary text-monospace"
@@ -68,7 +68,7 @@ export class MetadataCard extends Component<
                     >
                       {i18n.t("expand_here")}
                     </button>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
