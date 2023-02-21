@@ -1,13 +1,14 @@
 import { communitySearch, personSearch } from "@utils/app";
 import { isBrowser } from "@utils/browser";
-import { debounce, groupBy } from "@utils/helpers";
+import { getExternalHost } from "@utils/env";
+import { debounce, groupBy, hostname } from "@utils/helpers";
 import { CommunityTribute, PersonTribute } from "@utils/types";
 import { Picker } from "emoji-mart";
 import emojiShortName from "emoji-short-name";
 import { CustomEmojiView } from "lemmy-js-client";
 import { default as MarkdownIt } from "markdown-it";
 import markdown_it_container from "markdown-it-container";
-// import markdown_it_emoji from "markdown-it-emoji/bare";
+import markdown_it_emoji from "markdown-it-emoji/bare";
 import markdown_it_footnote from "markdown-it-footnote";
 import markdown_it_html5_embed from "markdown-it-html5-embed";
 import markdown_it_ruby from "markdown-it-ruby";
@@ -67,6 +68,7 @@ const spoilerConfig = {
 const html5EmbedConfig = {
   html5embed: {
     useImageSyntax: true, // Enables video/audio embed with ![]() syntax (default)
+    isAllowedHttp: true,
     attributes: {
       audio: 'controls preload="metadata"',
       video: 'width="100%" max-height="100%" controls loop preload="metadata"',
@@ -143,17 +145,13 @@ function localInstanceLinkParser(md: MarkdownIt) {
   });
 }
 
-export function setupMarkdown() {
+export function setupMarkdown(is_server: boolean) {
   const markdownItConfig: MarkdownIt.Options = {
     html: false,
-    linkify: true,
-    typographer: true,
+    linkify: !is_server,
+    typographer: false, // hexbear change to fix issue with legacy emojis throwing exception when followed by quote char
   };
 
-  // const emojiDefs = Array.from(customEmojisLookup.entries()).reduce(
-  //   (main, [key, value]) => ({ ...main, [key]: value }),
-  //   {}
-  // );
   md = new MarkdownIt(markdownItConfig)
     .use(markdown_it_sub)
     .use(markdown_it_sup)
@@ -162,9 +160,6 @@ export function setupMarkdown() {
     .use(markdown_it_container, "spoiler", spoilerConfig)
     .use(markdown_it_ruby)
     .use(localInstanceLinkParser);
-  // .use(markdown_it_emoji, {
-  //   defs: emojiDefs,
-  // });
 
   mdNoImages = new MarkdownIt(markdownItConfig)
     .use(markdown_it_sub)
@@ -172,12 +167,25 @@ export function setupMarkdown() {
     .use(markdown_it_footnote)
     .use(markdown_it_html5_embed, html5EmbedConfig)
     .use(markdown_it_container, "spoiler", spoilerConfig)
-    .use(localInstanceLinkParser)
-    // .use(markdown_it_emoji, {
-    //   defs: emojiDefs,
-    // })
     .disable("image");
-  const defaultRenderer = md.renderer.rules.image;
+  if (!is_server) {
+    const emojiDefs = Array.from(customEmojisLookup.entries()).reduce(
+      (main, [key, value]) => ({ ...main, [key]: value }),
+      {}
+    );
+    md = md.use(markdown_it_emoji, {
+      defs: emojiDefs,
+    });
+    mdNoImages = mdNoImages.use(markdown_it_emoji, {
+      defs: emojiDefs,
+    });
+    //hexbear handling of legacy :emoji: syntax in markdown
+    md.renderer.rules.emoji = function (token, idx) {
+      const emoji = customEmojisLookup.get(token[idx].markup)!;
+      return `<img class="icon icon-emoji" src="${emoji.custom_emoji.image_url}" title="${emoji.custom_emoji.shortcode}" alt="${emoji.custom_emoji.alt_text}"/>`;
+    };
+  }
+  var defaultRenderer = md.renderer.rules.image;
   md.renderer.rules.image = function (
     tokens: Token[],
     idx: number,
@@ -185,13 +193,20 @@ export function setupMarkdown() {
     env: any,
     self: Renderer
   ) {
-    //Provide custom renderer for our emojis to allow us to add a css class and force size dimensions on them.
+    //Provide custom renderer for our emojis to allow us to add a css class and force size dimensions on them. Also, prevent images to 3rd party domains
     const item = tokens[idx] as any;
     const title = item.attrs.length >= 3 ? item.attrs[2][1] : "";
+    const src: string = item.attrs[0][1];
     const customEmoji = customEmojisLookup.get(title);
     const isCustomEmoji = customEmoji != undefined;
+    const imgHostName = hostname(src);
+    if (!isImageHostWhitelisted(imgHostName)) {
+      return `<i>*removed externally hosted image*</i>`;
+    }
     if (!isCustomEmoji) {
-      return defaultRenderer?.(tokens, idx, options, env, self) ?? "";
+      const a = defaultRenderer?.(tokens, idx, options, env, self);
+      if (a) return hexbear_getInlineImage(a);
+      return "";
     }
     return `<img class="icon icon-emoji" src="${
       customEmoji!.custom_emoji.image_url
@@ -365,6 +380,35 @@ export function setupTribute() {
     ],
   });
 }
+
+function isImageHostWhitelisted(host: string): boolean {
+  const whiteList = [
+    getExternalHost(),
+    "localhost:8536",
+    "i.imgur.com",
+    "chapo.chat",
+    "test.hexbear.net",
+    "www.hexbear.net",
+  ];
+  if (whiteList.includes(host)) return true;
+  return false;
+}
+
+function hexbear_getInlineImage(imgElement: string): string {
+  return `<div class='inline-image'>
+    <span class='inline-image-toggle inline-image-toggle-btn' onclick='toggleInlineImage(this)'>Show</span>
+    <span class='img-blur-double' onclick='toggleInlineImage(this)'>${imgElement}</span>
+  </div>`;
+}
+
+globalThis.toggleInlineImage = e => {
+  const parent = e.parentElement;
+  if (e.classList.contains("inline-image-toggle")) {
+    parent.children[0].classList.toggle("hide");
+    parent.children[1].classList.toggle("img-blur-double");
+    parent.children[1].classList.toggle("inline-image-toggle");
+  }
+};
 
 interface EmojiMartCategory {
   id: string;

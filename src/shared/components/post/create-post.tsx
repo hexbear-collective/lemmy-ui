@@ -38,7 +38,7 @@ function getCreatePostQueryParams() {
 }
 
 function fetchCommunitiesForOptions(client: WrappedLemmyHttp) {
-  return client.listCommunities({ limit: 30, sort: "TopMonth", type_: "All" });
+  return client.listCommunities({ limit: 50, sort: "TopMonth", type_: "All" });
 }
 
 interface CreatePostState {

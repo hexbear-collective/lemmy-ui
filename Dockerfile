@@ -24,7 +24,7 @@ COPY src src
 COPY .git .git
 
 # Set UI version 
-RUN echo "export const VERSION = '$(git describe --tag)';" > "src/shared/version.ts"
+RUN echo "export const VERSION = '0.18.2.hexbear';" > "src/shared/version.ts"
 
 RUN yarn --production --prefer-offline
 RUN NODE_OPTIONS="--max-old-space-size=8192" yarn build:prod
@@ -42,9 +42,6 @@ FROM node:alpine as runner
 COPY --from=builder /usr/src/app/dist /app/dist
 COPY --from=builder /usr/src/app/node_modules /app/node_modules
 
-RUN chown -R node:node /app
-
-USER node
 EXPOSE 1234
 WORKDIR /app
 CMD node dist/js/server.js

@@ -79,7 +79,7 @@ export class MarkdownTextArea extends Component<
 
   state: MarkdownTextAreaState = {
     content: this.props.initialContent,
-    languageId: this.props.initialLanguageId,
+    languageId: 37,
     previewMode: false,
     loading: false,
     submitted: false,
@@ -274,7 +274,7 @@ export class MarkdownTextArea extends Component<
           </div>
 
           <div className="col-12 d-flex align-items-center flex-wrap mt-2">
-            {this.props.showLanguage && (
+            {/* {this.props.showLanguage && (
               <LanguageSelect
                 iconVersion
                 allLanguages={this.props.allLanguages}
@@ -285,10 +285,10 @@ export class MarkdownTextArea extends Component<
                 onChange={this.handleLanguageChange}
                 disabled={this.isDisabled}
               />
-            )}
+            )} */}
 
             {/* A flex expander */}
-            <div className="flex-grow-1"></div>
+            {/* <div className="flex-grow-1"></div> */}
 
             {this.props.replyType && (
               <button

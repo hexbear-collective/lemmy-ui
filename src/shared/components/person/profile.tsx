@@ -11,6 +11,7 @@ import {
   updatePersonBlock,
 } from "@utils/app";
 import { restoreScrollPosition, saveScrollPosition } from "@utils/browser";
+import { getHttpBase } from "@utils/env";
 import {
   capitalizeFirstLetter,
   futureDaysToUnixTime,
@@ -60,6 +61,7 @@ import {
   LockPost,
   MarkCommentReplyAsRead,
   MarkPersonMentionAsRead,
+  Person,
   PersonView,
   PostResponse,
   PurgeComment,
@@ -104,6 +106,7 @@ interface ProfileState {
   siteRes: GetSiteResponse;
   finished: Map<CommentId, boolean | undefined>;
   isIsomorphic: boolean;
+  relatedPersons: Person[];
 }
 
 interface ProfileProps {
@@ -169,6 +172,7 @@ export class Profile extends Component<
     removeData: false,
     finished: new Map(),
     isIsomorphic: false,
+    relatedPersons: [],
   };
 
   constructor(props: RouteComponentProps<{ username: string }>, context: any) {
@@ -217,6 +221,10 @@ export class Profile extends Component<
         isIsomorphic: true,
       };
     }
+    if (this.state.personRes.state == "success")
+      this.hexbear_getRelatedUsers(
+        this.state.personRes.data.person_view.person.id
+      );
   }
 
   async componentDidMount() {
@@ -382,6 +390,11 @@ export class Profile extends Component<
             <div className="col-12 col-md-4">
               <Moderates moderates={personRes.moderates} />
               {this.amCurrentUser && <Follows />}
+              {isAdmin(
+                UserService.Instance.myUserInfo?.local_user_view.person.id ??
+                  -1,
+                this.state.siteRes.admins
+              ) && this.hexbearRelatedUsers()}
             </div>
           </div>
         );
@@ -723,6 +736,34 @@ export class Profile extends Component<
     await this.fetchUserData();
   }
 
+  hexbearRelatedUsers() {
+    return (
+      <div className="card border-secondary mb-3">
+        <div className="card-body">
+          <h5>Related Users</h5>
+          <ul className="list-unstyled mb-0">
+            {this.state.relatedPersons.map(u => (
+              <li key={u.id}>
+                <PersonListing
+                  person={u}
+                  realLink={true}
+                  useApubName={false}
+                  muted
+                  hideAvatar={true}
+                />
+                {isBanned(u) && (
+                  <li className="list-inline-item badge badge-danger ml-2">
+                    {I18NextService.i18n.t("banned")}
+                  </li>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
   handlePageChange(page: number) {
     this.updateUrl({ page });
   }
@@ -1050,5 +1091,22 @@ export class Profile extends Component<
       }
       return s;
     });
+  }
+  hexbear_getRelatedUsers(userid: number) {
+    //hexbear-specific, get related users for admin purposes
+    const auth = myAuthRequired();
+    if (auth) {
+      const personId =
+        UserService.Instance.myUserInfo?.local_user_view.person.id ?? -1;
+      if (isAdmin(personId, this.state.siteRes.admins)) {
+        fetch(
+          `${getHttpBase()}/api/v3/user/related?user_id=${userid}&auth=${auth}`
+        )
+          .then(r => r.json())
+          .then((p: any) => {
+            this.setState({ relatedPersons: p.users });
+          });
+      }
+    }
   }
 }

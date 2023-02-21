@@ -13,6 +13,8 @@ interface PictrsImageProps {
   nsfw?: boolean;
   iconOverlay?: boolean;
   pushup?: boolean;
+  header?: boolean;
+  rounded?: boolean;
 }
 
 export class PictrsImage extends Component<PictrsImageProps, any> {
@@ -30,7 +32,7 @@ export class PictrsImage extends Component<PictrsImageProps, any> {
           src={this.props.src}
           alt={this.alt()}
           title={this.alt()}
-          loading="lazy"
+          loading="eager"
           className={classNames("overflow-hidden pictrs-image", {
             "img-fluid": !this.props.icon && !this.props.iconOverlay,
             banner: this.props.banner,
@@ -40,6 +42,8 @@ export class PictrsImage extends Component<PictrsImageProps, any> {
               !this.props.thumbnail && !this.props.icon,
             "img-blur": this.props.thumbnail && this.props.nsfw,
             "object-fit-cover img-icon me-1": this.props.icon,
+            "img-icon me-2": this.props.header,
+            "rounded-circle": this.props.rounded,
             "ms-2 mb-0 rounded-circle object-fit-cover avatar-overlay":
               this.props.iconOverlay,
             "avatar-pushup": this.props.pushup,

@@ -421,6 +421,9 @@ br.big {
 #emoji-picker {
   width: 100%;
 }
+.home-emojis-form em-emoji-picker {
+  width: 100%;
+}
 
 .skip-link {
   top: -40px;

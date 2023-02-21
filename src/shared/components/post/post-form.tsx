@@ -38,7 +38,6 @@ import { HttpService, RequestState } from "../../services/HttpService";
 import { setupTippy } from "../../tippy";
 import { toast } from "../../toast";
 import { Icon, Spinner } from "../common/icon";
-import { LanguageSelect } from "../common/language-select";
 import { MarkdownTextArea } from "../common/markdown-textarea";
 import { SearchableSelect } from "../common/searchable-select";
 import { PostListings } from "./post-listings";
@@ -268,24 +267,26 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
         communitySearchOptions: [selectedCommunityChoice].concat(
           (
             this.props.initialCommunities?.map(
-              ({ community: { id, title } }) => ({
-                label: title,
+              ({ community: { id, name } }) => ({
+                label: name,
                 value: id.toString(),
               })
             ) ?? []
-          ).filter(option => option.value !== selectedCommunityChoice.value)
+          )
+            .filter(option => option.value !== selectedCommunityChoice.value)
+            .sort((a, b) => a.label.localeCompare(b.label))
         ),
       };
     } else {
       this.state = {
         ...this.state,
         communitySearchOptions:
-          this.props.initialCommunities?.map(
-            ({ community: { id, title } }) => ({
-              label: title,
+          this.props.initialCommunities
+            ?.map(({ community: { id, name } }) => ({
+              label: name,
               value: id.toString(),
-            })
-          ) ?? [],
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label)) ?? [],
       };
     }
 
@@ -326,7 +327,7 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
 
   render() {
     const firstLang = this.state.form.language_id;
-    const selectedLangs = firstLang ? Array.of(firstLang) : undefined;
+    const selectedLangs = firstLang ? Array.of(firstLang) : [37]; // hexbear english;
 
     const url = this.state.form.url;
 
@@ -492,13 +493,13 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
             />
           </div>
         </div>
-        <LanguageSelect
+        {/* <LanguageSelect
           allLanguages={this.props.allLanguages}
           siteLanguages={this.props.siteLanguages}
           selectedLanguageIds={selectedLangs}
           multiple={false}
           onChange={this.handleLanguageChange}
-        />
+        /> */}
         {!this.props.post_view && (
           <div className="mb-3 row">
             <label className="col-sm-2 col-form-label" htmlFor="post-community">
@@ -695,7 +696,6 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
     if (selectedCommunityChoice) {
       newOptions.push(selectedCommunityChoice);
     }
-
     if (text.length > 0) {
       newOptions.push(...(await fetchCommunities(text)).map(communityToChoice));
 
@@ -703,7 +703,6 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
         communitySearchOptions: newOptions,
       });
     }
-
     this.setState({
       communitySearchLoading: false,
     });
