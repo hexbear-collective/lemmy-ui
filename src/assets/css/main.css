@@ -406,9 +406,19 @@ br.big {
 .tribute-container li.highlight {
   background: var(--bs-primary);
 }
-
 .tribute-container li span {
-  font-weight: bold;
+  font-weight:normal !important;
+}
+
+.tribute-container .emoji-image{
+  display:inline-block;
+  width:60px;
+}
+.tribute-container .emoji-codes{
+  display:inline-block;
+  vertical-align: top;
+  width:410px;
+  word-wrap: break-word;
 }
 
 .tribute-container li.no-match {
@@ -440,6 +450,9 @@ br.big {
 }
 
 #emoji-picker {
+  width: 100%;
+}
+.home-emojis-form em-emoji-picker {
   width: 100%;
 }
 

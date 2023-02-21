@@ -1,7 +1,8 @@
 import { readFile } from "fs/promises";
-import { Site } from "lemmy-js-client";
+import { Site,  } from "lemmy-js-client";
 import path from "path";
 import { fetchIconPng } from "./fetch-icon-png";
+import { getStaticDir } from "@utils/env";
 
 const iconSizes = [72, 96, 128, 144, 152, 192, 384, 512];
 
@@ -26,23 +27,12 @@ export default async function (site: Site) {
     theme_color: "#222222",
     icons: await Promise.all(
       iconSizes.map(async size => {
-        let src = await readFile(
-          path.join(defaultLogoPathDirectory, `icon-${size}x${size}.png`),
-        ).then(buf => buf.toString("base64"));
-
-        if (icon) {
-          const sharp = (await import("sharp")).default;
-          src = await sharp(icon)
-            .resize(size, size)
-            .png()
-            .toBuffer()
-            .then(buf => buf.toString("base64"));
-        }
+        let src = `${getStaticDir()}/assets/icons/icon-${size}x${size}.png`;
 
         return {
           sizes: `${size}x${size}`,
           type: "image/png",
-          src: `data:image/png;base64,${src}`,
+          src: `${src}`,
           purpose: "any maskable",
         };
       }),

@@ -1,4 +1,10 @@
-import { colorList, getCommentParentId } from "@utils/app";
+import {
+  colorList,
+  getCommentParentId,
+  myAuth,
+  newVote,
+  showScores,
+} from "@utils/app";
 import { futureDaysToUnixTime, numToSI } from "@utils/helpers";
 import classNames from "classnames";
 import { isBefore, parseISO, subMinutes } from "date-fns";
@@ -39,6 +45,7 @@ import {
   CommentNodeView,
   CommentViewType,
   VoteContentType,
+  VoteType,
 } from "../../interfaces";
 import { mdToHtml, mdToHtmlNoImages } from "../../markdown";
 import { I18NextService, UserService } from "../../services";
@@ -237,7 +244,8 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                 </>
               )}
 
-              {this.getLinkButton(true)}
+{/* HEXBEAR: Hide extra link button and language */}
+              {/* {this.getLinkButton(true)}
 
               {language_id !== 0 && (
                 <span className="badge text-bg-light d-none d-sm-inline me-2">
@@ -247,10 +255,8 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                     )?.name
                   }
                 </span>
-              )}
-              {/* This is an expanding spacer for mobile */}
-              <div className="me-lg-5 flex-grow-1 flex-lg-grow-0 unselectable pointer mx-2" />
-
+              )} */}
+              <span className="ms-1"></span>
               <VoteDisplay
                 voteDisplayMode={this.props.voteDisplayMode}
                 myVote={my_vote}
@@ -295,7 +301,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                   )}
                 </div>
                 <div className="comment-bottom-btns d-flex justify-content-between justify-content-lg-start flex-wrap text-muted fw-bold mt-1">
-                  {this.props.showContext && this.getLinkButton()}
+                  {/* {this.props.showContext && this.getLinkButton()} */}
                   {this.props.markable && (
                     <button
                       className="btn btn-link btn-animate text-muted"
@@ -374,8 +380,11 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                       </>
                     )}
                 </div>
-              </>
+                {/* end of button group */}
+              
+          </>
             )}
+            
           </div>
         </article>
         {showMoreChildren && (
@@ -471,7 +480,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
   getLinkButton(small = false) {
     const cv = this.commentView;
 
-    const classnames = classNames("btn btn-link btn-animate text-muted", {
+    const classnames = classNames("btn btn-link btn-animate text-muted mt-1", {
       "btn-sm": small,
     });
 
@@ -740,6 +749,22 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
       limit: 999, // TODO
       type_: "All",
       saved_only: false,
+    });
+  }
+
+  handleUpvote(i: CommentNode) {
+    i.setState({ upvoteLoading: true });
+    i.props.onCommentVote({
+      comment_id: i.commentId,
+      score: newVote(VoteType.Upvote, i.commentView.my_vote),
+    });
+  }
+
+  handleDownvote(i: CommentNode) {
+    i.setState({ downvoteLoading: true });
+    i.props.onCommentVote({
+      comment_id: i.commentId,
+      score: newVote(VoteType.Downvote, i.commentView.my_vote),
     });
   }
 }
