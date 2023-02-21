@@ -158,7 +158,7 @@ export class TaglineForm extends Component<TaglineFormProps, TaglineFormState> {
     event: any
   ) {
     event.preventDefault();
-    if (this.state.editingRow == props.index) {
+    if (props.form.state.editingRow == props.index) {
       props.form.setState({ editingRow: undefined });
     } else {
       props.form.setState({ editingRow: props.index });

@@ -37,7 +37,7 @@ export class Theme extends Component<Props> {
           <link
             rel="stylesheet"
             type="text/css"
-            href="/css/themes/litely.css"
+            href="/css/themes/darkly.css"
             id="default-light"
             media="(prefers-color-scheme: light)"
           />

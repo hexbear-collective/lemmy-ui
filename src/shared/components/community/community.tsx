@@ -263,7 +263,7 @@ export class Community extends Component<
               />
 
               <div className="row">
-                <div className="col-12 col-md-8">
+                <div className="col-12 col-md-8 hexbear-main">
                   {this.communityInfo}
                   <div className="d-block d-md-none">
                     <button
@@ -286,7 +286,7 @@ export class Community extends Component<
                   {this.listings}
                   <Paginator page={page} onChange={this.handlePageChange} />
                 </div>
-                <div className="d-none d-md-block col-md-4">
+                <div className="d-none d-md-block col-md-4 hexbear-aside">
                   {this.sidebar(res)}
                 </div>
               </div>
@@ -351,6 +351,7 @@ export class Community extends Component<
           enableNsfw={enableNsfw(site_res)}
           allLanguages={site_res.all_languages}
           siteLanguages={site_res.discussion_languages}
+          communityId={this.state.communityRes?.community_view.community.id}
         />
       );
     } else {

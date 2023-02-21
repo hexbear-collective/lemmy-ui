@@ -15,6 +15,7 @@ import {
   GetPersonDetails,
   GetPersonDetailsResponse,
   GetSiteResponse,
+  Person,
   PostResponse,
   PurgeItemResponse,
   SortType,
@@ -24,6 +25,7 @@ import {
 } from "lemmy-js-client";
 import moment from "moment";
 import { Subscription } from "rxjs";
+import { getHttpBase } from "../../env";
 import { i18n } from "../../i18next";
 import { InitialFetchRequest, PersonDetailsView } from "../../interfaces";
 import { UserService, WebSocketService } from "../../services";
@@ -76,6 +78,7 @@ interface ProfileState {
   showBanDialog: boolean;
   removeData: boolean;
   siteRes: GetSiteResponse;
+  relatedPersons: Person[];
 }
 
 interface ProfileProps {
@@ -160,6 +163,7 @@ export class Profile extends Component<
     siteRes: this.isoData.site_res,
     showBanDialog: false,
     removeData: false,
+    relatedPersons: [],
   };
 
   constructor(props: RouteComponentProps<{ username: string }>, context: any) {
@@ -170,6 +174,22 @@ export class Profile extends Component<
 
     this.parseMessage = this.parseMessage.bind(this);
     this.subscription = wsSubscribe(this.parseMessage);
+
+    //hexbear-specific, get related users for admin purposes
+    const auth = myAuth(false);
+    if (auth) {
+      const personId =
+        UserService.Instance.myUserInfo?.local_user_view.person.id ?? -1;
+      if (isAdmin(personId, this.state.siteRes.admins)) {
+        fetch(
+          `${getHttpBase()}/api/v3/user/related?user_id=${personId}&auth=${auth}`
+        )
+          .then(r => r.json())
+          .then((p: any) => {
+            this.setState({ relatedPersons: p.users });
+          });
+      }
+    }
 
     // Only fetch the data if coming from another route
     if (this.isoData.path === this.context.router.route.match.url) {
@@ -303,6 +323,11 @@ export class Profile extends Component<
               <div className="col-12 col-md-4">
                 <Moderates moderates={personRes.moderates} />
                 {this.amCurrentUser && <Follows />}
+                {isAdmin(
+                  UserService.Instance.myUserInfo?.local_user_view.person.id ??
+                    -1,
+                  this.state.siteRes.admins
+                ) && this.hexbearRelatedUsers()}
               </div>
             </div>
           )
@@ -411,8 +436,8 @@ export class Profile extends Component<
                       </li>
                     )}
                     {pv.person.admin && (
-                      <li className="list-inline-item badge badge-light">
-                        {i18n.t("admin")}
+                      <li className="list-inline-item badge badge-light admin-badge">
+                        A
                       </li>
                     )}
                     {pv.person.bot_account && (
@@ -643,6 +668,34 @@ export class Profile extends Component<
 
     this.setState({ loading: true });
     this.fetchUserData();
+  }
+
+  hexbearRelatedUsers() {
+    return (
+      <div className="card border-secondary mb-3">
+        <div className="card-body">
+          <h5>Related Users</h5>
+          <ul className="list-unstyled mb-0">
+            {this.state.relatedPersons.map(u => (
+              <li key={u.id}>
+                <PersonListing
+                  person={u}
+                  realLink={true}
+                  useApubName={false}
+                  muted
+                  hideAvatar={true}
+                />
+                {isBanned(u) && (
+                  <li className="list-inline-item badge badge-danger ml-2">
+                    {i18n.t("banned")}
+                  </li>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
   }
 
   handlePageChange(page: number) {

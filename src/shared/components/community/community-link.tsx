@@ -23,12 +23,12 @@ export class CommunityLink extends Component<CommunityLinkProps, any> {
     let local = community.local == null ? true : community.local;
     if (local) {
       name_ = community.name;
-      title = community.title;
+      title = community.name;
       link = `/c/${community.name}`;
     } else {
       let domain = hostname(community.actor_id);
       name_ = `${community.name}@${domain}`;
-      title = `${community.title}@${domain}`;
+      title = `${community.name}@${domain}`;
       link = !this.props.realLink ? `/c/${name_}` : community.actor_id;
     }
 
