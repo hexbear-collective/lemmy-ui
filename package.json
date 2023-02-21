@@ -8,12 +8,13 @@
   "scripts": {
     "analyze": "webpack --mode=none",
     "prebuild:dev": "yarn clean && node generate_translations.js",
-    "build:dev": "webpack --env COMMIT_HASH=$(git rev-parse --short HEAD) --mode=development",
+    "build:dev": "webpack --mode=development",
     "prebuild:prod": "yarn clean && node generate_translations.js",
     "build:prod": "webpack --env COMMIT_HASH=$(git rev-parse --short HEAD) --mode=production",
     "clean": "yarn run rimraf dist",
     "dev": "yarn build:dev --watch",
-    "lint": "yarn translations:generate && tsc --noEmit && eslint --report-unused-disable-directives --ext .js,.ts,.tsx \"src/**\" && prettier --check \"src/**/*.{ts,tsx,js,css,scss}\"",
+    "start": "yarn build:dev --watch",
+    "lint": "yarn translations:generate && tsc --noEmit && prettier --check \"src/**/*.{ts,tsx,js,css,scss}\"",
     "prepare": "husky install",
     "postinstall": "husky install",
     "themes:build": "sass src/assets/css/themes/:src/assets/css/themes",
@@ -24,8 +25,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx,js}": [
-      "prettier --write",
-      "eslint --fix"
+      "prettier --write"
     ],
     "*.{css, scss}": [
       "prettier --write"

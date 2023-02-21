@@ -35,7 +35,7 @@ COPY src src
 COPY .git .git
 
 # Set UI version 
-RUN echo "export const VERSION = '$(git describe --tag)';" > "src/shared/version.ts"
+RUN echo "export const VERSION = '0.19.0';" > "src/shared/version.ts"
 
 RUN yarn --production --prefer-offline --network-timeout 100000
 RUN NODE_OPTIONS="--max-old-space-size=8192" yarn build:prod
@@ -58,7 +58,7 @@ RUN apk update && apk upgrade && apk add curl vips-cpp
 COPY --from=builder /usr/src/app/dist /app/dist
 COPY --from=builder /usr/src/app/node_modules /app/node_modules
 
-RUN chown -R node:node /app
+#RUN chown -R node:node /app
 
 LABEL org.opencontainers.image.authors="The Lemmy Authors"
 LABEL org.opencontainers.image.source="https://github.com/LemmyNet/lemmy-ui"
@@ -67,7 +67,7 @@ LABEL org.opencontainers.image.description="The official web app for Lemmy."
 
 HEALTHCHECK --interval=60s --start-period=10s --retries=2 --timeout=10s CMD curl -ILfSs http://localhost:1234/ > /dev/null || exit 1
 
-USER node
+#USER node
 EXPOSE 1234
 WORKDIR /app
 CMD exec node dist/js/server.js
