@@ -1278,12 +1278,12 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
 
         {/* The larger view*/}
         <div className="d-none d-sm-block">
-          <div className="row">
+          <div className="row hexbear-row">
             {!this.props.viewOnly && this.voteBar()}
-            <div className="col-sm-2 pr-0">
+            <div className="col-sm-2 pr-0 hexbear-thumbnail-wrapper">
               <div className="">{this.thumbnail()}</div>
             </div>
-            <div className="col-12 col-sm-9">
+            <div className="col-12 col-sm-9 hexbear-post-content">
               <div className="row">
                 <div className="col-12">
                   {this.postTitleLine()}

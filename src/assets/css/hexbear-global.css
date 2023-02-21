@@ -1,0 +1,36 @@
+.container-lg{
+    max-width:100% !important;
+}
+.vote-bar{
+    max-width:60px !important;
+    width:30px !important;
+    padding-right:15px !important;
+}
+.hexbear-thumbnail-wrapper{
+    max-width:115px !important;
+}
+.hexbear-thumbnail-wrapper a{
+    width:100px !important;
+}
+.hexbear-row{
+    padding: .5rem 0;
+    margin: 0px !important;
+}
+
+.hexbear-aside{
+    max-width: 400px !important;
+}
+.hexbear-main{
+    flex:1 !important;
+    max-width:100% !important;
+}
+.hexbear-divider{
+    margin-bottom: 0.25rem !important;
+    margin-top:0px !important;
+}
+.hexbear-post-link{
+    display: inline-block !important;
+}
+.text-body{
+    display: inline-block !important;
+}

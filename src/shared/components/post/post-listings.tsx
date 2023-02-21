@@ -43,7 +43,7 @@ export class PostListings extends Component<PostListingsProps, any> {
                 allLanguages={this.props.allLanguages}
                 siteLanguages={this.props.siteLanguages}
               />
-              <hr className="my-3" />
+              <hr className="hexbear-divider" />
             </>
           ))
         ) : (
