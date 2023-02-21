@@ -49,7 +49,7 @@ import {
   PurgeType,
   VoteContentType,
 } from "../../interfaces";
-import { mdToHtml, mdToHtmlInline } from "../../markdown";
+import { mdToHtml } from "../../markdown";
 import { I18NextService, UserService } from "../../services";
 import { setupTippy } from "../../tippy";
 import { Icon, PurgeWarning, Spinner } from "../common/icon";
@@ -96,6 +96,7 @@ interface PostListingState {
   addModLoading: boolean;
   addAdminLoading: boolean;
   transferLoading: boolean;
+  inline: boolean;
 }
 
 interface PostListingProps {
@@ -130,6 +131,7 @@ interface PostListingProps {
   onAddModToCommunity(form: AddModToCommunity): void;
   onAddAdmin(form: AddAdmin): void;
   onTransferCommunity(form: TransferCommunity): void;
+  inline?: boolean;
 }
 
 export class PostListing extends Component<PostListingProps, PostListingState> {
@@ -162,6 +164,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     addModLoading: false,
     addAdminLoading: false,
     transferLoading: false,
+    inline: this.props.inline ?? true,
   };
 
   constructor(props: any, context: any) {
@@ -396,9 +399,193 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     }
   }
 
+  // hexbear_thumbnail() {
+  //   const post = this.props.post_view.post;
+  //   const url = post.url;
+  //   const thumbnail = post.thumbnail_url;
+
+  //   if (!this.props.hideImage && url && isImage(url) && this.imageSrc) {
+  //     return (
+  //       <a
+  //         href={this.imageSrc}
+  //         className="text-body d-inline-block position-relative mb-2"
+  //         data-tippy-content={I18NextService.i18n.t("expand_here")}
+  //         onClick={linkEvent(this, this.handleImageExpandClick)}
+  //         aria-label={I18NextService.i18n.t("expand_here")}
+  //       >
+  //         {this.imgThumb(this.imageSrc)}
+  //         <Icon icon="image" classes="mini-overlay" />
+  //       </a>
+  //     );
+  //   } else if (!this.props.hideImage && url && thumbnail && this.imageSrc) {
+  //     return (
+  //       <a
+  //         className="text-body d-inline-block position-relative mb-2"
+  //         href={url}
+  //         onClick={linkEvent(this, this.handleImageExpandClick)}
+  //         rel={relTags}
+  //         title={url}
+  //       >
+  //         {this.imgThumb(this.imageSrc)}
+  //         <Icon icon="external-link" classes="mini-overlay" />
+  //       </a>
+  //     );
+  //   } else if (url) {
+  //     if (!this.props.hideImage && isVideo(url)) {
+  //       return (
+  //         <div className="embed-responsive embed-responsive-16by9">
+  //           <video
+  //             playsInline
+  //             muted
+  //             loop
+  //             controls
+  //             className="embed-responsive-item"
+  //           >
+  //             <source src={url} type="video/mp4" />
+  //           </video>
+  //         </div>
+  //       );
+  //     } else {
+  //       return (
+  //         <a className="text-body" href={url} title={url} rel={relTags}>
+  //           <div className="thumbnail rounded bg-light d-flex justify-content-center">
+  //             <Icon icon="external-link" classes="d-flex align-items-center" />
+  //           </div>
+  //         </a>
+  //       );
+  //     }
+  //   } else {
+  //     return (
+  //       <div
+  //         className="thumbnail rounded bg-light d-flex justify-content-center pointer"
+  //         data-tippy-content={I18NextService.i18n.t("expand_here")}
+  //         onClick={linkEvent(this, this.handleImageExpandClick)}
+  //       >
+  //         <Icon icon="message-square" classes="d-flex align-items-center" />
+  //       </div>
+  //     );
+  //   }
+  // }
+
+  // hexbear_mobileBody() {
+  //   const body = this.props.post_view.post.body;
+  //   const longPost = body && body.length > 300;
+  //   return body ? (
+  //     <div
+  //       onClick={linkEvent(this, this.handleShowBody)}
+  //       className={`col-12 card my-2 p-2 collapsed-content ${
+  //         this.showBody || !longPost ? "expanded" : ""
+  //       }`}
+  //     >
+  //       {this.state.viewSource ? (
+  //         <pre>{body}</pre>
+  //       ) : (
+  //         <div className="md-div" dangerouslySetInnerHTML={mdToHtml(body)} />
+  //       )}
+  //     </div>
+  //   ) : (
+  //     <></>
+  //   );
+  // }
+
+  // hexbear_mobileActionLine() {
+  //   return (
+  //     <div className="d-flex flex-wrap hexbear-mobileActionLine">
+  //       {/* {!this.props.viewOnly && this.mobileVotes} */}
+  //       {UserService.Instance.myUserInfo && !this.props.viewOnly && (
+  //         <div>{this.saveButton}</div>
+  //       )}
+  //       {this.commentsButton(true)}
+  //       <div className="dropdown">
+  //         <button
+  //           className="btn btn-sm btn-animate text-muted py-0 dropdown-toggle"
+  //           onClick={linkEvent(this, this.handleShowAdvanced)}
+  //           data-tippy-content={I18NextService.i18n.t("more")}
+  //           data-bs-toggle="dropdown"
+  //           aria-expanded="false"
+  //           aria-controls="advancedButtonsDropdown"
+  //           aria-label={I18NextService.i18n.t("more")}
+  //         >
+  //           <Icon icon="more-vertical" inline />
+  //         </button>
+
+  //         <ul className="dropdown-menu" id="advancedButtonsDropdown">
+  //           {!this.myPost ? (
+  //             <>
+  //               <li>{this.reportButton}</li>
+  //               <li>{this.blockButton}</li>
+  //             </>
+  //           ) : (
+  //             <>
+  //               <li>{this.editButton}</li>
+  //               <li>{this.deleteButton}</li>
+  //             </>
+  //           )}
+
+  //           {/* Any mod can do these, not limited to hierarchy*/}
+  //           {(amMod(this.props.moderators) || amAdmin()) && (
+  //             <>
+  //               <li>
+  //                 <hr className="dropdown-divider" />
+  //               </li>
+  //               <li>{this.lockButton}</li>
+  //               {this.featureButtons}
+  //             </>
+  //           )}
+
+  //           {(this.canMod_ || this.canAdmin_) && (
+  //             <li>{this.modRemoveButton}</li>
+  //           )}
+  //         </ul>
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
+  // hexbear_mobileContent() {
+  //   const post = this.props.post_view.post;
+  //   return (
+  //     <div className="row">
+  //       <div className="col-12">
+  //         {this.createdLine()}
+
+  //         {/* If it has a thumbnail, do a right aligned thumbnail */}
+  //         <span onClick={linkEvent(this, this.handleImageExpandClick)}>
+  //           {this.mobileThumbnail()}
+  //         </span>
+
+  //         {/* Show a preview of the post body */}
+  //         {!post.embed_video_url && (
+  //           <div
+  //             className={`collapsed-image collapsed-content ${
+  //               this.showBody ? "expanded" : ""
+  //             }`}
+  //           >
+  //             {this.img}
+  //           </div>
+  //         )}
+  //         {/* {post.embed_video_url && (
+  //           <div style="left: 0; width: 100%; height: 0; position: relative; padding-bottom: 75%;">
+  //             <iframe
+  //               src={post.embed_video_url}
+  //               style="border: 0; top: 0; left: 0; width: 100%; height: 100%; position: absolute;"
+  //               scrolling="no"
+  //               allow="encrypted-media; accelerometer; clipboard-write; gyroscope; picture-in-picture; web-share"
+  //             ></iframe>
+  //           </div>
+  //         )} */}
+  //         {this.hexbear_mobileBody()}
+
+  //         {this.hexbear_mobileActionLine()}
+  //         {this.removeAndBanDialogs()}
+  //       </div>
+  //     </div>
+  //   );
+  // }
+
   createdLine() {
     const post_view = this.postView;
-
+    const url = post_view.post.url;
     return (
       <div className="small mb-1 mb-md-0">
         <PersonListing person={post_view.creator} />
@@ -415,16 +602,9 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
             <CommunityLink community={post_view.community} />
           </>
         )}
-        {post_view.post.language_id !== 0 && (
-          <span className="mx-1 badge text-bg-light">
-            {
-              this.props.allLanguages.find(
-                lang => lang.id === post_view.post.language_id
-              )?.name
-            }
-          </span>
-        )}{" "}
-        •{" "}
+
+        {url && this.urlLine()}
+        <span className="small"> • </span>
         <MomentTime
           published={post_view.post.published}
           updated={post_view.post.updated}
@@ -440,15 +620,12 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
         className={`d-inline ${
           !post.featured_community && !post.featured_local
             ? "link-dark"
-            : "link-primary"
+            : "link-dark"
         }`}
         to={`/post/${post.id}`}
         title={I18NextService.i18n.t("comments")}
       >
-        <span
-          className="d-inline"
-          dangerouslySetInnerHTML={mdToHtmlInline(post.name)}
-        />
+        <div className="d-inline-block">{post.name}</div>
       </Link>
     );
   }
@@ -466,13 +643,14 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
                 className={
                   !post.featured_community && !post.featured_local
                     ? "link-dark"
-                    : "link-primary"
+                    : "link-dark"
                 }
                 href={url}
                 title={url}
                 rel={relTags}
-                dangerouslySetInnerHTML={mdToHtmlInline(post.name)}
-              ></a>
+              >
+                <div className="d-inline-block">{post.name}</div>
+              </a>
             ) : (
               this.postLink
             )}
@@ -539,7 +717,6 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
             </small>
           )}
         </div>
-        {url && this.urlLine()}
       </>
     );
   }
@@ -549,18 +726,21 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     const url = post.url;
 
     return (
-      <p className="small m-0">
+      <span className="small m-0">
         {url && !(hostname(url) === getExternalHost()) && (
-          <a
-            className="fst-italic link-dark link-opacity-75 link-opacity-100-hover"
-            href={url}
-            title={url}
-            rel={relTags}
-          >
-            {hostname(url)}
-          </a>
+          <span>
+            <span> • </span>
+            <a
+              className="fst-italic link-dark link-opacity-75 link-opacity-100-hover"
+              href={url}
+              title={url}
+              rel={relTags}
+            >
+              {hostname(url)}
+            </a>
+          </span>
         )}
-      </p>
+      </span>
     );
   }
 
@@ -592,8 +772,12 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     const post = this.postView.post;
 
     return (
-      <div className="d-flex align-items-center justify-content-start flex-wrap text-muted">
-        {this.commentsButton}
+      <div
+        className={`d-flex align-items-center justify-content-start flex-wrap text-muted ${
+          mobile ? "hexbear-mobileActionLine" : ""
+        }`}
+      >
+        {this.commentsButton(mobile)}
         {canShare() && (
           <button
             className="btn btn-sm btn-link btn-animate text-muted py-0"
@@ -735,22 +919,21 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     );
   }
 
-  get commentsButton() {
-    const post_view = this.postView;
+  commentsButton(isMobile = false) {
+    const post_view = this.props.post_view;
     const title = I18NextService.i18n.t("number_of_comments", {
       count: Number(post_view.counts.comments),
       formattedCount: Number(post_view.counts.comments),
     });
-
     return (
       <Link
         className="btn btn-link btn-sm text-muted ps-0"
         title={title}
-        to={`/post/${post_view.post.id}?scrollToComments=true`}
+        to={`/post/${post_view.post.id}?scrollToComments=false`}
         data-tippy-content={title}
       >
         <Icon icon="message-square" classes="me-1" inline />
-        {post_view.counts.comments}
+        {post_view.counts.comments} {!isMobile ? "Comments" : ""}
         {this.unreadCount && (
           <>
             {" "}
@@ -1721,7 +1904,10 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
 
   handleImageExpandClick(i: PostListing, event: any) {
     event.preventDefault();
-    i.setState({ imageExpanded: !i.state.imageExpanded });
+    i.setState({
+      imageExpanded: !i.state.imageExpanded,
+      showBody: !i.state.showBody,
+    });
     setupTippy();
   }
 

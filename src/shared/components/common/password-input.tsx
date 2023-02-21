@@ -31,7 +31,7 @@ const passwordStrengthOptions: Options<string> = [
     id: 1,
     value: "weak",
     minDiversity: 2,
-    minLength: 10,
+    minLength: 4,
   },
   {
     id: 2,
@@ -96,7 +96,7 @@ class PasswordInput extends Component<PasswordInputProps, PasswordInputState> {
                 value={value}
                 required
                 maxLength={60}
-                minLength={10}
+                minLength={4}
               />
               <button
                 className="btn btn-outline-dark"

@@ -56,7 +56,7 @@ export class PersonListing extends Component<PersonListingProps, any> {
               "person-listing d-inline-flex align-items-baseline",
               {
                 "text-muted": this.props.muted,
-                "text-info": !this.props.muted,
+                "text-person": !this.props.muted,
               }
             )}
             to={link}
@@ -67,7 +67,7 @@ export class PersonListing extends Component<PersonListingProps, any> {
           <a
             title={apubName}
             className={`person-listing d-inline-flex align-items-baseline ${
-              this.props.muted ? "text-muted" : "text-info"
+              this.props.muted ? "text-muted" : "text-person"
             }`}
             href={link}
             rel={relTags}
@@ -87,10 +87,12 @@ export class PersonListing extends Component<PersonListingProps, any> {
       <>
         {!this.props.hideAvatar &&
           !this.props.person.banned &&
-          showAvatars() && (
+          showAvatars() &&
+          avatar && (
             <PictrsImage
               src={avatar ?? `${getStaticDir()}/assets/icons/icon-96x96.png`}
               icon
+              rounded
             />
           )}
         <span>{displayName}</span>

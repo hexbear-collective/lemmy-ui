@@ -40,6 +40,13 @@ export class UserService {
       showToast && toast(I18NextService.i18n.t("logged_in"));
       setAuthCookie(res.jwt);
       this.#setJwtInfo();
+      // if (
+      //   jwt_split.length > 1 &&
+      //   jwt_split[1].length > 0 &&
+      //   localStorage.getItem("bid") === null
+      // ) {
+      //   localStorage.setItem("bid", jwt_split[1]);
+      // }
     }
   }
 
@@ -62,6 +69,10 @@ export class UserService {
     const jwt = this.jwtInfo?.jwt;
 
     if (jwt) {
+      // const bid = localStorage.getItem("bid");
+      // if (bid) {
+      //   return `${jwt}:${bid}`;
+      // }
       return jwt;
     } else {
       const msg = "No JWT cookie found";

@@ -61,7 +61,7 @@ export class LanguageSelect extends Component<LanguageSelectProps, any> {
             this.props.multiple ? "language_plural" : "language"
           )}
         </label>
-        {this.props.multiple && this.props.showLanguageWarning && (
+        {/* {this.props.multiple && this.props.showLanguageWarning && (
           <div
             id="lang-warning"
             className="alert small alert-warning"
@@ -70,7 +70,7 @@ export class LanguageSelect extends Component<LanguageSelectProps, any> {
             <Icon icon="alert-triangle" classes="icon-inline me-2" />
             {I18NextService.i18n.t("undetermined_language_warning")}
           </div>
-        )}
+        )} */}
         <div
           className={classNames(`col-sm-${this.props.multiple ? 9 : 10}`, {
             "input-group": this.props.multiple,
