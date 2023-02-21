@@ -20,10 +20,6 @@
   opacity: 0.65;
 }
 
-.upvote:hover {
-  color: var(--info);
-}
-
 .upvote {
   margin-bottom: -5px;
 }

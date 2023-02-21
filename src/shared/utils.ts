@@ -41,7 +41,7 @@ import { Subscription } from "rxjs";
 import { delay, retryWhen, take } from "rxjs/operators";
 import tippy from "tippy.js";
 import Toastify from "toastify-js";
-import { getHttpBase } from "./env";
+import { getExternalHost, getHttpBase } from "./env";
 import { i18n, languages } from "./i18next";
 import { CommentNodeI, DataType, IsoData } from "./interfaces";
 import { UserService, WebSocketService } from "./services";
@@ -57,9 +57,9 @@ export const favIconUrl = "/static/assets/icons/favicon.svg";
 export const favIconPngUrl = "/static/assets/icons/apple-touch-icon.png";
 // TODO
 // export const defaultFavIcon = `${window.location.protocol}//${window.location.host}${favIconPngUrl}`;
-export const repoUrl = "https://github.com/LemmyNet";
+export const repoUrl = "https://github.com/hexbear-collective";
 export const joinLemmyUrl = "https://join-lemmy.org";
-export const donateLemmyUrl = `${joinLemmyUrl}/donate`;
+export const donateLemmyUrl = `https://liberapay.com/hexbear`;
 export const docsUrl = `${joinLemmyUrl}/docs/en/index.html`;
 export const helpGuideUrl = `${joinLemmyUrl}/docs/en/users/01-getting-started.html`; // TODO find a way to redirect to the non-en folder
 export const markdownHelpUrl = `${joinLemmyUrl}/docs/en/users/02-media.html`;
@@ -206,10 +206,12 @@ export function hotRank(score: number, timeStr: string): number {
 }
 
 export function mdToHtml(text: string) {
+  // restore '>' character to fix quotes
   return { __html: md.render(text) };
 }
 
 export function mdToHtmlNoImages(text: string) {
+  // restore '>' character to fix quotes
   return { __html: mdNoImages.render(text) };
 }
 
@@ -241,7 +243,6 @@ export function canMod(
     admins
       ?.map(a => a.person.id)
       .concat(mods?.map(m => m.moderator.id) ?? []) ?? [];
-
   if (myUserInfo) {
     let myIndex = adminsThenMods.findIndex(
       id => id == myUserInfo.local_user_view.person.id
@@ -790,7 +791,7 @@ function setupMarkdown() {
   const markdownItConfig: MarkdownIt.Options = {
     html: false,
     linkify: true,
-    typographer: true,
+    typographer: false, // hexbear change to fix issue with legacy emojis throwing exception when followed by quote char
   };
 
   const emojiDefs = Array.from(customEmojisLookup.entries()).reduce(
@@ -825,16 +826,25 @@ function setupMarkdown() {
     env: any,
     self: Renderer
   ) {
-    //Provide custom renderer for our emojis to allow us to add a css class and force size dimensions on them.
+    //Provide custom renderer for our emojis to allow us to add a css class and force size dimensions on them. Also, prevent images to 3rd party domains
     const item = tokens[idx] as any;
     const title = item.attrs.length >= 3 ? item.attrs[2][1] : "";
     const src: string = item.attrs[0][1];
     const isCustomEmoji = customEmojisLookup.get(title) != undefined;
+    const imgHostName = hostname(src);
+    if (!isImageHostWhitelisted(imgHostName)) {
+      return `<i>*removed externally hosted image*</i>`;
+    }
     if (!isCustomEmoji) {
       return defaultRenderer?.(tokens, idx, options, env, self) ?? "";
     }
     const alt_text = item.content;
     return `<img class="icon icon-emoji" src="${src}" title="${title}" alt="${alt_text}"/>`;
+  };
+  //hexbear handling of legacy :emoji: syntax in markdown
+  md.renderer.rules.emoji = function (token, idx) {
+    let emoji = customEmojisLookup.get(token[idx].markup)!;
+    return `<img class="icon icon-emoji" src="${emoji.custom_emoji.image_url}" title="${emoji.custom_emoji.shortcode}" alt="${emoji.custom_emoji.alt_text}"/>`;
   };
 }
 
@@ -1376,7 +1386,7 @@ export async function fetchUsers(q: string) {
 
 export function communitySelectName(cv: CommunityView): string {
   return cv.community.local
-    ? cv.community.title
+    ? cv.community.name
     : `${hostname(cv.community.actor_id)}/${cv.community.title}`;
 }
 
@@ -1600,4 +1610,10 @@ export function share(shareData: ShareData) {
   if (isBrowser()) {
     navigator.share(shareData);
   }
+}
+
+function isImageHostWhitelisted(host: string): boolean {
+  const whiteList = [getExternalHost(), "i.imgur.com"];
+  if (whiteList.includes(host)) return true;
+  return false;
 }

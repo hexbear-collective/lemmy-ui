@@ -86,11 +86,11 @@ server.get("/css/themes/:name", async (req, res) => {
   } else {
     const internalTheme = path.resolve(`./dist/assets/css/themes/${theme}`);
 
-    // If the theme doesn't exist, just send litely
+    // If the theme doesn't exist, just send darkly
     if (existsSync(internalTheme)) {
       res.sendFile(internalTheme);
     } else {
-      res.sendFile(path.resolve("./dist/assets/css/themes/litely.css"));
+      res.sendFile(path.resolve("./dist/assets/css/themes/darkly.css"));
     }
   }
 });
@@ -131,8 +131,21 @@ server.get("/*", async (req, res) => {
     let site: GetSiteResponse | undefined = undefined;
     let routeData: any[] = [];
     let errorPageData: ErrorPageData | undefined;
+    let try_site: any;
     try {
-      let try_site: any = await client.getSite(getSiteForm);
+      try {
+        try_site = await client.getSite(getSiteForm);
+      } catch (error) {
+        // Temp hexbear change to handle weird jwt issue. Can throw away next rebase.
+        if (error == "not_logged_in") {
+          console.error(
+            "Incorrect JWT token, skipping auth so frontend can remove jwt cookie"
+          );
+          getSiteForm.auth = undefined;
+          auth = undefined;
+          try_site = await client.getSite(getSiteForm);
+        }
+      }
       if (try_site.error == "not_logged_in") {
         console.error(
           "Incorrect JWT token, skipping auth so frontend can remove jwt cookie"
@@ -337,7 +350,8 @@ async function createSsrHtml(root: string, isoData: IsoDataOptionalSite) {
     </>
   );
 
-  const erudaStr = process.env["LEMMY_UI_DEBUG"] ? renderToString(eruda) : "";
+  const erudaStr =
+    process.env.LEMMY_UI_DEBUG == "true" ? renderToString(eruda) : "";
 
   const helmet = Helmet.renderStatic();
 
@@ -347,7 +361,7 @@ async function createSsrHtml(root: string, isoData: IsoDataOptionalSite) {
   <!DOCTYPE html>
   <html ${helmet.htmlAttributes.toString()} lang="en">
   <head>
-  <script>window.isoData = ${JSON.stringify(isoData)}</script>
+  <script>window.isoData = ${serialize(isoData)}</script>
   <script>window.lemmyConfig = ${serialize(config)}</script>
 
   <!-- A remote debugging utility for mobile -->

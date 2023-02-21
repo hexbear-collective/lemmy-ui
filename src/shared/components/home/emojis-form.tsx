@@ -483,14 +483,12 @@ export class EmojiForm extends Component<any, EmojiFormState> {
         console.log(res);
         if (res.msg === "ok") {
           pictrsDeleteToast(file.name, res.delete_url as string);
-        } else {
-          toast(JSON.stringify(res), "danger");
-          let hash = res.files?.at(0)?.file;
-          let url = `${res.url}/${hash}`;
           props.form.handleEmojiImageUrlChange(
-            { form: props.form, index: props.index, overrideValue: url },
+            { form: props.form, index: props.index, overrideValue: res.url! },
             event
           );
+        } else {
+          toast(JSON.stringify(res), "danger");
         }
       })
       .catch(error => {

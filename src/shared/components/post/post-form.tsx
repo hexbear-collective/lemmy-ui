@@ -120,7 +120,6 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
         },
       };
     }
-
     const selectedCommunityChoice = this.props.selectedCommunityChoice;
 
     if (selectedCommunityChoice) {
@@ -180,15 +179,15 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
       ...restState,
       form: {
         ...form,
-        community_id: getIdFromString(selectedCommunityChoice?.value),
+        community_id:
+          form.community_id ?? getIdFromString(selectedCommunityChoice?.value),
       },
     };
   }
 
   render() {
     let firstLang = this.state.form.language_id;
-    let selectedLangs = firstLang ? Array.of(firstLang) : undefined;
-
+    let selectedLangs = firstLang ? Array.of(firstLang) : [37]; // hexbear english;
     let url = this.state.form.url;
     return (
       <div>
@@ -626,7 +625,6 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
     if (selectedCommunityChoice) {
       newOptions.push(selectedCommunityChoice);
     }
-
     if (text.length > 0) {
       newOptions.push(
         ...(await fetchCommunities(text)).communities.map(communityToChoice)
@@ -636,7 +634,6 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
         communitySearchOptions: newOptions,
       });
     }
-
     this.setState({
       communitySearchLoading: false,
     });

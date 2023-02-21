@@ -13,6 +13,7 @@ interface PictrsImageProps {
   nsfw?: boolean;
   iconOverlay?: boolean;
   pushup?: boolean;
+  header?: boolean;
 }
 
 export class PictrsImage extends Component<PictrsImageProps, any> {
@@ -29,7 +30,7 @@ export class PictrsImage extends Component<PictrsImageProps, any> {
         <img
           src={this.props.src}
           alt={this.alt()}
-          loading="lazy"
+          loading="eager"
           className={classNames({
             "img-fluid": !this.props.icon && !this.props.iconOverlay,
             banner: this.props.banner,
@@ -39,6 +40,7 @@ export class PictrsImage extends Component<PictrsImageProps, any> {
               !this.props.thumbnail && !this.props.icon,
             "img-blur": this.props.thumbnail && this.props.nsfw,
             "rounded-circle img-icon mr-2": this.props.icon,
+            "img-icon mr-2": this.props.header,
             "ml-2 mb-0 rounded-circle avatar-overlay": this.props.iconOverlay,
             "avatar-pushup": this.props.pushup,
           })}
