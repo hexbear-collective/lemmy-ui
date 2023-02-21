@@ -7,6 +7,7 @@ import { Badges } from "../common/badges";
 import { BannerIconHeader } from "../common/banner-icon-header";
 import { Icon } from "../common/icon";
 import { PersonListing } from "../person/person-listing";
+import MoscowTime from "./moscow-time";
 
 interface SiteSidebarProps {
   site: Site;
@@ -89,6 +90,7 @@ export class SiteSidebar extends Component<SiteSidebarProps, SiteSidebarState> {
     const site = this.props.site;
     return (
       <div>
+        <MoscowTime />
         {site.description && <h6>{site.description}</h6>}
         {site.sidebar && this.siteSidebar(site.sidebar)}
         {this.props.counts && <Badges counts={this.props.counts} />}

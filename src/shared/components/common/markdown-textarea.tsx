@@ -79,7 +79,7 @@ export class MarkdownTextArea extends Component<
 
   state: MarkdownTextAreaState = {
     content: this.props.initialContent,
-    languageId: this.props.initialLanguageId,
+    languageId: 37,
     previewMode: false,
     loading: false,
     submitted: false,
@@ -287,15 +287,16 @@ export class MarkdownTextArea extends Component<
             )}
 
             {/* A flex expander */}
-            <div className="flex-grow-1"></div>
+            {/* <div className="flex-grow-1"></div> */}
 
-            {this.props.replyType && (
+            {this.props.buttonTitle && (
               <button
-                type="button"
+                type="submit"
                 className="btn btn-sm btn-secondary ms-2"
-                onClick={linkEvent(this, this.handleReplyCancel)}
+                disabled={this.isDisabled || !this.state.content}
               >
-                {I18NextService.i18n.t("cancel")}
+                {this.state.loading && <Spinner className="me-1" />}
+                {this.props.buttonTitle}
               </button>
             )}
             <button
@@ -310,14 +311,13 @@ export class MarkdownTextArea extends Component<
                 ? I18NextService.i18n.t("edit")
                 : I18NextService.i18n.t("preview")}
             </button>
-            {this.props.buttonTitle && (
+            {this.props.replyType && (
               <button
-                type="submit"
+                type="button"
                 className="btn btn-sm btn-secondary ms-2"
-                disabled={this.isDisabled || !this.state.content}
+                onClick={linkEvent(this, this.handleReplyCancel)}
               >
-                {this.state.loading && <Spinner className="me-1" />}
-                {this.props.buttonTitle}
+                {I18NextService.i18n.t("cancel")}
               </button>
             )}
           </div>

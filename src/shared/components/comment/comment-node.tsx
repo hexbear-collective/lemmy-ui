@@ -1,4 +1,10 @@
-import { colorList, getCommentParentId, showScores } from "@utils/app";
+import {
+  colorList,
+  getCommentParentId,
+  myAuth,
+  newVote,
+  showScores,
+} from "@utils/app";
 import { futureDaysToUnixTime, numToSI } from "@utils/helpers";
 import classNames from "classnames";
 import { isBefore, parseISO, subMinutes } from "date-fns";
@@ -39,6 +45,7 @@ import {
   CommentNodeI,
   CommentViewType,
   VoteContentType,
+  VoteType,
 } from "../../interfaces";
 import { mdToHtml, mdToHtmlNoImages } from "../../markdown";
 import { I18NextService, UserService } from "../../services";
@@ -247,31 +254,35 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                   </Link>
                 </>
               )}
-
-              {this.getLinkButton(true)}
-
-              {language_id !== 0 && (
-                <span className="badge text-bg-light d-none d-sm-inline me-2">
-                  {
-                    this.props.allLanguages.find(
-                      lang => lang.id === language_id,
-                    )?.name
-                  }
-                </span>
-              )}
-              {/* This is an expanding spacer for mobile */}
-              <div className="me-lg-5 flex-grow-1 flex-lg-grow-0 unselectable pointer mx-2" />
-
+              
               {showScores() && (
                 <>
                   <span
-                    className={`me-1 fw-bold ${this.scoreColor}`}
-                    aria-label={I18NextService.i18n.t("number_of_points", {
-                      count: Number(counts.score),
-                      formattedCount: numToSI(counts.score),
-                    })}
+                    className={`unselectable pointer ${this.scoreColor} ms-1`}
+                    onClick={linkEvent(this, this.handleUpvote)}
+                    data-tippy-content={this.pointsTippy}
                   >
-                    {numToSI(counts.score)}
+                    {this.state.upvoteLoading ? (
+                      <Spinner className="icon-inline hexbear-score-icon" />
+                    ) : (
+                      <span
+                        className="me-1 fw-bold"
+                        aria-label={I18NextService.i18n.t("number_of_points", {
+                          count: Number(this.commentView.counts.score),
+                          formattedCount: numToSI(
+                            this.commentView.counts.score
+                          ),
+                        })}
+                      >
+                        <Icon
+                          icon="hexbear"
+                          classes="icon-inline mr-1 mb-1 hexbear-score-icon"
+                        />
+                        <span className="hexbear-score-text d-inline-block">
+                          {numToSI(this.commentView.counts.score)}
+                        </span>
+                      </span>
+                    )}
                   </span>
                   <span className="me-1">•</span>
                 </>
@@ -312,7 +323,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                   )}
                 </div>
                 <div className="comment-bottom-btns d-flex justify-content-between justify-content-lg-start flex-wrap text-muted fw-bold mt-1">
-                  {this.props.showContext && this.getLinkButton()}
+                  {/* {this.props.showContext && this.getLinkButton()} */}
                   {this.props.markable && (
                     <button
                       className="btn btn-link btn-animate text-muted"
@@ -340,6 +351,11 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                       )}
                     </button>
                   )}
+                  {!UserService.Instance.myUserInfo && ( //hexbear show link button when unauthenticated
+                    <>
+                      <span>{this.getLinkButton(true)}</span>
+                    </>
+                  )}
                   {UserService.Instance.myUserInfo && !this.props.viewOnly && (
                     <>
                       <VoteButtonsCompact
@@ -366,6 +382,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                           }`}
                         />
                       </button>
+                      
                       <CommentActionDropdown
                         commentView={this.commentView}
                         admins={this.props.admins}
@@ -389,8 +406,11 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                     </>
                   )}
                 </div>
-              </>
+                {/* end of button group */}
+              
+          </>
             )}
+            
           </div>
         </article>
         {showMoreChildren && (
@@ -487,7 +507,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
   getLinkButton(small = false) {
     const cv = this.commentView;
 
-    const classnames = classNames("btn btn-link btn-animate text-muted", {
+    const classnames = classNames("btn btn-link btn-animate text-muted mt-1", {
       "btn-sm": small,
     });
 
@@ -769,6 +789,22 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
       limit: 999, // TODO
       type_: "All",
       saved_only: false,
+    });
+  }
+
+  handleUpvote(i: CommentNode) {
+    i.setState({ upvoteLoading: true });
+    i.props.onCommentVote({
+      comment_id: i.commentId,
+      score: newVote(VoteType.Upvote, i.commentView.my_vote),
+    });
+  }
+
+  handleDownvote(i: CommentNode) {
+    i.setState({ downvoteLoading: true });
+    i.props.onCommentVote({
+      comment_id: i.commentId,
+      score: newVote(VoteType.Downvote, i.commentView.my_vote),
     });
   }
 }

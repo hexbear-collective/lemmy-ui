@@ -310,6 +310,7 @@ export class Community extends Component<
   }
 
   renderCommunity() {
+    const { pageCursor } = getCommunityQueryParams();
     switch (this.state.communityRes.state) {
       case "loading":
         return (
@@ -332,7 +333,7 @@ export class Community extends Component<
 
             <div className="row">
               <main
-                className="col-12 col-md-8 col-lg-9"
+                className="col-12 col-md-8 col-lg-9 hexbear-main"
                 ref={this.mainContentRef}
               >
                 {this.communityInfo(res)}
@@ -356,11 +357,13 @@ export class Community extends Component<
                 {this.selects(res)}
                 {this.listings(res)}
                 <PaginatorCursor
+                  prevPage={pageCursor}
                   nextPage={this.getNextPage}
                   onNext={this.handlePageNext}
+                  onPrev={this.handlePagePrev}
                 />
               </main>
-              <aside className="d-none d-md-block col-md-4 col-lg-3">
+              <aside className="d-none d-md-block col-md-4 col-lg-3 hexbear-aside safe-inline">
                 {this.sidebar(res)}
               </aside>
             </div>

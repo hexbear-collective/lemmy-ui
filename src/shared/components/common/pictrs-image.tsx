@@ -16,6 +16,8 @@ interface PictrsImageProps {
   iconOverlay?: boolean;
   pushup?: boolean;
   cardTop?: boolean;
+  header?: boolean;
+  rounded?: boolean;
 }
 
 export class PictrsImage extends Component<PictrsImageProps, any> {
@@ -43,17 +45,18 @@ export class PictrsImage extends Component<PictrsImageProps, any> {
           src={src}
           alt={this.alt()}
           title={this.alt()}
-          loading="lazy"
+          loading="eager"
           className={classNames("overflow-hidden pictrs-image", {
             "img-fluid": !(icon || iconOverlay),
             banner,
-            "thumbnail rounded object-fit-cover":
-              thumbnail && !(icon || banner),
+            "thumbnail rounded object-fit-cover":thumbnail && !(icon || banner),
             "img-expanded slight-radius": !(thumbnail || icon),
             "img-blur": thumbnail && nsfw,
             "object-fit-cover img-icon me-1": icon,
             "img-blur-icon": icon && blur_image,
             "img-blur-thumb": thumbnail && blur_image,
+            "img-icon me-2": this.props.header,
+            "rounded-circle": this.props.rounded,
             "ms-2 mb-0 rounded-circle object-fit-cover avatar-overlay":
               iconOverlay,
             "avatar-pushup": pushup,

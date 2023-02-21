@@ -59,7 +59,7 @@ export default async (req: Request, res: Response) => {
 
     if (try_site.state === "success") {
       site = try_site.data;
-      initializeSite(site);
+      initializeSite(site, true);
 
       if (path !== "/setup" && !site.site_view.local_site.site_setup) {
         return res.redirect("/setup");

@@ -190,11 +190,11 @@ export class Post extends Component<any, PostState> {
         isIsomorphic: true,
       };
 
-      if (isBrowser()) {
-        if (this.checkScrollIntoCommentsParam) {
-          this.scrollIntoCommentSection();
-        }
-      }
+      // if (isBrowser()) {
+      //   if (this.checkScrollIntoCommentsParam) {
+      //     this.scrollIntoCommentSection();
+      //   }
+      // }
     }
   }
 
@@ -228,9 +228,9 @@ export class Post extends Component<any, PostState> {
 
     if (!this.state.commentId) restoreScrollPosition(this.context);
 
-    if (this.checkScrollIntoCommentsParam) {
-      this.scrollIntoCommentSection();
-    }
+    // if (this.checkScrollIntoCommentsParam) {
+    //   this.scrollIntoCommentSection();
+    // }
   }
 
   static async fetchInitialData({
@@ -359,7 +359,7 @@ export class Post extends Component<any, PostState> {
         const res = this.state.postRes.data;
         return (
           <div className="row">
-            <main className="col-12 col-md-8 col-lg-9 mb-3">
+            <main className="col-12 col-md-8 col-lg-9 mb-3 hexbear-main">
               <HtmlTags
                 title={this.documentTitle}
                 path={this.context.router.route.match.url}
@@ -395,6 +395,7 @@ export class Post extends Component<any, PostState> {
                 onTransferCommunity={this.handleTransferCommunity}
                 onFeaturePost={this.handleFeaturePost}
                 onMarkPostAsRead={() => {}}
+                inline={false}
               />
               <div ref={this.state.commentSectionRef} className="mb-2" />
 
@@ -433,7 +434,7 @@ export class Post extends Component<any, PostState> {
               {this.state.commentViewType === CommentViewType.Flat &&
                 this.commentsFlat()}
             </main>
-            <aside className="d-none d-md-block col-md-4 col-lg-3">
+            <aside className="d-none d-md-block col-md-4 col-lg-3 hexbear-aside safe-inline">
               {this.sidebar()}
             </aside>
           </div>

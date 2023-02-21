@@ -38,13 +38,15 @@ export class PersonListing extends Component<PersonListingProps, any> {
         ? `/u/${person.name}@${domain}`
         : person.actor_id;
     }
+    //Hexbear: temp change to force domain to show
+    let displayName = person.display_name ?? apubName;
 
-    let displayName = this.props.useApubName
-      ? apubName
-      : person.display_name ?? apubName;
-
-    if (this.props.showApubName && !local && person.display_name) {
-      displayName = `${displayName} (${apubName})`;
+    if (!local && person.display_name) {
+      const domain = hostname(person.actor_id);
+      displayName = `${displayName}@${domain}`;
+    }
+    if (this.props.useApubName) {
+      displayName = apubName;
     }
 
     return (
@@ -57,6 +59,7 @@ export class PersonListing extends Component<PersonListingProps, any> {
               {
                 "text-muted": this.props.muted,
                 "text-info": !this.props.muted,
+                "text-person": !this.props.muted,
               },
             )}
             to={link}
@@ -67,7 +70,7 @@ export class PersonListing extends Component<PersonListingProps, any> {
           <a
             title={apubName}
             className={`person-listing d-inline-flex align-items-baseline ${
-              this.props.muted ? "text-muted" : "text-info"
+              this.props.muted ? "text-muted" : "text-person"
             }`}
             href={link}
             rel={relTags}
@@ -87,10 +90,12 @@ export class PersonListing extends Component<PersonListingProps, any> {
       <>
         {!this.props.hideAvatar &&
           !this.props.person.banned &&
-          showAvatars() && (
+          showAvatars() &&
+          avatar && (
             <PictrsImage
               src={avatar ?? `${getStaticDir()}/assets/icons/icon-96x96.png`}
               icon
+              rounded
             />
           )}
         <span>{displayName}</span>

@@ -9,6 +9,7 @@ import {
   updatePersonBlock,
 } from "@utils/app";
 import { restoreScrollPosition, saveScrollPosition } from "@utils/browser";
+import { getHttpBase } from "@utils/env";
 import {
   capitalizeFirstLetter,
   futureDaysToUnixTime,
@@ -58,6 +59,7 @@ import {
   LockPost,
   MarkCommentReplyAsRead,
   MarkPersonMentionAsRead,
+  Person,
   PersonView,
   PostResponse,
   PurgeComment,
@@ -109,6 +111,7 @@ interface ProfileState {
   siteRes: GetSiteResponse;
   finished: Map<CommentId, boolean | undefined>;
   isIsomorphic: boolean;
+  relatedPersons: Person[];
 }
 
 interface ProfileProps {
@@ -184,6 +187,7 @@ export class Profile extends Component<
     removeData: false,
     finished: new Map(),
     isIsomorphic: false,
+    relatedPersons: [],
   };
 
   constructor(props: RouteComponentProps<{ username: string }>, context: any) {
@@ -727,6 +731,34 @@ export class Profile extends Component<
 
     this.props.history.push(`/u/${username}${getQueryString(queryParams)}`);
     await this.fetchUserData();
+  }
+
+  hexbearRelatedUsers() {
+    return (
+      <div className="card border-secondary mb-3">
+        <div className="card-body">
+          <h5>Related Users</h5>
+          <ul className="list-unstyled mb-0">
+            {this.state.relatedPersons.map(u => (
+              <li key={u.id}>
+                <PersonListing
+                  person={u}
+                  realLink={true}
+                  useApubName={false}
+                  muted
+                  hideAvatar={true}
+                />
+                {isBanned(u) && (
+                  <li className="list-inline-item badge badge-danger ml-2">
+                    {I18NextService.i18n.t("banned")}
+                  </li>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
   }
 
   handlePageChange(page: number) {
