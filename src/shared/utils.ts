@@ -869,6 +869,11 @@ function setupMarkdown() {
     const alt_text = item.content;
     return `<img class="icon icon-emoji" src="${src}" title="${title}" alt="${alt_text}"/>`;
   };
+  //hexbear handling of legacy :emoji: syntax in markdown
+  md.renderer.rules.emoji = function (token, idx) {
+    let emoji = customEmojisLookup.get(token[idx].markup)!;
+    return `<img class="icon icon-emoji" src="${emoji.custom_emoji.image_url}" title="${emoji.custom_emoji.shortcode}" alt="${emoji.custom_emoji.alt_text}"/>`;
+  };
 }
 
 export function getEmojiMart(
