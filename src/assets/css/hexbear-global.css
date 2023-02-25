@@ -34,3 +34,10 @@
 .text-body{
     display: inline-block !important;
 }
+.hexbear-score-icon{
+    width:20px;
+    height:20px;
+}
+.hexbear-collapse{
+    order:-1;
+}

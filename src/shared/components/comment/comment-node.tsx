@@ -272,7 +272,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                 </>
               )}
               <button
-                className="btn btn-sm text-muted"
+                className="btn btn-sm text-muted hexbear-collapse"
                 onClick={linkEvent(this, this.handleCommentCollapse)}
                 aria-label={this.expandText}
                 data-tippy-content={this.expandText}
@@ -300,6 +300,10 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                         formattedCount: this.state.score,
                       })}
                     >
+                      <Icon
+                        icon="hexbear"
+                        classes="icon-inline mr-1 mb-1 hexbear-score-icon"
+                      />
                       {numToSI(this.state.score)}
                     </span>
                   </a>
@@ -1055,11 +1059,6 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
         >
           <Icon icon="link" classes="icon-inline" />
         </Link>
-        {/* remove fediverse for hexbear {
-          <a className={classnames} title={title} href={cv.comment.ap_id}>
-            <Icon icon="fedilink" classes="icon-inline" />
-          </a>
-        } */}
       </>
     );
   }
