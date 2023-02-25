@@ -304,7 +304,9 @@ export class Home extends Component<any, HomeState> {
         ...this.state,
         trendingCommunities: trendingRes?.communities ?? [],
         loading: false,
-        tagline: getRandomFromList(taglines)?.content,
+        tagline: this.hexbear_setupTagline(
+          getRandomFromList(taglines)?.content ?? ""
+        ),
       };
     } else {
       fetchTrendingCommunities();
@@ -732,6 +734,39 @@ export class Home extends Component<any, HomeState> {
     window.scrollTo(0, 0);
   }
 
+  hexbear_setupTagline(tagline: string): string {
+    return tagline
+      .replace("<MOSCOW_TIME>", getMoscowTime())
+      .replace("<CURRENT_USER>", getCurrentUsername())
+      .replace("<CURRENT_YEAR>", getCurrentYear())
+      .replace(
+        /<RANDOM:(\d+):(\d+)>/,
+        (_value, min, max) => `${getRandomNumber(min, max)}`
+      );
+    function getRandomNumber(minimum: number, maximum: number): number {
+      return (Math.random() * (maximum - minimum + 1)) << 0;
+    }
+    function getMoscowTime(): string {
+      const localDate = new Date();
+
+      const utc = localDate.getTime() + localDate.getTimezoneOffset() * 60000;
+
+      // create new Date object for different city
+      // using supplied offset
+      const moscowTime = new Date(utc + 3600000 * 3);
+      return moscowTime.toLocaleString().split(", ")[1];
+    }
+    function getCurrentYear(): string {
+      const localYear = new Date().getFullYear();
+      return localYear.toString();
+    }
+    function getCurrentUsername(): string {
+      return (
+        UserService.Instance?.myUserInfo?.local_user_view.person.name ??
+        "Someone"
+      );
+    }
+  }
   parseMessage(msg: any) {
     const op = wsUserOp(msg);
     console.log(msg);
