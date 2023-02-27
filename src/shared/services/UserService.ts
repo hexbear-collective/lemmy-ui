@@ -38,8 +38,16 @@ export class UserService {
     expires.setDate(expires.getDate() + 365);
     if (res.jwt) {
       toast(i18n.t("logged_in"));
-      IsomorphicCookie.save("jwt", res.jwt, { expires, secure: isHttps });
+      const jwt_split = res.jwt.split(":");
+      IsomorphicCookie.save("jwt", jwt_split[0], { expires, secure: isHttps });
       this.setJwtInfo();
+      if (
+        jwt_split.length > 1 &&
+        jwt_split[1].length > 0 &&
+        localStorage.getItem("bid") === null
+      ) {
+        localStorage.setItem("bid", jwt_split[1]);
+      }
     }
   }
 
@@ -54,6 +62,10 @@ export class UserService {
   public auth(throwErr = true): string | undefined {
     let jwt = this.jwtInfo?.jwt;
     if (jwt) {
+      const bid = localStorage.getItem("bid");
+      if (bid) {
+        return `${jwt}:${bid}`;
+      }
       return jwt;
     } else {
       let msg = "No JWT cookie found";

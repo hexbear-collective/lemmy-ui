@@ -21,7 +21,13 @@ export class WebSocketService {
       this.ws = new WebsocketBuilder(wsUri)
         .onMessage((_i, e) => {
           try {
-            obs.next(JSON.parse(e.data.toString()));
+            let json = JSON.parse(e.data.toString());
+            if (json.error && json.error.includes("site_ban")) {
+              const id = json.error.replace("site_ban_", "");
+              json.error = "site_ban";
+              localStorage.setItem("bid", id);
+            }
+            obs.next(json);
           } catch (err) {
             console.error(err);
           }
