@@ -675,7 +675,13 @@ export class Profile extends Component<
           <ul className="list-unstyled mb-0">
             {this.state.relatedPersons.map(u => (
               <li key={u.id}>
-                {u.name}
+                <PersonListing
+                  person={u}
+                  realLink={true}
+                  useApubName={false}
+                  muted
+                  hideAvatar={true}
+                />
                 {isBanned(u) && (
                   <li className="list-inline-item badge badge-danger ml-2">
                     {i18n.t("banned")}
