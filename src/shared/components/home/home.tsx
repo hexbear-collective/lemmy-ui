@@ -261,6 +261,7 @@ export class Home extends Component<any, HomeState> {
     loading: true,
     posts: [],
     comments: [],
+    tagline: ""
   };
 
   constructor(props: any, context: any) {
@@ -273,6 +274,16 @@ export class Home extends Component<any, HomeState> {
 
     this.parseMessage = this.parseMessage.bind(this);
     this.subscription = wsSubscribe(this.parseMessage);
+
+    if (isBrowser()) {
+      const taglines = this.state?.siteRes?.taglines ?? [];
+      this.state = {
+        ...this.state,
+        tagline: this.hexbear_setupTagline(
+          getRandomFromList(taglines)?.content ?? ""
+        ),
+      };
+    }
 
     // Only fetch the data if coming from another route
     if (this.isoData.path === this.context.router.route.match.url) {
@@ -299,14 +310,10 @@ export class Home extends Component<any, HomeState> {
           wsClient.communityJoin({ community_id: 0 })
         );
       }
-      const taglines = this.state?.siteRes?.taglines ?? [];
       this.state = {
         ...this.state,
         trendingCommunities: trendingRes?.communities ?? [],
         loading: false,
-        tagline: this.hexbear_setupTagline(
-          getRandomFromList(taglines)?.content ?? ""
-        ),
       };
     } else {
       fetchTrendingCommunities();
