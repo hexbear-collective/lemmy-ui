@@ -154,11 +154,14 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
         {!this.state.showEdit ? (
           <>
             {this.listing()}
-            {this.state.imageExpanded && !this.props.hideImage && this.img}
-            {post.url && this.showBody && post.embed_title && (
-              <MetadataCard post={post} />
-            )}
-            {this.showBody && this.body()}
+            {/* Hide for mobile view*/}
+            <div className="d-none d-sm-block">
+              {this.state.imageExpanded && !this.props.hideImage && this.img}
+              {post.url && this.showBody && post.embed_title && (
+                <MetadataCard post={post} />
+              )}
+              {this.showBody && this.body()}
+            </div>
           </>
         ) : (
           <div className="col-12">
@@ -372,14 +375,81 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
         );
       }
     } else {
-        return (
-          <div className="thumbnail rounded bg-light d-flex justify-content-center pointer"
-            data-tippy-content={i18n.t("expand_here")}
-            onClick={linkEvent(this, this.handleImageExpandClick)}>
-            <Icon icon="message-square" classes="d-flex align-items-center" />
-          </div>
-        );
+      return (
+        <div className="thumbnail rounded bg-light d-flex justify-content-center pointer"
+          data-tippy-content={i18n.t("expand_here")}
+          onClick={linkEvent(this, this.handleImageExpandClick)}>
+          <Icon icon="message-square" classes="d-flex align-items-center" />
+        </div>
+      );
     }
+  }
+
+  hexbear_mobileBody() {
+    let body = this.props.post_view.post.body;
+    const longPost = body && body.length > 300;
+    return body ? (
+      <div className={`col-12 card my-2 p-2 collapsed-content ${this.showBody || !longPost ? "expanded" : ""}`}
+        onClick={linkEvent(this, this.handleImageExpandClick)}>
+        {this.state.viewSource ? (
+          <pre>{body}</pre>
+        ) : (
+          <div className="md-div" dangerouslySetInnerHTML={mdToHtml(body)} />
+        )}
+      </div>
+    ) : (
+      <></>
+    );
+  }
+
+  hexbear_mobileActionLine() {
+    return (
+      <div className="d-flex flex-wrap hexbear-mobileActionLine">
+        {!this.props.viewOnly && this.mobileVotes}
+        {UserService.Instance.myUserInfo &&
+          !this.props.viewOnly &&
+          <div>
+            {this.saveButton}
+          </div>}
+        {this.commentsButton}
+        {this.showMoreButton}
+        {this.state.showAdvanced && (
+          <>
+            {this.canModOnSelf_ && (
+              <>
+                {this.lockButton}
+                {this.featureButton}
+              </>
+            )}
+            {(this.canMod_ || this.canAdmin_) && <>{this.modRemoveButton}</>}
+          </>
+        )}
+      </div>
+    );
+
+  }
+
+  hexbear_mobileContent() {
+    return (
+      <div className="row">
+        <div className="col-12">
+          {this.createdLine()}
+
+          {/* If it has a thumbnail, do a right aligned thumbnail */}
+          <span onClick={linkEvent(this, this.handleImageExpandClick)}>
+            {this.mobileThumbnail()}
+          </span>
+
+          {/* Show a preview of the post body */}
+          <div className={`collapsed-image collapsed-content ${this.showBody ? "expanded" : ""}`}>
+            {this.img}
+          </div>
+          {this.hexbear_mobileBody()}
+
+          {this.hexbear_mobileActionLine()}
+        </div>
+      </div>
+    )
   }
 
   createdLine() {
@@ -546,6 +616,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
           ) : (
             this.postLink
           )}
+{/* Removed for HexBear
           {(url && isImage(url)) ||
             (post.thumbnail_url && (
               <button
@@ -561,6 +632,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
                 />
               </button>
             ))}
+             */}
           {post.removed && (
             <small className="ml-2 text-muted font-italic">
               {i18n.t("removed")}
@@ -1293,12 +1365,8 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     let post = this.props.post_view.post;
     return post.thumbnail_url || (post.url && isImage(post.url)) ? (
       <div className="row">
-        <div className={`${this.state.imageExpanded ? "col-12" : "col-8"}`}>
+        <div className="col-12">
           {this.postTitleLine()}
-        </div>
-        <div className="col-4">
-          {/* Post body prev or thumbnail */}
-          {!this.state.imageExpanded && this.thumbnail()}
         </div>
       </div>
     ) : (
@@ -1320,22 +1388,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
       <>
         {/* The mobile view*/}
         <div className="d-block d-sm-none">
-          <div className="row">
-            <div className="col-12">
-              {this.createdLine()}
-
-              {/* If it has a thumbnail, do a right aligned thumbnail */}
-              {this.mobileThumbnail()}
-
-              {/* Show a preview of the post body */}
-              {this.showMobilePreview()}
-
-              {this.commentsLine(true)}
-              {this.userActionsLine()}
-              {this.duplicatesLine()}
-              {this.removeAndBanDialogs()}
-            </div>
-          </div>
+          {this.hexbear_mobileContent()}
         </div>
 
         {/* The larger view*/}
