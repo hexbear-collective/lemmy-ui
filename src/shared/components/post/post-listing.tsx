@@ -316,6 +316,72 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     }
   }
 
+  hexbear_thumbnail() {
+    let post = this.props.post_view.post;
+    let url = post.url;
+    let thumbnail = post.thumbnail_url;
+
+    if (!this.props.hideImage && url && isImage(url) && this.imageSrc) {
+      return (
+        <a
+          href={this.imageSrc}
+          className="text-body d-inline-block position-relative mb-2"
+          data-tippy-content={i18n.t("expand_here")}
+          onClick={linkEvent(this, this.handleImageExpandClick)}
+          aria-label={i18n.t("expand_here")}
+        >
+          {this.imgThumb(this.imageSrc)}
+          <Icon icon="image" classes="mini-overlay" />
+        </a>
+      );
+    } else if (!this.props.hideImage && url && thumbnail && this.imageSrc) {
+      return (
+        <a
+          className="text-body d-inline-block position-relative mb-2"
+          href={url}
+          onClick={linkEvent(this, this.handleImageExpandClick)}
+          rel={relTags}
+          title={url}
+        >
+          {this.imgThumb(this.imageSrc)}
+          <Icon icon="external-link" classes="mini-overlay" />
+        </a>
+      );
+    } else if (url) {
+      if (!this.props.hideImage && isVideo(url)) {
+        return (
+          <div className="embed-responsive embed-responsive-16by9">
+            <video
+              playsInline
+              muted
+              loop
+              controls
+              className="embed-responsive-item"
+            >
+              <source src={url} type="video/mp4" />
+            </video>
+          </div>
+        );
+      } else {
+        return (
+          <a className="text-body" href={url} title={url} rel={relTags}>
+            <div className="thumbnail rounded bg-light d-flex justify-content-center">
+              <Icon icon="external-link" classes="d-flex align-items-center" />
+            </div>
+          </a>
+        );
+      }
+    } else {
+        return (
+          <div className="thumbnail rounded bg-light d-flex justify-content-center pointer"
+            data-tippy-content={i18n.t("expand_here")}
+            onClick={linkEvent(this, this.handleImageExpandClick)}>
+            <Icon icon="message-square" classes="d-flex align-items-center" />
+          </div>
+        );
+    }
+  }
+
   createdLine() {
     let post_view = this.props.post_view;
     let url = post_view.post.url;
@@ -338,8 +404,8 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
           )}
           {(post_view.creator_banned_from_community ||
             isBanned(post_view.creator)) && (
-            <span className="mx-1 badge badge-danger">{i18n.t("banned")}</span>
-          )}
+              <span className="mx-1 badge badge-danger">{i18n.t("banned")}</span>
+            )}
           {post_view.creator_blocked && (
             <span className="mx-1 badge badge-danger">{"blocked"}</span>
           )}
@@ -397,9 +463,8 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     return (
       <div className={`vote-bar col-1 pr-0 small text-center`}>
         <button
-          className={`btn-animate btn btn-link p-0 ${
-            this.state.my_vote == 1 ? "text-info" : "text-muted"
-          }`}
+          className={`btn-animate btn btn-link p-0 ${this.state.my_vote == 1 ? "text-info" : "text-muted"
+            }`}
           onClick={this.handlePostLike}
           data-tippy-content={i18n.t("upvote")}
           aria-label={i18n.t("upvote")}
@@ -418,9 +483,8 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
         )}
         {this.props.enableDownvotes && (
           <button
-            className={`btn-animate btn btn-link p-0 ${
-              this.state.my_vote == -1 ? "text-danger" : "text-muted"
-            }`}
+            className={`btn-animate btn btn-link p-0 ${this.state.my_vote == -1 ? "text-danger" : "text-muted"
+              }`}
             onClick={this.handlePostDisLike}
             data-tippy-content={i18n.t("downvote")}
             aria-label={i18n.t("downvote")}
@@ -674,9 +738,8 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
       <>
         <div>
           <button
-            className={`btn-animate btn py-0 px-1 ${
-              this.state.my_vote == 1 ? "text-info" : "text-muted"
-            }`}
+            className={`btn-animate btn py-0 px-1 ${this.state.my_vote == 1 ? "text-info" : "text-muted"
+              }`}
             {...tippy}
             onClick={this.handlePostLike}
             aria-label={i18n.t("upvote")}
@@ -688,9 +751,8 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
           </button>
           {this.props.enableDownvotes && (
             <button
-              className={`ml-2 btn-animate btn py-0 px-1 ${
-                this.state.my_vote == -1 ? "text-danger" : "text-muted"
-              }`}
+              className={`ml-2 btn-animate btn py-0 px-1 ${this.state.my_vote == -1 ? "text-danger" : "text-muted"
+                }`}
               onClick={this.handlePostDisLike}
               {...tippy}
               aria-label={i18n.t("downvote")}
@@ -1281,7 +1343,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
           <div className="row hexbear-row">
             {!this.props.viewOnly && this.voteBar()}
             <div className="col-sm-2 pr-0 hexbear-thumbnail-wrapper">
-              <div className="">{this.thumbnail()}</div>
+              <div className="">{this.hexbear_thumbnail()}</div>
             </div>
             <div className="col-12 col-sm-9 hexbear-post-content">
               <div className="row">
@@ -1493,9 +1555,9 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
 
     return body
       ? `${i18n.t("cross_posted_from")} ${post.ap_id}\n\n${body.replace(
-          /^/gm,
-          "> "
-        )}`
+        /^/gm,
+        "> "
+      )}`
       : undefined;
   }
 
@@ -1756,7 +1818,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
 
   handleImageExpandClick(i: PostListing, event: any) {
     event.preventDefault();
-    i.setState({ imageExpanded: !i.state.imageExpanded });
+    i.setState({ imageExpanded: !i.state.imageExpanded, showBody: !i.state.showBody });
     setupTippy();
   }
 
