@@ -173,8 +173,7 @@ server.get("/*", async (req, res) => {
         <script>eruda.init();</script>
       </>
     );
-
-    const erudaStr = process.env["LEMMY_UI_DEBUG"] ? renderToString(eruda) : "";
+    const erudaStr = process.env.LEMMY_UI_DEBUG == "true" ? renderToString(eruda) : "";
     const root = renderToString(wrapper);
     const helmet = Helmet.renderStatic();
 
