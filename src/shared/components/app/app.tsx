@@ -26,13 +26,13 @@ export class App extends Component<any, any> {
         <Provider i18next={i18n}>
           <div id="app">
             <Theme defaultTheme={siteView.local_site.default_theme} />
-            {icon && (
+            {(favIconUrl || icon) && (
               <Helmet>
                 <link
                   id="favicon"
                   rel="shortcut icon"
                   type="image/x-icon"
-                  href={icon || favIconUrl}
+                  href={favIconUrl || icon}
                 />
                 <link rel="apple-touch-icon" href={icon || favIconPngUrl} />
               </Helmet>
