@@ -49,11 +49,12 @@ export class LanguageSelect extends Component<LanguageSelectProps, any> {
       this.selectBtn
     ) : (
       <div>
+        {/*        Removed for Hexbear - Annoying useless warning
         {this.props.multiple && (
           <div className="alert alert-warning" role="alert">
             {i18n.t("undetermined_language_warning")}
           </div>
-        )}
+        )} */}
         <div className="form-group row">
           <label
             className={classNames(
