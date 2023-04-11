@@ -119,3 +119,20 @@
 .hexbear-mobileActionLine .icon {
     font-size:140% !important;
 }
+
+.featured-posts{
+    background-color: var(--theme-ui-colors-muted,#2F2F37);
+    border-radius: 0.25rem;
+}
+.featured-posts-toggle{
+    padding:8px 16px;
+    font-weight:400;
+    justify-content: space-between;
+    display: flex;
+    cursor:pointer;
+}
+.featured-posts-toggle svg{
+    width:20px;
+    height:20px;
+    margin-right:5px;
+}
