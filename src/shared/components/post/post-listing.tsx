@@ -426,7 +426,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
         {UserService.Instance.myUserInfo && !this.props.viewOnly && (
           <div>{this.saveButton}</div>
         )}
-        {this.commentsButton}
+        {this.commentsButton(true)}
         {this.showMoreButton}
         {this.state.showAdvanced && (
           <>
@@ -739,7 +739,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     let post = this.props.post_view.post;
     return (
       <div className="d-flex justify-content-start flex-wrap text-muted font-weight-bold mb-1">
-        {this.commentsButton}
+        {this.commentsButton(false)}
         {!post.local && (
           <a
             className="btn btn-link btn-animate text-muted py-0"
@@ -800,7 +800,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     );
   }
 
-  get commentsButton() {
+  commentsButton(isMobile = false) {
     let post_view = this.props.post_view;
     return (
       <button className="btn btn-link text-muted py-0 pl-0">
@@ -813,12 +813,15 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
           to={`/post/${post_view.post.id}?scrollToComments=true`}
         >
           <Icon icon="message-square" classes="mr-1" inline />
-          <span className="mr-2">
-            {i18n.t("number_of_comments", {
-              count: post_view.counts.comments,
-              formattedCount: numToSI(post_view.counts.comments),
-            })}
-          </span>
+          {!isMobile && (
+            <span className="mr-2">
+              {i18n.t("number_of_comments", {
+                count: post_view.counts.comments,
+                formattedCount: numToSI(post_view.counts.comments),
+              })}
+            </span>
+          )}
+          {isMobile && <span>{post_view.counts.comments}</span>}
           {this.unreadCount && (
             <span className="small text-warning">
               ({this.unreadCount} {i18n.t("new")})
