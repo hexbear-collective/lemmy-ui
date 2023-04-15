@@ -224,8 +224,8 @@ export class Settings extends Component<any, SettingsState> {
           avatar,
           banner,
           display_name,
-          pronoun_1: this.hexbear_parsePronouns(luv.person.display_name!, 1),
-          pronoun_2: this.hexbear_parsePronouns(luv.person.display_name!, 2),
+          pronoun_1: this.hexbear_parsePronouns(display_name!, 1),
+          pronoun_2: this.hexbear_parsePronouns(display_name!, 2),
           show_avatars,
           bot_account,
           show_bot_accounts,
@@ -924,7 +924,7 @@ export class Settings extends Component<any, SettingsState> {
             </div>
           </>
         )}
-        </>
+      </>
     );
   }
   hexbear_setupPronouns() {
