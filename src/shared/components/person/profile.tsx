@@ -15,7 +15,7 @@ import {
   GetPersonDetails,
   GetPersonDetailsResponse,
   GetSiteResponse,
-  PersonSafe,
+  Person,
   PostResponse,
   PurgeItemResponse,
   SortType,
@@ -25,7 +25,7 @@ import {
 } from "lemmy-js-client";
 import moment from "moment";
 import { Subscription } from "rxjs";
-import { httpBase } from "../../env";
+import { getHttpBase } from "../../env";
 import { i18n } from "../../i18next";
 import { InitialFetchRequest, PersonDetailsView } from "../../interfaces";
 import { UserService, WebSocketService } from "../../services";
@@ -78,7 +78,7 @@ interface ProfileState {
   showBanDialog: boolean;
   removeData: boolean;
   siteRes: GetSiteResponse;
-  relatedPersons: PersonSafe[];
+  relatedPersons: Person[];
 }
 
 interface ProfileProps {
@@ -182,7 +182,7 @@ export class Profile extends Component<
         UserService.Instance.myUserInfo?.local_user_view.person.id ?? -1;
       if (isAdmin(personId, this.state.siteRes.admins)) {
         fetch(
-          `${httpBase}/api/v3/user/related?user_id=${personId}&auth=${auth}`
+          `${getHttpBase()}/api/v3/user/related?user_id=${personId}&auth=${auth}`
         )
           .then(r => r.json())
           .then((p: any) => {
