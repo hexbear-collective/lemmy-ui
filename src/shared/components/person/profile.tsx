@@ -768,7 +768,6 @@ export class Profile extends Component<
           const data = wsJsonToRes<GetPersonDetailsResponse>(msg);
           this.setState({ personRes: data, loading: false });
           this.setPersonBlock();
-          this.hexbearRelatedUsers;
           restoreScrollPosition(this.context);
 
           //hexbear-specific, get related users for admin purposes
