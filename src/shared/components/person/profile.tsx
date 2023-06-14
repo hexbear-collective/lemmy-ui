@@ -175,22 +175,6 @@ export class Profile extends Component<
     this.parseMessage = this.parseMessage.bind(this);
     this.subscription = wsSubscribe(this.parseMessage);
 
-    //hexbear-specific, get related users for admin purposes
-    const auth = myAuth(false);
-    if (auth) {
-      const personId =
-        UserService.Instance.myUserInfo?.local_user_view.person.id ?? -1;
-      if (isAdmin(personId, this.state.siteRes.admins)) {
-        fetch(
-          `${getHttpBase()}/api/v3/user/related?user_id=${personId}&auth=${auth}`
-        )
-          .then(r => r.json())
-          .then((p: any) => {
-            this.setState({ relatedPersons: p.users });
-          });
-      }
-    }
-
     // Only fetch the data if coming from another route
     if (this.isoData.path === this.context.router.route.match.url) {
       this.state = {
@@ -784,7 +768,26 @@ export class Profile extends Component<
           const data = wsJsonToRes<GetPersonDetailsResponse>(msg);
           this.setState({ personRes: data, loading: false });
           this.setPersonBlock();
+          this.hexbearRelatedUsers;
           restoreScrollPosition(this.context);
+
+          //hexbear-specific, get related users for admin purposes
+          const auth = myAuth(false);
+          if (auth) {
+            const personId =
+              UserService.Instance.myUserInfo?.local_user_view.person.id ?? -1;
+            if (isAdmin(personId, this.state.siteRes.admins)) {
+              fetch(
+                `${getHttpBase()}/api/v3/user/related?user_id=${
+                  data.person_view.person.id
+                }&auth=${auth}`
+              )
+                .then(r => r.json())
+                .then((p: any) => {
+                  this.setState({ relatedPersons: p.users });
+                });
+            }
+          }
 
           break;
         }
