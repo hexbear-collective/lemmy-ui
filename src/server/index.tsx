@@ -10,7 +10,6 @@ import { GetSite, GetSiteResponse, LemmyHttp, Site } from "lemmy-js-client";
 import path from "path";
 import process from "process";
 import serialize from "serialize-javascript";
-import sharp from "sharp";
 import { App } from "../shared/components/app/app";
 import { getHttpBase, getHttpBaseInternal } from "../shared/env";
 import {
@@ -138,18 +137,12 @@ server.get("/*", async (req, res) => {
       } catch (error) {
         // Temp hexbear change to handle weird jwt issue. Can throw away next rebase.
         if (error == "not_logged_in") {
-          console.error(
-            "Incorrect JWT token, skipping auth so frontend can remove jwt cookie"
-          );
           getSiteForm.auth = undefined;
           auth = undefined;
           try_site = await client.getSite(getSiteForm);
         }
       }
       if (try_site.error == "not_logged_in") {
-        console.error(
-          "Incorrect JWT token, skipping auth so frontend can remove jwt cookie"
-        );
         getSiteForm.auth = undefined;
         auth = undefined;
         try_site = await client.getSite(getSiteForm);
@@ -161,7 +154,7 @@ server.get("/*", async (req, res) => {
       }
 
       site = try_site;
-      initializeSite(site);
+      initializeSite(site, true);
 
       if (site) {
         const initialFetchReq: InitialFetchRequest = {
@@ -279,11 +272,11 @@ export async function generateManifestBase64(site: Site) {
         ).then(buf => buf.toString("base64"));
 
         if (icon) {
-          src = await sharp(icon)
-            .resize(size, size)
-            .png()
-            .toBuffer()
-            .then(buf => buf.toString("base64"));
+          // src = await sharp(icon)
+          //   .resize(size, size)
+          //   .png()
+          //   .toBuffer()
+          //   .then(buf => buf.toString("base64"));
         }
 
         return {
@@ -327,20 +320,7 @@ function getErrorPageData(error: Error, site?: GetSiteResponse) {
 async function createSsrHtml(root: string, isoData: IsoDataOptionalSite) {
   const site = isoData.site_res;
   const appleTouchIcon = site?.site_view.site.icon
-    ? `data:image/png;base64,${sharp(
-        await fetchIconPng(site.site_view.site.icon)
-      )
-        .resize(180, 180)
-        .extend({
-          bottom: 20,
-          top: 20,
-          left: 20,
-          right: 20,
-          background: "#222222",
-        })
-        .png()
-        .toBuffer()
-        .then(buf => buf.toString("base64"))}`
+    ? favIconPngUrl
     : favIconPngUrl;
 
   const eruda = (

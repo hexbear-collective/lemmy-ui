@@ -787,26 +787,19 @@ export function removeFromEmojiDataModel(id: number) {
   customEmojisLookup.delete(view?.custom_emoji.shortcode);
 }
 
-function setupMarkdown() {
+function setupMarkdown(is_server: boolean) {
   const markdownItConfig: MarkdownIt.Options = {
     html: false,
-    linkify: true,
+    linkify: !is_server,
     typographer: false, // hexbear change to fix issue with legacy emojis throwing exception when followed by quote char
   };
 
-  const emojiDefs = Array.from(customEmojisLookup.entries()).reduce(
-    (main, [key, value]) => ({ ...main, [key]: value }),
-    {}
-  );
   md = new MarkdownIt(markdownItConfig)
     .use(markdown_it_sub)
     .use(markdown_it_sup)
     .use(markdown_it_footnote)
     .use(markdown_it_html5_embed, html5EmbedConfig)
-    .use(markdown_it_container, "spoiler", spoilerConfig)
-    .use(markdown_it_emoji, {
-      defs: emojiDefs,
-    });
+    .use(markdown_it_container, "spoiler", spoilerConfig);
 
   mdNoImages = new MarkdownIt(markdownItConfig)
     .use(markdown_it_sub)
@@ -814,10 +807,24 @@ function setupMarkdown() {
     .use(markdown_it_footnote)
     .use(markdown_it_html5_embed, html5EmbedConfig)
     .use(markdown_it_container, "spoiler", spoilerConfig)
-    .use(markdown_it_emoji, {
-      defs: emojiDefs,
-    })
     .disable("image");
+  if (!is_server) {
+    const emojiDefs = Array.from(customEmojisLookup.entries()).reduce(
+      (main, [key, value]) => ({ ...main, [key]: value }),
+      {}
+    );
+    md = md.use(markdown_it_emoji, {
+      defs: emojiDefs,
+    });
+    mdNoImages = mdNoImages.use(markdown_it_emoji, {
+      defs: emojiDefs,
+    });
+    //hexbear handling of legacy :emoji: syntax in markdown
+    md.renderer.rules.emoji = function (token, idx) {
+      let emoji = customEmojisLookup.get(token[idx].markup)!;
+      return `<img class="icon icon-emoji" src="${emoji.custom_emoji.image_url}" title="${emoji.custom_emoji.shortcode}" alt="${emoji.custom_emoji.alt_text}"/>`;
+    };
+  }
   var defaultRenderer = md.renderer.rules.image;
   md.renderer.rules.image = function (
     tokens: Token[],
@@ -840,11 +847,6 @@ function setupMarkdown() {
     }
     const alt_text = item.content;
     return `<img class="icon icon-emoji" src="${src}" title="${title}" alt="${alt_text}"/>`;
-  };
-  //hexbear handling of legacy :emoji: syntax in markdown
-  md.renderer.rules.emoji = function (token, idx) {
-    let emoji = customEmojisLookup.get(token[idx].markup)!;
-    return `<img class="icon icon-emoji" src="${emoji.custom_emoji.image_url}" title="${emoji.custom_emoji.shortcode}" alt="${emoji.custom_emoji.alt_text}"/>`;
   };
 }
 
@@ -1397,13 +1399,13 @@ export function personSelectName({
   return local ? pName : `${hostname(actor_id)}/${pName}`;
 }
 
-export function initializeSite(site?: GetSiteResponse) {
+export function initializeSite(site?: GetSiteResponse, is_server = false) {
   UserService.Instance.myUserInfo = site?.my_user;
   i18n.changeLanguage(getLanguages()[0]);
   if (site) {
     setupEmojiDataModel(site.custom_emojis);
   }
-  setupMarkdown();
+  setupMarkdown(is_server);
 }
 
 const SHORTNUM_SI_FORMAT = new Intl.NumberFormat("en-US", {
@@ -1613,7 +1615,7 @@ export function share(shareData: ShareData) {
 }
 
 function isImageHostWhitelisted(host: string): boolean {
-  const whiteList = [getExternalHost(), "i.imgur.com"];
+  const whiteList = [getExternalHost(), "i.imgur.com", "chapo.chat"];
   if (whiteList.includes(host)) return true;
   return false;
 }
