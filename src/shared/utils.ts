@@ -843,7 +843,9 @@ function setupMarkdown(is_server: boolean) {
       return `<i>*removed externally hosted image*</i>`;
     }
     if (!isCustomEmoji) {
-      return defaultRenderer?.(tokens, idx, options, env, self) ?? "";
+      let a = defaultRenderer?.(tokens, idx, options, env, self);
+      if (a) return `<span class='inline-image'>${a}</span>`;
+      return "";
     }
     const alt_text = item.content;
     return `<img class="icon icon-emoji" src="${src}" title="${title}" alt="${alt_text}"/>`;

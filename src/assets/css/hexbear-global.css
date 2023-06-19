@@ -210,3 +210,9 @@ html .btn-outline-secondary.active {
 html .icon-inline {
   margin-bottom: 0px !important;
 }
+
+.inline-image {
+  display: inline-block;
+  max-width: 400px;
+  max-height: 400px;
+}
