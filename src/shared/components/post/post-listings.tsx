@@ -31,10 +31,10 @@ export class PostListings extends Component<
   constructor(props: any, context: any) {
     super(props, context);
 
-    let showFeaturedPosts = false;
+    let showFeaturedPosts = true;
     if (isBrowser()) {
       showFeaturedPosts =
-        (localStorage.getItem("featuredPostToggle") ?? true) == "true";
+        (localStorage.getItem("featuredPostToggle") ?? "true") == "true";
     }
     this.state = {
       showFeaturedPosts: showFeaturedPosts,
