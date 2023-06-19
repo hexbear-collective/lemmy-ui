@@ -1412,6 +1412,15 @@ export function initializeSite(site?: GetSiteResponse, is_server = false) {
     setupEmojiDataModel(site.custom_emojis);
   }
   setupMarkdown(is_server);
+  if (!is_server) {
+    // Temp remove service worker
+    navigator.serviceWorker.getRegistrations().then(function (registrations) {
+      var registrationslength = registrations.length;
+      for (var i = 0; i < registrationslength; i++) {
+        registrations[i].unregister();
+      }
+    });
+  }
 }
 
 const SHORTNUM_SI_FORMAT = new Intl.NumberFormat("en-US", {
