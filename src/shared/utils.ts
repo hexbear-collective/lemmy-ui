@@ -847,7 +847,7 @@ function setupMarkdown(is_server: boolean) {
       // let a = defaultRenderer?.(tokens, idx, options, env, self);
       // if (a) return `<span class='inline-image'>${a}</span>`;
       // return "";
-      `<i>*temporarily disabled inline images*</i>`;
+      return `<i>*temporarily disabled inline images*</i>`;
     }
     const alt_text = item.content;
     return `<img class="icon icon-emoji" src="${
