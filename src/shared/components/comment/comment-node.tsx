@@ -367,7 +367,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                   />
                 )}
                 <div className="d-flex justify-content-between justify-content-lg-start flex-wrap text-muted font-weight-bold">
-                  {this.props.showContext && this.linkBtn()}
+                  {/* {this.props.showContext && this.linkBtn()} */}
                   {this.props.markable && (
                     <button
                       className="btn btn-link btn-animate text-muted"
