@@ -286,7 +286,7 @@ export class Community extends Component<
                   {this.listings}
                   <Paginator page={page} onChange={this.handlePageChange} />
                 </div>
-                <div className="d-none d-md-block col-md-4 hexbear-aside">
+                <div className="d-none d-lg-block col-lg-4 hexbear-aside">
                   {this.sidebar(res)}
                 </div>
               </div>

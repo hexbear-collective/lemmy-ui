@@ -34,7 +34,7 @@ export class PostListings extends Component<
     let showFeaturedPosts = false;
     if (isBrowser()) {
       showFeaturedPosts =
-        localStorage.getItem("featuredPostToggle") == "true" ?? true;
+        (localStorage.getItem("featuredPostToggle") ?? true) == "true";
     }
     this.state = {
       showFeaturedPosts: showFeaturedPosts,
