@@ -361,7 +361,7 @@ async function createSsrHtml(root: string, isoData: IsoDataOptionalSite) {
      id="favicon"
      rel="shortcut icon"
      type="image/x-icon"
-     href=${site?.site_view.site.icon ?? favIconUrl}
+     href=${favIconUrl}
    />
 
   <!-- Web app manifest -->
