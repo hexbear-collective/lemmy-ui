@@ -635,7 +635,6 @@ export class Search extends Component<any, SearchState> {
                     },
                   ]}
                   viewType={CommentViewType.Flat}
-                  viewOnly
                   locked
                   noIndent
                   enableDownvotes={enableDownvotes(this.state.siteRes)}
