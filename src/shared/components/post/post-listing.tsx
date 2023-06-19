@@ -1449,7 +1449,10 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     return (
       <>
         {/* The mobile view*/}
-        <div className="d-block d-sm-none">{this.hexbear_mobileContent()}</div>
+        <div className="d-block d-sm-none">
+          {this.hexbear_mobileContent()}
+          {this.removeAndBanDialogs()}
+        </div>
 
         {/* The larger view*/}
         <div className="d-none d-sm-block">
