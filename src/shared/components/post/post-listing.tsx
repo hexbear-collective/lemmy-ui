@@ -627,7 +627,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
         className={`d-inline-block ${
           !post.featured_community && !post.featured_local
             ? "text-body"
-            : "text-primary"
+            : "text-body"
         }`}
         to={`/post/${post.id}`}
         title={i18n.t("comments")}
@@ -647,11 +647,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
           {url ? (
             this.props.showBody ? (
               <a
-                className={`d-inline-block ${
-                  !post.featured_community && !post.featured_local
-                    ? "text-body"
-                    : "text-primary"
-                }`}
+                className={`d-inline-block text-body`}
                 href={url}
                 title={url}
                 rel={relTags}
