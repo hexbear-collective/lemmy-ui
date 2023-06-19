@@ -297,7 +297,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                   <Icon icon="minus-square" classes="icon-inline" />
                 )}
               </button>
-              {this.linkBtn(true)}
+              {/* {this.linkBtn(true)} */}
               {/* <span className="mx-1 badge badge-secondary">
                 {
                   this.props.allLanguages.find(
@@ -310,7 +310,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
               {showScores() && (
                 <>
                   <a
-                    className={`unselectable pointer ${this.scoreColor}`}
+                    className={`unselectable pointer ${this.scoreColor} ml-1`}
                     onClick={this.handleCommentUpvote}
                     data-tippy-content={this.pointsTippy}
                   >
@@ -441,6 +441,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                       >
                         <Icon icon="reply1" classes="icon-inline" />
                       </button>
+                      {this.linkBtn(true)}
                       {!this.state.showAdvanced ? (
                         <button
                           className="btn btn-link btn-animate text-muted"
@@ -1065,7 +1066,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
 
   linkBtn(small = false) {
     let cv = this.props.node.comment_view;
-    let classnames = classNames("btn btn-link btn-animate text-muted", {
+    let classnames = classNames("btn btn-link btn-animate text-muted mt-1", {
       "btn-sm": small,
     });
 
