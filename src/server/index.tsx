@@ -393,7 +393,7 @@ async function createSsrHtml(root: string, isoData: IsoDataOptionalSite) {
     </noscript>
 
     <div id='root'>${root}</div>
-    <script defer src='/static/js/client.js'></script>
+    <script defer src='/static/js/client.js?v=1'></script>
   </body>
 </html>
 `;
