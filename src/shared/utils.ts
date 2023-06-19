@@ -837,18 +837,22 @@ function setupMarkdown(is_server: boolean) {
     const item = tokens[idx] as any;
     const title = item.attrs.length >= 3 ? item.attrs[2][1] : "";
     const src: string = item.attrs[0][1];
-    const isCustomEmoji = customEmojisLookup.get(title) != undefined;
+    const customEmoji = customEmojisLookup.get(title);
+    const isCustomEmoji = customEmoji != undefined;
     const imgHostName = hostname(src);
     if (!isImageHostWhitelisted(imgHostName)) {
       return `<i>*removed externally hosted image*</i>`;
     }
     if (!isCustomEmoji) {
-      let a = defaultRenderer?.(tokens, idx, options, env, self);
-      if (a) return `<span class='inline-image'>${a}</span>`;
-      return "";
+      // let a = defaultRenderer?.(tokens, idx, options, env, self);
+      // if (a) return `<span class='inline-image'>${a}</span>`;
+      // return "";
+      `<i>*temporarily disabled inline images*</i>`;
     }
     const alt_text = item.content;
-    return `<img class="icon icon-emoji" src="${src}" title="${title}" alt="${alt_text}"/>`;
+    return `<img class="icon icon-emoji" src="${
+      customEmoji!.custom_emoji.image_url
+    }" title="${title}" alt="${alt_text}"/>`;
   };
 }
 
