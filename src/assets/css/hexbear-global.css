@@ -89,6 +89,15 @@ html .icon-inline.hexbear-score-icon {
   pointer-events: none;
 }
 
+.featured-posts .collapsed-content::after,
+.featured-posts .collapsed-image::after {
+  background-image: linear-gradient(
+    to bottom,
+    transparent,
+    var(--background-color, #2f2f37)
+  );
+}
+
 .collapsed-content.expanded::after,
 .collapsed-image.expanded::after {
   content: "";
