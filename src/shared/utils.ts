@@ -844,10 +844,9 @@ function setupMarkdown(is_server: boolean) {
       return `<i>*removed externally hosted image*</i>`;
     }
     if (!isCustomEmoji) {
-      // let a = defaultRenderer?.(tokens, idx, options, env, self);
-      // if (a) return `<span class='inline-image'>${a}</span>`;
-      // return "";
-      return `<i>*temporarily disabled inline images*</i>`;
+      let a = defaultRenderer?.(tokens, idx, options, env, self);
+      if (a) return hexbear_getInlineImage(a);
+      return "";
     }
     const alt_text = item.content;
     return `<img class="icon icon-emoji" src="${
@@ -855,6 +854,22 @@ function setupMarkdown(is_server: boolean) {
     }" title="${title}" alt="${alt_text}"/>`;
   };
 }
+
+function hexbear_getInlineImage(imgElement: string): string {
+  return `<div class='inline-image'>
+  <span class='inline-image-toggle inline-image-toggle-btn' onclick='toggleInlineImage(this)'>Show</span>
+  <span class='img-blur-double' onclick='toggleInlineImage(this)'>${imgElement}</span>
+  </div>`;
+}
+
+globalThis.toggleInlineImage = e => {
+  let parent = e.parentElement;
+  if (e.classList.contains("inline-image-toggle")) {
+    parent.children[0].classList.toggle("hide");
+    parent.children[1].classList.toggle("img-blur-double");
+    parent.children[1].classList.toggle("inline-image-toggle");
+  }
+};
 
 export function getEmojiMart(
   onEmojiSelect: (e: any) => void,
@@ -1621,7 +1636,12 @@ export function share(shareData: ShareData) {
 }
 
 function isImageHostWhitelisted(host: string): boolean {
-  const whiteList = [getExternalHost(), "i.imgur.com", "chapo.chat"];
+  const whiteList = [
+    getExternalHost(),
+    "localhost:8536",
+    "i.imgur.com",
+    "chapo.chat",
+  ];
   if (whiteList.includes(host)) return true;
   return false;
 }
