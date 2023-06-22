@@ -360,7 +360,7 @@ export class Post extends Component<any, PostState> {
                 {this.state.commentViewType == CommentViewType.Flat &&
                   this.commentsFlat()}
               </div>
-              <div className="d-none d-lg-block col-lg-4 hexbear-aside">
+              <div className="d-none d-lg-block col-lg-4 hexbear-aside safe-inline">
                 {this.sidebar()}
               </div>
             </div>

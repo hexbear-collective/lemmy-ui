@@ -407,7 +407,7 @@ export class Home extends Component<any, HomeState> {
               <div className="d-block d-md-none">{this.mobileView}</div>
               {this.posts()}
             </main>
-            <aside className="d-none d-lg-block col-lg-4 hexbear-aside">
+            <aside className="d-none d-lg-block col-lg-4 hexbear-aside safe-inline">
               {this.mySidebar}
             </aside>
           </div>

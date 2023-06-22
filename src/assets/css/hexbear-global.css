@@ -281,3 +281,11 @@ html .icon-inline {
   backdrop-filter: blur(20px);
   pointer-events: none;
 }
+
+.safe-inline .img-blur-double::after {
+  backdrop-filter: unset;
+}
+
+.safe-inline .inline-image-toggle {
+  display: none;
+}
