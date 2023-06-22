@@ -149,6 +149,7 @@ export function randomStr(
 const html5EmbedConfig = {
   html5embed: {
     useImageSyntax: true, // Enables video/audio embed with ![]() syntax (default)
+    isAllowedHttp: true,
     attributes: {
       audio: 'controls preload="metadata"',
       video: 'width="100%" max-height="100%" controls loop preload="metadata"',
@@ -857,8 +858,8 @@ function setupMarkdown(is_server: boolean) {
 
 function hexbear_getInlineImage(imgElement: string): string {
   return `<div class='inline-image'>
-  <span class='inline-image-toggle inline-image-toggle-btn' onclick='toggleInlineImage(this)'>Show</span>
-  <span class='img-blur-double' onclick='toggleInlineImage(this)'>${imgElement}</span>
+    <span class='inline-image-toggle inline-image-toggle-btn' onclick='toggleInlineImage(this)'>Show</span>
+    <span class='img-blur-double' onclick='toggleInlineImage(this)'>${imgElement}</span>
   </div>`;
 }
 

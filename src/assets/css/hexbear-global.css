@@ -224,15 +224,17 @@ html .icon-inline {
   display: inline-block;
   max-width: 400px;
   max-height: 400px;
+  min-width: 80px;
   position: relative;
   user-select: none;
 }
 .inline-image img {
-  max-width: 400px;
+  max-width: 100%;
   max-height: 400px;
 }
 .inline-image-toggle {
   cursor: pointer;
+  display: inline-block;
 }
 .inline-image-toggle-btn {
   position: absolute;
@@ -256,7 +258,7 @@ html .icon-inline {
   font-weight: 700;
 }
 
-.inline-image-toggle:hover {
+.inline-image-toggle-btn:hover {
   background-color: rgba(230, 230, 230, 0.25);
 }
 
