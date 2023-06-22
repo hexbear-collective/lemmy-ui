@@ -83,6 +83,7 @@ interface PostListingState {
   score: number;
   upvotes: number;
   downvotes: number;
+  inline: boolean;
 }
 
 interface PostListingProps {
@@ -98,6 +99,7 @@ interface PostListingProps {
   enableDownvotes?: boolean;
   enableNsfw?: boolean;
   viewOnly?: boolean;
+  inline?: boolean;
 }
 
 export class PostListing extends Component<PostListingProps, PostListingState> {
@@ -122,6 +124,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     score: this.props.post_view.counts.score,
     upvotes: this.props.post_view.counts.upvotes,
     downvotes: this.props.post_view.counts.downvotes,
+    inline: this.props.inline ?? true,
   };
 
   constructor(props: any, context: any) {
@@ -147,7 +150,6 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
 
   render() {
     const post = this.props.post_view.post;
-
     return (
       <div className="post-listing">
         {!this.state.showEdit ? (
@@ -210,6 +212,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
 
   get img() {
     let src = this.imageSrc;
+    let post_view = this.props.post_view;
     return src ? (
       <>
         <div className="offset-sm-3 my-2 d-none d-sm-block">
@@ -222,7 +225,14 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
             className="d-inline-block"
             onClick={linkEvent(this, this.handleImageExpandClick)}
           >
-            <PictrsImage src={src} />
+            <PictrsImage
+              src={src}
+              nsfw={
+                this.state.inline
+                  ? post_view.post.nsfw || post_view.community.nsfw
+                  : false
+              }
+            />
           </a>
         </div>
       </>

@@ -328,6 +328,7 @@ export class Post extends Component<any, PostState> {
                   enableNsfw={enableNsfw(this.state.siteRes)}
                   allLanguages={this.state.siteRes.all_languages}
                   siteLanguages={this.state.siteRes.discussion_languages}
+                  inline={false}
                 />
                 <div ref={this.state.commentSectionRef} className="mb-2" />
                 <CommentForm
