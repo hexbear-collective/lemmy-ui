@@ -852,7 +852,9 @@ function setupMarkdown(is_server: boolean) {
     const alt_text = item.content;
     return `<img class="icon icon-emoji" src="${
       customEmoji!.custom_emoji.image_url
-    }" title="${title}" alt="${alt_text}"/>`;
+    }" title="${customEmoji!.custom_emoji.shortcode}" alt="${
+      customEmoji!.custom_emoji.alt_text
+    }"/>`;
   };
 }
 
