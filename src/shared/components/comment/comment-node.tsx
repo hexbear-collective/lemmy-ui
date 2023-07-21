@@ -431,6 +431,11 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                       )}
                     </button>
                   )}
+                  {!UserService.Instance.myUserInfo && ( //hexbear show link button when unauthenticated
+                    <>
+                      <span>{this.getLinkButton(true)}</span>
+                    </>
+                  )}
                   {UserService.Instance.myUserInfo && !this.props.viewOnly && (
                     <>
                       <VoteButtonsCompact
