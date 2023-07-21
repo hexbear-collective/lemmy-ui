@@ -300,3 +300,7 @@ html .img-icon {
 .safe-inline .inline-image-toggle {
   display: none;
 }
+
+.emoji-picker-container {
+  transform: translateX(0%);
+}
