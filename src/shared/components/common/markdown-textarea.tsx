@@ -19,6 +19,7 @@ import { setupTippy } from "../../tippy";
 import { pictrsDeleteToast, toast } from "../../toast";
 import { EmojiPicker } from "./emoji-picker";
 import { Icon, Spinner } from "./icon";
+import { LanguageSelect } from "./language-select";
 import ProgressBar from "./progress-bar";
 
 interface MarkdownTextAreaProps {
@@ -273,7 +274,7 @@ export class MarkdownTextArea extends Component<
           </div>
 
           <div className="col-12 d-flex align-items-center flex-wrap mt-2">
-            {/* {this.props.showLanguage && (
+            {this.props.showLanguage && (
               <LanguageSelect
                 iconVersion
                 allLanguages={this.props.allLanguages}
@@ -284,7 +285,7 @@ export class MarkdownTextArea extends Component<
                 onChange={this.handleLanguageChange}
                 disabled={this.isDisabled}
               />
-            )} */}
+            )}
 
             {/* A flex expander */}
             {/* <div className="flex-grow-1"></div> */}

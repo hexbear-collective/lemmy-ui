@@ -389,6 +389,18 @@ function isImageHostWhitelisted(host: string): boolean {
     "chapo.chat",
     "test.hexbear.net",
     "www.hexbear.net",
+    //federated sites below
+    "lemmy.world",
+    "possumpat.io",
+    "lemmy.ml",
+    "lemmygrad.ml",
+    "mander.xyz",
+    "lemm.ee",
+    "toots.matapacos.dog",
+    "jlai.lu",
+    "discuss.tchncs.de",
+    "ttrpg.network",
+    "pathfinder.social",
   ];
   if (whiteList.includes(host)) return true;
   return false;
