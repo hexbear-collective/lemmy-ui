@@ -38,13 +38,13 @@ export class PersonListing extends Component<PersonListingProps, any> {
         ? `/u/${person.name}@${domain}`
         : person.actor_id;
     }
-
     let displayName = this.props.useApubName
       ? apubName
       : person.display_name ?? apubName;
 
-    if (this.props.showApubName && !local && person.display_name) {
-      displayName = `${displayName} (${apubName})`;
+    if (!local && person.display_name) {
+      const domain = hostname(person.actor_id);
+      displayName = `${displayName}@(${domain})`;
     }
 
     return (
