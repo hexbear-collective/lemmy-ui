@@ -44,7 +44,7 @@ export class PersonListing extends Component<PersonListingProps, any> {
 
     if (!local && person.display_name) {
       const domain = hostname(person.actor_id);
-      displayName = `${displayName}@(${domain})`;
+      displayName = `${displayName}@${domain}`;
     }
 
     return (
