@@ -38,13 +38,15 @@ export class PersonListing extends Component<PersonListingProps, any> {
         ? `/u/${person.name}@${domain}`
         : person.actor_id;
     }
-    let displayName = this.props.useApubName
-      ? apubName
-      : person.display_name ?? apubName;
+    //Hexbear: temp change to force domain to show
+    let displayName = person.display_name ?? apubName;
 
     if (!local && person.display_name) {
       const domain = hostname(person.actor_id);
       displayName = `${displayName}@${domain}`;
+    }
+    if (this.props.useApubName) {
+      displayName = apubName;
     }
 
     return (
