@@ -195,17 +195,22 @@ export function setupMarkdown(is_server: boolean) {
   ) {
     //Provide custom renderer for our emojis to allow us to add a css class and force size dimensions on them. Also, prevent images to 3rd party domains
     const item = tokens[idx] as any;
-    const title = item.attrs.length >= 3 ? item.attrs[2][1] : "";
+    let title: string = item.attrs.length >= 3 ? item.attrs[2][1] : "";
     const src: string = item.attrs[0][1];
+    const splitTitle = title.split(/ (.*)/, 2);
+    const isEmoji = splitTitle[0] == "emoji";
+    if (isEmoji) {
+      title = splitTitle[1];
+    }
     const customEmoji = customEmojisLookup.get(title);
-    const isCustomEmoji = customEmoji != undefined;
+    const isLocalEmoji = customEmoji != undefined;
     const imgHostName = hostname(src);
     if (!isImageHostWhitelisted(imgHostName)) {
       return `<i>*removed externally hosted image*</i>`;
     }
-    if (!isCustomEmoji) {
+    if (!isLocalEmoji) {
       const a = defaultRenderer?.(tokens, idx, options, env, self);
-      if (a) return hexbear_getInlineImage(a);
+      if (a) return hexbear_getInlineImage(a, isEmoji);
       return "";
     }
     return `<img class="icon icon-emoji" src="${
@@ -326,7 +331,7 @@ export function setupTribute() {
           )?.custom_emoji;
           if (customEmoji == undefined) return `${item.original.val}`;
           else
-            return `![${customEmoji.alt_text}](${customEmoji.image_url} "${customEmoji.shortcode}")`;
+            return `![${customEmoji.alt_text}](${customEmoji.image_url} "emoji ${customEmoji.shortcode}")`;
         },
         values: Object.entries(emojiShortName)
           .map(e => {
@@ -406,10 +411,12 @@ function isImageHostWhitelisted(host: string): boolean {
   return false;
 }
 
-function hexbear_getInlineImage(imgElement: string): string {
+function hexbear_getInlineImage(imgElement: string, isEmoji: boolean): string {
   return `<div class='inline-image'>
     <span class='inline-image-toggle inline-image-toggle-btn' onclick='toggleInlineImage(this)'>Show</span>
-    <span class='img-blur-double' onclick='toggleInlineImage(this)'>${imgElement}</span>
+    <span class='img-blur-double ${
+      isEmoji ? "icon icon-emoji" : ""
+    }' onclick='toggleInlineImage(this)'>${imgElement}</span>
   </div>`;
 }
 
