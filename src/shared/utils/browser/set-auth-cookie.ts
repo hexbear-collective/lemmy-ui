@@ -1,4 +1,4 @@
-import { isHttps } from "@utils/env";
+import { getExternalHost, isHttps } from "@utils/env";
 import * as cookie from "cookie";
 import { authCookieName } from "../../config";
 
@@ -8,5 +8,6 @@ export default function setAuthCookie(jwt: string) {
     secure: isHttps(),
     sameSite: true,
     path: "/",
+    domain: `.${getExternalHost()}`
   });
 }
