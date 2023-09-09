@@ -368,8 +368,7 @@ export class CodeOfConduct extends Component<any, any> {
               </li>
               <li>
                 {" "}
-                Complaints about bans at the comm level are not allowed. For
-                sitewide decisions, posts may be made on !userunion.
+                Complaints about bans at the comm level are not allowed.
               </li>
               <li>
                 {" "}
@@ -427,10 +426,7 @@ export class CodeOfConduct extends Component<any, any> {
               </li>
               <li>
                 Mods are not obligated to justify bans and build a
-                &#34;case&#34; explaining the reasoning for a ban. While mods
-                may choose to respond to a !userunion post with a quick answer,
-                the mod team has a lot on their plate and will not be
-                relitigating every mod action.
+                &#34;case&#34; explaining the reasoning for a ban.
               </li>
             </ul>
             <p>
