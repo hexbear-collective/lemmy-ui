@@ -256,7 +256,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                   </Link>
                 </>
               )}
-              {this.getLinkButton(true)}
+              
               {showScores() && (
                 <>
                   <span
@@ -509,7 +509,7 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
   getLinkButton(small = false) {
     const cv = this.commentView;
 
-    const classnames = classNames("btn btn-link btn-animate text-muted", {
+    const classnames = classNames("btn btn-link btn-animate text-muted mt-1", {
       "btn-sm": small,
     });
 

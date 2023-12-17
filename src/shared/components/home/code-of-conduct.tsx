@@ -200,6 +200,27 @@ export class CodeOfConduct extends Component<any, any> {
               saying you can&#39;t do something. We reserve the right to remove
               individuals as needed.
             </p>
+            <h3>Content warnings</h3>
+            <p>
+              A content warning (CW) should be before the content and spoiler both the warning itself and the content (the following example does not contain extreme content):
+
+              <p>::: spoiler Mushrooms
+              I cut up hella mushrooms and then ate them all raw
+              :::
+              </p>
+            </p>
+            <p>
+              <strong>Topics that _must_ be CW'd</strong>
+            </p>
+            <ul>
+              <li><strong>Violence towards self</strong> such as self-harm and suicide</li>
+              <li><strong>Violence towards animals or humans</strong> such as corpses and carnist products and especially ||abuse, gore, and sexual violence</li>
+              <li><strong>Traumatic societal harms</strong> such as transphobia, sexual and gender oppression, fatphobia and lookism, ableism, sanism, racism, ageism and other bigotry</li>
+              <li><strong>Other common triggers</strong> such as discussion of weight and calories, ableist slurs, abortion, NSFW, rape and sexual assault, police brutality, ethnic cleansing and genocide, etc.</li>
+            </ul>
+            <p>
+            Do not abbreviate your CWs. Not everyone knows what the abbreviation stands for.
+            </p>
             <h3 id="user-content-be-aware-of-your-own-enjoyment-of-the-site">
               Be aware of your own enjoyment of the site.{" "}
             </h3>
