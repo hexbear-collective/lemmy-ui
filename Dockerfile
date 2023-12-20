@@ -35,7 +35,7 @@ COPY src src
 COPY .git .git
 
 # Set UI version 
-RUN echo "export const VERSION = '0.19.0';" > "src/shared/version.ts"
+RUN echo "export const VERSION = '0.19.1';" > "src/shared/version.ts"
 
 RUN yarn --production --prefer-offline --network-timeout 100000
 RUN NODE_OPTIONS="--max-old-space-size=8192" yarn build:prod
