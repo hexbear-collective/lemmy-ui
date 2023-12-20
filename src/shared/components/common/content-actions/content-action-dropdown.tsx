@@ -172,7 +172,7 @@ export default class ContentActionDropdown extends Component<
           <CrossPostButton {...this.props.crossPostParams!} />
         )}
 
-        <div className="dropdown">
+        <div className="dropdown mt-1">
           <button
             className="btn btn-sm btn-link btn-animate text-muted py-0 dropdown-toggle"
             data-tippy-content={I18NextService.i18n.t("more")}
