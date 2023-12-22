@@ -358,8 +358,9 @@ export function setupTribute() {
       {
         trigger: ":",
         menuItemTemplate: (item: any) => {
+          const customEmoji = customEmojisLookup.get(item.original.key);
           const shortName = `:${item.original.key}:`;
-          return `${item.original.val} ${shortName}`;
+          return `<span>${item.original.val} ${shortName} (${customEmoji?.keywords.map(y => y.keyword).join(',')})</span>`;
         },
         selectTemplate: (item: any) => {
           const customEmoji = customEmojisLookup.get(item.original.key)
@@ -368,16 +369,14 @@ export function setupTribute() {
           else
             return `![${customEmoji.alt_text}](${customEmoji.image_url} "emoji ${customEmoji.shortcode}")`;
         },
-        values: Object.entries(emojiShortName)
-          .map(e => {
-            return { key: e[1], val: e[0] };
-          })
-          .concat(
-            Array.from(customEmojisLookup.entries()).map(k => ({
-              key: k[0],
-              val: `<img class="icon icon-emoji" src="${k[1].custom_emoji.image_url}" title="${k[1].custom_emoji.shortcode}" alt="${k[1].custom_emoji.alt_text}" />`,
-            })),
-          ),
+        values: Array.from(customEmojisLookup.entries()).map(k => ({
+          key: k[0],
+          val: `<img class="icon icon-emoji" src="${k[1].custom_emoji.image_url}" title="${k[1].custom_emoji.shortcode}" alt="${k[1].custom_emoji.alt_text}" />`,
+        })),
+        lookup: function (item) {
+          const customEmoji = customEmojisLookup.get(item.key);
+          return [...customEmoji!.keywords.map(y => y.keyword), customEmoji!.custom_emoji.shortcode].join(',');
+        },
         allowSpaces: false,
         autocompleteMode: true,
         // TODO
