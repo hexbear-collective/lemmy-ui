@@ -359,8 +359,11 @@ export function setupTribute() {
         trigger: ":",
         menuItemTemplate: (item: any) => {
           const customEmoji = customEmojisLookup.get(item.original.key);
-          const shortName = `:${item.original.key}:`;
-          return `<span>${item.original.val} ${shortName} (${customEmoji?.keywords.map(y => y.keyword).join(',')})</span>`;
+          const shortName = `${item.original.key}`;
+          return `<div>
+          <span class='emoji-image'>${item.original.val}</span>
+          <span class='emoji-codes'>Code: <strong>${shortName}</strong> <br/> Keywords:(${customEmoji?.keywords.map(y => y.keyword).join(',')})</span>
+          </div>`;
         },
         selectTemplate: (item: any) => {
           const customEmoji = customEmojisLookup.get(item.original.key)
@@ -371,7 +374,7 @@ export function setupTribute() {
         },
         values: Array.from(customEmojisLookup.entries()).map(k => ({
           key: k[0],
-          val: `<img class="icon icon-emoji" src="${k[1].custom_emoji.image_url}" title="${k[1].custom_emoji.shortcode}" alt="${k[1].custom_emoji.alt_text}" />`,
+          val: `<img class="icon icon-emoji" src="${k[1].custom_emoji.image_url}" title="${k[1].custom_emoji.shortcode}" alt="${k[1].custom_emoji.alt_text}" loading="lazy" />`,
         })),
         lookup: function (item) {
           const customEmoji = customEmojisLookup.get(item.key);
@@ -379,8 +382,6 @@ export function setupTribute() {
         },
         allowSpaces: false,
         autocompleteMode: true,
-        // TODO
-        // menuItemLimit: mentionDropdownFetchLimit,
         menuShowMinLength: 2,
       },
       // Persons
