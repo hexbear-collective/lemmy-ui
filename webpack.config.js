@@ -123,17 +123,17 @@ module.exports = (env, argv) => {
                 },
               },
             },
-            {
-              urlPattern: ({ url: { pathname }, request: { method } }) =>
-                pathname.includes("pictrs") && method === "GET",
-              handler: "CacheFirst",
-              options: {
-                cacheName: "image-cache",
-                expiration: {
-                  maxAgeSeconds: 60 * 60 * 24 * 30,
-                },
-              },
-            },
+            // {
+            //   urlPattern: ({ url: { pathname }, request: { method } }) =>
+            //     pathname.includes("pictrs") && method === "GET",
+            //   handler: "CacheFirst",
+            //   options: {
+            //     cacheName: "image-cache",
+            //     expiration: {
+            //       maxAgeSeconds: 60 * 60 * 24 * 30,
+            //     },
+            //   },
+            // },
           ],
         },
       }),
