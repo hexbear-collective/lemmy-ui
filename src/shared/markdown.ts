@@ -340,6 +340,8 @@ export function getEmojiMart(
 ) {
   const pickerOptions = {
     ...customPickerOptions,
+    
+    data: { categories: [], emojis: [], aliases: [] },
     onEmojiSelect: onEmojiSelect,
     custom: customEmojis,
   };
