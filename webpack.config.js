@@ -126,11 +126,11 @@ module.exports = (env, argv) => {
             {
               urlPattern: ({ url: { pathname }, request: { method } }) =>
                 pathname.includes("pictrs") && method === "GET",
-              handler: "StaleWhileRevalidate",
+              handler: "CacheFirst",
               options: {
                 cacheName: "image-cache",
                 expiration: {
-                  maxAgeSeconds: 60 * 60 * 24,
+                  maxAgeSeconds: 60 * 60 * 24 * 30,
                 },
               },
             },
