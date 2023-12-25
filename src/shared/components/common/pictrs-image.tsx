@@ -49,12 +49,12 @@ export class PictrsImage extends Component<PictrsImageProps, any> {
           className={classNames("overflow-hidden pictrs-image", {
             "img-fluid": !(icon || iconOverlay),
             banner,
-            "thumbnail rounded object-fit-cover":
-              this.props.thumbnail && !this.props.icon && !this.props.banner,
-            "img-expanded slight-radius":
-              !this.props.thumbnail && !this.props.icon,
-            "img-blur": this.props.thumbnail && this.props.nsfw,
-            "object-fit-cover img-icon me-1": this.props.icon,
+            "thumbnail rounded object-fit-cover":thumbnail && !(icon || banner),
+            "img-expanded slight-radius": !(thumbnail || icon),
+            "img-blur": thumbnail && nsfw,
+            "object-fit-cover img-icon me-1": icon,
+            "img-blur-icon": icon && blur_image,
+            "img-blur-thumb": thumbnail && blur_image,
             "img-icon me-2": this.props.header,
             "rounded-circle": this.props.rounded,
             "ms-2 mb-0 rounded-circle object-fit-cover avatar-overlay":
