@@ -310,6 +310,7 @@ export class Community extends Component<
   }
 
   renderCommunity() {
+    const { pageCursor } = getCommunityQueryParams();
     switch (this.state.communityRes.state) {
       case "loading":
         return (
@@ -356,8 +357,10 @@ export class Community extends Component<
                 {this.selects(res)}
                 {this.listings(res)}
                 <PaginatorCursor
+                  prevPage={pageCursor}
                   nextPage={this.getNextPage}
                   onNext={this.handlePageNext}
+                  onPrev={this.handlePagePrev}
                 />
               </main>
               <aside className="d-none d-md-block col-md-4 col-lg-3 hexbear-aside safe-inline">
