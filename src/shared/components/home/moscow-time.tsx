@@ -38,7 +38,7 @@ export default class MoscowTime extends Component<any, MoscowTimeState> {
     return (
       isBrowser() && (
         <div>
-          <strong>Current time:</strong>&nbsp;
+          <strong className="fw-semibold">Current time:</strong>&nbsp;
           {intlFormat.format(this.state?.currentDate)}
         </div>
       )
