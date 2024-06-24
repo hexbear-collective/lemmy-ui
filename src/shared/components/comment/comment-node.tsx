@@ -261,6 +261,8 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
                 voteDisplayMode={this.props.voteDisplayMode}
                 myVote={my_vote}
                 counts={counts}
+                onVote={this.props.onCommentVote}
+                id={id}
               />
               <span>
                 <MomentTime published={published} updated={updated} />
