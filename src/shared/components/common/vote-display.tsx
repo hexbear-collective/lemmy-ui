@@ -152,12 +152,13 @@ export class VoteDisplay extends Component<Props, any> {
       className={`btn btn-animate btn-sm btn-link ${
         this.props.myVote === 1 ? "text-info" : "text-muted"
       }`}
+      
         aria-label={upvotesTippy}
         disabled={!UserService.Instance.myUserInfo}
         data-tippy-content={upvotesTippy}
         onClick={linkEvent(this, handleUpvote)}
       >
-        <Icon icon="hexbear" classes="me-1 icon-inline small" />
+        <Icon icon="hexbear" classes="me-1 icon-inline mb-1" />
         {upvotesStr}
       </button>
     );
