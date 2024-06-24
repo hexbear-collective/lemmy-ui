@@ -12,7 +12,7 @@ import { tippyMixin } from "../mixins/tippy-mixin";
 import { Icon } from "./icon";
 import classNames from "classnames";
 import { calculateUpvotePct, newVote } from "@utils/app";
-import { VoteType } from "shared/interfaces";
+import {  VoteType } from "../../interfaces";
 import { linkEvent } from "inferno";
 
 interface Props {
