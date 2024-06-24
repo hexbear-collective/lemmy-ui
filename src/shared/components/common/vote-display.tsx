@@ -158,7 +158,7 @@ export class VoteDisplay extends Component<Props, any> {
         data-tippy-content={upvotesTippy}
         onClick={linkEvent(this, handleUpvote)}
       >
-        <Icon icon="hexbear" classes="me-1 icon-inline mb-1" />
+        <Icon icon="hexbear" classes="me-1 icon-inline hexbear-score-icon" />
         {upvotesStr}
       </button>
     );
