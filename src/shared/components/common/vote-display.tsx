@@ -7,7 +7,7 @@ import {
   LocalUserVoteDisplayMode,
   PostAggregates,
 } from "lemmy-js-client";
-import { I18NextService } from "../../services";
+import { I18NextService, UserService } from "../../services";
 import { tippyMixin } from "../mixins/tippy-mixin";
 import { Icon } from "./icon";
 import classNames from "classnames";
@@ -147,17 +147,19 @@ export class VoteDisplay extends Component<Props, any> {
     });
 
     return (
-      <span
-        className={classNames({
-          "text-info": myVote === 1,
-        })}
+      <button
+      type="button"
+      className={`btn btn-animate btn-sm btn-link ${
+        this.props.myVote === 1 ? "text-info" : "text-muted"
+      }`}
         aria-label={upvotesTippy}
+        disabled={!UserService.Instance.myUserInfo}
         data-tippy-content={upvotesTippy}
         onClick={linkEvent(this, handleUpvote)}
       >
         <Icon icon="hexbear" classes="me-1 icon-inline small" />
         {upvotesStr}
-      </span>
+      </button>
     );
   }
 
