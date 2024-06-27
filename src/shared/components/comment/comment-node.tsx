@@ -507,13 +507,16 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
         >
           <Icon icon="link" classes="icon-inline" />
         </Link>
-        <a
+        {!cv.comment.local && ( //hexbear hide fedilink if local
+          <a
           className={classnames}
           title={I18NextService.i18n.t("link")}
           href={cv.comment.ap_id}
         >
-          <Icon icon="fedilink" classes="icon-inline" />
-        </a>
+            <Icon icon="fedilink" classes="icon-inline" />
+          </a>
+          
+        )}
       </>
     );
   }
