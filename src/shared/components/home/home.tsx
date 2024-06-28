@@ -95,7 +95,7 @@ import { toast } from "../../toast";
 import { CommentNodes } from "../comment/comment-nodes";
 import { DataTypeSelect } from "../common/data-type-select";
 import { HtmlTags } from "../common/html-tags";
-import { Icon } from "../common/icon";
+import { Icon, Spinner } from "../common/icon";
 import { ListingTypeSelect } from "../common/listing-type-select";
 import { SortSelect } from "../common/sort-select";
 import { CommunityLink } from "../community/community-link";
@@ -730,7 +730,7 @@ export class Home extends Component<HomeRouteProps, HomeState> {
         case "empty":
           return <div style="min-height: 20000px;"></div>;
         case "loading":
-          return <PostsLoadingSkeleton />;
+          return <Spinner />;
         case "success": {
           const posts = this.state.postsRes.data.posts;
           return (
@@ -768,7 +768,7 @@ export class Home extends Component<HomeRouteProps, HomeState> {
     } else {
       switch (this.state.commentsRes.state) {
         case "loading":
-          return <CommentsLoadingSkeleton />;
+          return <Spinner />;
         case "success": {
           const comments = this.state.commentsRes.data.comments;
           return (
