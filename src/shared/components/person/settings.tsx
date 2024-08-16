@@ -1309,6 +1309,7 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
       "xey/xem",
       "ze/hir",
       "ze/zir",
+      "null/void",
     ];
     return (
       <>
