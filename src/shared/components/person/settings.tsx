@@ -1310,6 +1310,7 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
       "ze/hir",
       "ze/zir",
       "null/void",
+      "sie/hir",
     ];
     return (
       <>
