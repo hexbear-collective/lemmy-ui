@@ -105,7 +105,7 @@ import { CommentNodes } from "../comment/comment-nodes";
 import { BannerIconHeader } from "../common/banner-icon-header";
 import { DataTypeSelect } from "../common/data-type-select";
 import { HtmlTags } from "../common/html-tags";
-import { Icon, Spinner } from "../common/icon";
+import { Icon } from "../common/icon";
 import { SortSelect } from "../common/sort-select";
 import { SiteSidebar } from "../home/site-sidebar";
 import { PostListings } from "../post/post-listings";
@@ -480,7 +480,7 @@ export class Community extends Component<CommunityRouteProps, State> {
     if (dataType === DataType.Post) {
       switch (this.state.postsRes.state) {
         case "loading":
-          return <Spinner />;
+          return <PostsLoadingSkeleton />;
         case "success":
           return (
             <PostListings
@@ -518,7 +518,7 @@ export class Community extends Component<CommunityRouteProps, State> {
       }
       switch (this.state.commentsRes.state) {
         case "loading":
-          return <Spinner />;
+          return <CommentsLoadingSkeleton />;
         case "success":
           return (
             <CommentNodes
