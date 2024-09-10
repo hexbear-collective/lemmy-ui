@@ -6,7 +6,7 @@ export default function clearAuthCookie() {
   const domain = (getExternalHost().includes('localhost') || getExternalHost().includes('test.hexbear')) ? "" : `.${getExternalHost()}`
   document.cookie = cookie.serialize(authCookieName, "", {
     maxAge: -1,
-    sameSite: true,
+    sameSite: "lax",
     path: "/",
     domain: domain
   });
