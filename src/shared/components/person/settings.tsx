@@ -1306,7 +1306,7 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
       "it/its",
       "love/loves",
       "null/void",
-      "pup/pups",
+      "pup/pup's",
       "she/her",
       "sie/hir",
       "they/them",
