@@ -778,7 +778,8 @@ export class Modlog extends Component<ModlogRouteProps, ModlogState> {
               <MomentTime published={i.when_} />
             </td>
             <td>
-              {this.amAdminOrMod && i.moderator ? (
+              {(this.amAdminOrMod || !this.isoData.site_res.site_view.local_site
+              .hide_modlog_mod_names) && i.moderator ? (
                 <PersonListing person={i.moderator} />
               ) : (
                 <div>{this.modOrAdminText(i.moderator)}</div>

@@ -4,6 +4,11 @@ export default async ({ res }: { res: Response }) => {
   res.setHeader("content-type", "text/plain; charset=utf-8");
 
   res.send(`User-Agent: *
+  Disallow: /
+
+  User-agent: DuckDuckBot
+  User-agent: Bingbot
+  User-agent: Googlebot
   Disallow: /login
   Disallow: /login_reset
   Disallow: /settings

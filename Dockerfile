@@ -45,7 +45,7 @@ COPY src src
 COPY .git .git
 
 # Set UI version 
-RUN echo "export const VERSION = '$(git describe --tag)';" > "src/shared/version.ts"
+RUN echo "export const VERSION = '0.19.15';" > "src/shared/version.ts"
 RUN echo "export const BUILD_DATE_ISO8601 = '$(date -u +"%Y-%m-%dT%H:%M:%SZ")';" > "src/shared/build-date.ts"
 
 RUN \
