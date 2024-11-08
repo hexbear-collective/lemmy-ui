@@ -1,7 +1,7 @@
 import { myAuth, setIsoData } from "@utils/app";
 import { canShare, share } from "@utils/browser";
 import { getExternalHost, getHttpBase } from "@utils/env";
-import { futureDaysToUnixTime, hostname } from "@utils/helpers";
+import { formatPastDate, futureDaysToUnixTime, hostname } from "@utils/helpers";
 import { isImage, isVideo } from "@utils/media";
 import { canAdmin, canMod } from "@utils/roles";
 import classNames from "classnames";
@@ -148,10 +148,10 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
       UserService.Instance.myUserInfo &&
       !this.isoData.showAdultConsentModal
     ) {
-      const { auto_expand, blur_nsfw } =
-        UserService.Instance.myUserInfo.local_user_view.local_user;
+      const blur_nsfw =
+        UserService.Instance.myUserInfo.local_user_view.local_user.blur_nsfw;
       this.setState({
-        imageExpanded: auto_expand && !(blur_nsfw && this.postView.post.nsfw),
+        imageExpanded: !(blur_nsfw && this.postView.post.nsfw),
       });
     }
 
@@ -187,6 +187,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
             {this.showBody && post.url && post.embed_title && (
               <MetadataCard post={post} />
             )}
+            {this.showBody && this.videoBlock}
             {this.showBody && this.body()}
           </>
         ) : (
@@ -238,37 +239,56 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
       </div>
     );
   }
-  get img() {
-    const { post } = this.postView;
-    const { url } = post;
 
-    if (this.isoData.showAdultConsentModal) {
-      return <></>;
-    }
+  get videoBlock() {
+    const post = this.postView.post;
+    const url = post.url;
 
     // if direct video link or embedded video link
-    if (url && (isVideo(url) || post.embed_video_url)) {
+    if (url && isVideo(url)) {
       return (
-        <div className="embed-responsive ratio ratio-16x9 mt-3">
+        <div className="ratio ratio-16x9 mt-3">
           <video
             onLoadStart={linkEvent(this, this.handleVideoLoadStart)}
             onPlay={linkEvent(this, this.handleVideoLoadStart)}
             onVolumeChange={linkEvent(this, this.handleVideoVolumeChange)}
             controls
-            className="embed-responsive-item col-12"
           >
             <source src={post.embed_video_url ?? url} type="video/mp4" />
           </video>
         </div>
       );
+    } else if (post.embed_video_url) {
+      return (
+        <div className="ratio ratio-16x9 mt-3">
+          <iframe
+            title="video embed"
+            src={post.embed_video_url}
+            sandbox="allow-same-origin allow-scripts"
+            allowFullScreen={true}
+          ></iframe>
+        </div>
+      );
+    }
+  }
+
+  get img() {
+    if (this.isoData.showAdultConsentModal) {
+      return <></>;
     }
 
-    if (this.imageSrc) {
+    // Use the full-size image for expands
+    const post = this.postView.post;
+    const url = post.url;
+    const thumbnail = post.thumbnail_url;
+    const imageSrc = url && isImage(url) ? url : thumbnail;
+
+    if (imageSrc) {
       return (
         <>
           <div className="offset-sm-3 my-2 d-none d-sm-block">
-            <a href={this.imageSrc} className="d-inline-block">
-              <PictrsImage src={this.imageSrc} alt={post.alt_text} />
+            <a href={imageSrc} className="d-inline-block">
+              <PictrsImage src={imageSrc} alt={post.alt_text} />
             </a>
           </div>
           <div className="my-2 d-block d-sm-none">
@@ -277,7 +297,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
               className="p-0 border-0 bg-transparent d-inline-block"
               onClick={linkEvent(this, this.handleImageExpandClick)}
             >
-              <PictrsImage src={this.imageSrc} alt={post.alt_text} />
+              <PictrsImage src={imageSrc} alt={post.alt_text} />
             </button>
           </div>
         </>
@@ -299,26 +319,12 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     );
   }
 
-  get imageSrc(): string | undefined {
-    const post = this.postView.post;
-    const url = post.url;
-    const thumbnail = post.thumbnail_url;
-
-    if (thumbnail) {
-      return thumbnail;
-    } else if (url && isImage(url)) {
-      return url;
-    } else {
-      return undefined;
-    }
-  }
-
   thumbnail() {
     const post = this.postView.post;
     const url = post.url;
     const thumbnail = post.thumbnail_url;
 
-    if (!this.props.hideImage && url && isImage(url) && this.imageSrc) {
+    if (!this.props.hideImage && url && isImage(url) && thumbnail) {
       return (
         <button
           type="button"
@@ -327,20 +333,14 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
           onClick={linkEvent(this, this.handleImageExpandClick)}
           aria-label={I18NextService.i18n.t("expand_here")}
         >
-          {this.imgThumb(this.imageSrc)}
+          {this.imgThumb(thumbnail)}
           <Icon
             icon="image"
             classes="d-block text-white position-absolute end-0 top-0 mini-overlay text-opacity-75 text-opacity-100-hover"
           />
         </button>
       );
-    } else if (
-      !this.props.hideImage &&
-      url &&
-      thumbnail &&
-      this.imageSrc &&
-      !isVideo(url)
-    ) {
+    } else if (!this.props.hideImage && url && thumbnail && !isVideo(url)) {
       return (
         <a
           className="thumbnail rounded overflow-hidden d-inline-block position-relative p-0 border-0"
@@ -349,7 +349,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
           title={url}
           target={this.linkTarget}
         >
-          {this.imgThumb(this.imageSrc)}
+          {this.imgThumb(thumbnail)}
           <Icon
             icon="external-link"
             classes="d-block text-white position-absolute end-0 top-0 mini-overlay text-opacity-75 text-opacity-100-hover"
@@ -417,7 +417,6 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
 
   createdLine() {
     const pv = this.postView;
-
     return (
       <div className="small mb-1 mb-md-0">
         <PersonListing person={pv.creator} />
@@ -441,6 +440,13 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
                 lang => lang.id === pv.post.language_id,
               )?.name
             }
+          </span>
+        )}{" "}
+        {pv.post.scheduled_publish_time && (
+          <span className="mx-1 badge text-bg-light">
+            {I18NextService.i18n.t("publish_in_time", {
+              time: formatPastDate(pv.post.scheduled_publish_time),
+            })}
           </span>
         )}{" "}
         · <MomentTime published={pv.post.published} updated={pv.post.updated} />
@@ -1007,7 +1013,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
   handleModBanFromCommunity({
     daysUntilExpires,
     reason,
-    shouldRemove,
+    shouldRemoveOrRestoreData,
   }: BanUpdateForm) {
     const {
       creator: { id: person_id },
@@ -1018,7 +1024,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
 
     // If its an unban, restore all their data
     if (ban === false) {
-      shouldRemove = false;
+      shouldRemoveOrRestoreData = true;
     }
     const expires = futureDaysToUnixTime(daysUntilExpires);
 
@@ -1026,7 +1032,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
       community_id,
       person_id,
       ban,
-      remove_data: shouldRemove,
+      remove_or_restore_data: shouldRemoveOrRestoreData,
       reason,
       expires,
     });
@@ -1035,7 +1041,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
   handleModBanFromSite({
     daysUntilExpires,
     reason,
-    shouldRemove,
+    shouldRemoveOrRestoreData,
   }: BanUpdateForm) {
     const {
       creator: { id: person_id, banned },
@@ -1044,14 +1050,14 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
 
     // If its an unban, restore all their data
     if (ban === false) {
-      shouldRemove = false;
+      shouldRemoveOrRestoreData = true;
     }
     const expires = futureDaysToUnixTime(daysUntilExpires);
 
     return this.props.onBanPerson({
       person_id,
       ban,
-      remove_data: shouldRemove,
+      remove_or_restore_data: shouldRemoveOrRestoreData,
       reason,
       expires,
     });
