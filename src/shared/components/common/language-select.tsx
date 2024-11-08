@@ -68,7 +68,11 @@ export class LanguageSelect extends Component<LanguageSelectProps, any> {
             role="alert"
           >
             <Icon icon="alert-triangle" classes="icon-inline me-2" />
-            {I18NextService.i18n.t("undetermined_language_warning")}
+            {/* <{I18NextService.i18n.t("undetermined_language_warning")}> */}
+            <span>
+              Don't deselect 'Undetermined' and 'English' languages, as you will
+              not see most posts. Use Ctrl+click to select more languages.
+            </span>
           </div>
         )}
         <div

@@ -816,7 +816,6 @@ export class Search extends Component<SearchRouteProps, SearchState> {
                     },
                   ]}
                   viewType={CommentViewType.Flat}
-                  viewOnly
                   locked
                   isTopLevel
                   enableDownvotes={enableDownvotes(siteRes)}
@@ -877,7 +876,6 @@ export class Search extends Component<SearchRouteProps, SearchState> {
       <CommentNodes
         nodes={commentsToFlatNodes(comments)}
         viewType={CommentViewType.Flat}
-        viewOnly
         locked
         isTopLevel
         enableDownvotes={enableDownvotes(siteRes)}

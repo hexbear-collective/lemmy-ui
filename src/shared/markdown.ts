@@ -1,5 +1,7 @@
 import { communitySearch, personSearch } from "@utils/app";
-import { debounce, groupBy } from "@utils/helpers";
+import { isBrowser } from "@utils/browser";
+import { getExternalHost } from "@utils/env";
+import { debounce, groupBy, hostname } from "@utils/helpers";
 import { CommunityTribute, PersonTribute } from "@utils/types";
 import { Picker } from "emoji-mart";
 import emojiShortName from "emoji-short-name";
@@ -8,6 +10,7 @@ import { default as MarkdownIt } from "markdown-it";
 import markdown_it_container from "markdown-it-container";
 // import markdown_it_emoji from "markdown-it-emoji/bare";
 import markdown_it_bidi from "markdown-it-bidi";
+import {bare as markdown_it_emoji} from "markdown-it-emoji";
 import markdown_it_footnote from "markdown-it-footnote";
 import markdown_it_html5_embed from "markdown-it-html5-embed";
 import markdown_it_ruby from "markdown-it-ruby";
@@ -80,6 +83,7 @@ const highlightjsConfig = {
 const html5EmbedConfig = {
   html5embed: {
     useImageSyntax: true, // Enables video/audio embed with ![]() syntax (default)
+    isAllowedHttp: true,
     attributes: {
       audio: 'controls preload="metadata"',
       video: 'width="100%" max-height="100%" controls loop preload="metadata"',
@@ -156,17 +160,13 @@ function localInstanceLinkParser(md: MarkdownIt) {
   });
 }
 
-export function setupMarkdown() {
+export function setupMarkdown(is_server: boolean) {
   const markdownItConfig: MarkdownIt.Options = {
     html: false,
-    linkify: true,
-    typographer: true,
+    linkify: !is_server,
+    typographer: false, // hexbear change to fix issue with legacy emojis throwing exception when followed by quote char
   };
 
-  // const emojiDefs = Array.from(customEmojisLookup.entries()).reduce(
-  //   (main, [key, value]) => ({ ...main, [key]: value }),
-  //   {}
-  // );
   md = new MarkdownIt(markdownItConfig)
     .use(markdown_it_sub)
     .use(markdown_it_sup)
@@ -190,11 +190,25 @@ export function setupMarkdown() {
     .use(markdown_it_highlightjs, highlightjsConfig)
     .use(localInstanceLinkParser)
     .use(markdown_it_bidi)
-    // .use(markdown_it_emoji, {
-    //   defs: emojiDefs,
-    // })
     .disable("image");
-  const defaultImageRenderer = md.renderer.rules.image;
+  if (!is_server) {
+    const emojiDefs = Array.from(customEmojisLookup.entries()).reduce(
+      (main, [key, value]) => ({ ...main, [key]: value }),
+      {}
+    );
+    md = md.use(markdown_it_emoji, {
+      defs: emojiDefs,
+    });
+    mdNoImages = mdNoImages.use(markdown_it_emoji, {
+      defs: emojiDefs,
+    });
+    //hexbear handling of legacy :emoji: syntax in markdown
+    md.renderer.rules.emoji = function (token, idx) {
+      const emoji = customEmojisLookup.get(token[idx].markup)!;
+      return `<img class="icon icon-emoji" src="${emoji.custom_emoji.image_url}" title="${emoji.custom_emoji.shortcode}" alt="${emoji.custom_emoji.alt_text}"/>`;
+    };
+  }
+  var defaultRenderer = md.renderer.rules.image;
   md.renderer.rules.image = function (
     tokens: Token[],
     idx: number,
@@ -202,7 +216,7 @@ export function setupMarkdown() {
     env: any,
     self: Renderer,
   ) {
-    //Provide custom renderer for our emojis to allow us to add a css class and force size dimensions on them.
+    //Provide custom renderer for our emojis to allow us to add a css class and force size dimensions on them. Also, prevent images to 3rd party domains
     const item = tokens[idx] as any;
     let title = item.attrs.length >= 3 ? item.attrs[2][1] : "";
     const splitTitle = title.split(/ (.*)/, 2);
@@ -210,16 +224,17 @@ export function setupMarkdown() {
     if (isEmoji) {
       title = splitTitle[1];
     }
+    const url = item.attrs.length > 0 ? item.attrs[0][1] : "";
     const customEmoji = customEmojisLookup.get(title);
     const isLocalEmoji = customEmoji !== undefined;
+    const imgHostName = hostname(url);
+    if (!isImageHostWhitelisted(imgHostName)) {
+      return `<i>*removed externally hosted image*</i>`;
+    }
     if (!isLocalEmoji) {
-      const imgElement =
-        defaultImageRenderer?.(tokens, idx, options, env, self) ?? "";
-      if (imgElement) {
-        return `<span class='${
-          isEmoji ? "icon icon-emoji" : ""
-        }'>${imgElement}</span>`;
-      } else return "";
+      const a = defaultRenderer?.(tokens, idx, options, env, self);
+      if (a) return hexbear_getInlineImage(a, isEmoji);
+      return "";
     }
     return `<img class="icon icon-emoji" src="${
       customEmoji!.custom_emoji.image_url
@@ -330,6 +345,8 @@ export function getEmojiMart(
 ) {
   const pickerOptions = {
     ...customPickerOptions,
+    
+    data: { categories: [], emojis: [], aliases: [] },
     onEmojiSelect: onEmojiSelect,
     custom: customEmojis,
   };
@@ -352,8 +369,12 @@ export async function setupTribute() {
       {
         trigger: ":",
         menuItemTemplate: (item: any) => {
-          const shortName = `:${item.original.key}:`;
-          return `${item.original.val} ${shortName}`;
+          const customEmoji = customEmojisLookup.get(item.original.key);
+          const shortName = `${item.original.key}`;
+          return `<div>
+          <span class='emoji-image'>${item.original.val}</span>
+          <span class='emoji-codes'>Code: <strong>${shortName}</strong> <br/> Keywords:(${customEmoji?.keywords.map(y => y.keyword).join(',')})</span>
+          </div>`;
         },
         selectTemplate: (item: any) => {
           const customEmoji = customEmojisLookup.get(
@@ -363,20 +384,16 @@ export async function setupTribute() {
           else
             return `![${customEmoji.alt_text}](${customEmoji.image_url} "emoji ${customEmoji.shortcode}")`;
         },
-        values: Object.entries(emojiShortName)
-          .map(e => {
-            return { key: e[1], val: e[0] };
-          })
-          .concat(
-            Array.from(customEmojisLookup.entries()).map(k => ({
-              key: k[0],
-              val: `<img class="icon icon-emoji" src="${k[1].custom_emoji.image_url}" title="${k[1].custom_emoji.shortcode}" alt="${k[1].custom_emoji.alt_text}" />`,
-            })),
-          ),
+        values: Array.from(customEmojisLookup.entries()).map(k => ({
+          key: k[0],
+          val: `<img class="icon icon-emoji" src="${k[1].custom_emoji.image_url}" title="${k[1].custom_emoji.shortcode}" alt="${k[1].custom_emoji.alt_text}" loading="lazy" />`,
+        })),
+        lookup: function (item) {
+          const customEmoji = customEmojisLookup.get(item.key);
+          return [...customEmoji!.keywords.map(y => y.keyword), customEmoji!.custom_emoji.shortcode].join(',');
+        },
         allowSpaces: false,
         autocompleteMode: true,
-        // TODO
-        // menuItemLimit: mentionDropdownFetchLimit,
         menuShowMinLength: 2,
       },
       // Persons
@@ -432,3 +449,51 @@ interface EmojiMartCustomEmoji {
 interface EmojiMartSkin {
   src: string;
 }
+
+function isImageHostWhitelisted(host: string): boolean {
+  const whiteList = [
+    getExternalHost(),
+    "localhost:8536",
+    "i.imgur.com",
+    "chapo.chat",
+    "test.hexbear.net",
+    "hexbear.net",
+    "www.hexbear.net",
+    //federated sites below
+    "lemmy.world",
+    "possumpat.io",
+    "lemmy.ml",
+    "lemmygrad.ml",
+    "mander.xyz",
+    "lemm.ee",
+    "toots.matapacos.dog",
+    "assets.toots.matapacos.dog",
+    "jlai.lu",
+    "discuss.tchncs.de",
+    "ttrpg.network",
+    "pathfinder.social",
+  ];
+  if (whiteList.includes(host)) return true;
+  return false;
+}
+
+function hexbear_getInlineImage(imgElement: string, isEmoji: boolean): string {
+  return `<div class='inline-image'>
+    <span class='inline-image-toggle inline-image-toggle-btn' onclick='toggleInlineImage(this)'>Show</span>
+    <span class='img-blur-double ${
+      isEmoji ? "icon icon-emoji" : ""
+    }' onclick='toggleInlineImage(this)'>${imgElement}</span>
+  </div>`;
+}
+
+globalThis.toggleInlineImage = (e) => {
+  const ev = window.event!;
+  ev.preventDefault();
+  ev.stopPropagation();
+  const parent = e.parentElement;
+  if (e.classList.contains("inline-image-toggle")) {
+    parent.children[0].classList.toggle("hide");
+    parent.children[1].classList.toggle("img-blur-double");
+    parent.children[1].classList.toggle("inline-image-toggle");
+  }
+};

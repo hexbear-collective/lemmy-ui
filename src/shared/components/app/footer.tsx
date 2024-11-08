@@ -28,6 +28,11 @@ export class Footer extends Component<FooterProps, any> {
               <span className="nav-link">BE: {this.props.site?.version}</span>
             </li>
             <li className="nav-item">
+              <NavLink className="nav-link" to="/PPB">
+                PPB
+              </NavLink>
+            </li>
+            <li className="nav-item">
               <NavLink className="nav-link" to="/modlog">
                 {I18NextService.i18n.t("modlog")}
               </NavLink>
@@ -60,6 +65,16 @@ export class Footer extends Component<FooterProps, any> {
               <a className="nav-link" href={joinLemmyUrl}>
                 {new URL(joinLemmyUrl).hostname}
               </a>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/tos">
+                Terms of Service
+              </NavLink>
+            </li>
+            <li className="nav-item">
+              <NavLink className="nav-link" to="/code_of_conduct">
+                Code Of Conduct
+              </NavLink>
             </li>
           </ul>
         </div>

@@ -518,7 +518,6 @@ export class EmojiForm extends Component<EmojiFormProps, EmojiFormState> {
 
   configurePicker(): any {
     return {
-      data: { categories: [], emojis: [], aliases: [] },
       maxFrequentRows: 0,
       dynamicWidth: true,
     };

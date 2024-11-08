@@ -22,6 +22,7 @@ import ModActionFormModal, {
 import { BanType, CommentNodeView, PurgeType } from "../../../interfaces";
 import { getApubName, hostname } from "@utils/helpers";
 import { tippyMixin } from "../../mixins/tippy-mixin";
+import getCommentParentId from "@utils/app/get-comment-parent-id";
 
 interface ContentActionDropdownPropsBase {
   onSave: () => Promise<void>;
@@ -191,6 +192,13 @@ export default class ContentActionDropdown extends Component<
             label={I18NextService.i18n.t("reply")}
             noLoading
           />
+          
+        )}
+        {type === "comment" && (
+          <span>{this.getLinkButton(true,false)}</span>
+        )}
+        {type === "comment" && (
+          <span>{this.getLinkButton(true,true)}</span>
         )}
         <ActionButton
           onClick={onSave}
@@ -203,7 +211,7 @@ export default class ContentActionDropdown extends Component<
           <CrossPostButton {...this.props.crossPostParams!} />
         )}
 
-        <div className="dropdown">
+        <div className="dropdown mt-1">
           <button
             className="btn btn-sm btn-link btn-animate text-muted py-0 dropdown-toggle"
             data-tippy-content={I18NextService.i18n.t("more")}
@@ -884,6 +892,45 @@ export default class ContentActionDropdown extends Component<
       UserService.Instance.myUserInfo,
       true,
     );
+  }
+
+  get id() {
+    return this.props.type === "post"
+      ? this.props.postView.creator.id
+      : this.props.commentView.creator.id;
+  }
+
+  getLinkButton(small = false, fedilink: boolean = false) {
+    if (this.props.type === "comment"){
+      const cv = this.props.commentView
+
+      const classnames = classNames("btn btn-link btn-animate text-muted mt-1", {
+        "btn-sm": small,
+      });
+
+      const title = I18NextService.i18n.t("show_context");
+
+      // The context button should show the parent comment by default
+      const parentCommentId = getCommentParentId(cv.comment) ?? cv.comment.id;
+      if (!fedilink){
+        return (
+          <Link
+          className={classnames}
+          to={`/comment/${parentCommentId}`}
+          title={title}
+        >
+          <Icon icon="link" classes="icon-inline" />
+        </Link>
+        )
+      }
+      else{
+        return (
+          <a className={classnames} title={title} href={cv.comment.ap_id}>
+              <Icon icon="fedilink" classes="icon-inline" />
+          </a>
+        )
+      }
+    }
   }
 
   wrapHandler(handler: (arg?: any) => Promise<void>) {

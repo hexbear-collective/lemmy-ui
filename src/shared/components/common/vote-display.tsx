@@ -2,19 +2,33 @@ import { numToSI } from "@utils/helpers";
 import { Component } from "inferno";
 import {
   CommentAggregates,
+  CreateCommentLike,
+  CreatePostLike,
   LocalUserVoteDisplayMode,
   PostAggregates,
 } from "lemmy-js-client";
-import { I18NextService } from "../../services";
+import { I18NextService, UserService } from "../../services";
 import { tippyMixin } from "../mixins/tippy-mixin";
 import { Icon } from "./icon";
 import classNames from "classnames";
-import { calculateUpvotePct } from "@utils/app";
+import { calculateUpvotePct, newVote } from "@utils/app";
+import {  VoteType } from "../../interfaces";
+import { linkEvent } from "inferno";
 
 interface Props {
   voteDisplayMode: LocalUserVoteDisplayMode;
   counts: CommentAggregates | PostAggregates;
   myVote?: number;
+  id: number;
+  onVote: (i: CreateCommentLike | CreatePostLike) => void;
+}
+
+function handleUpvote(i: VoteDisplay) {
+  i.setState({ upvoteLoading: true });
+  i.props.onVote({
+    comment_id: i.props.id,
+    score: newVote(VoteType.Upvote, i.props.myVote),
+  });
 }
 
 const BADGE_CLASSES = "unselectable";
@@ -133,16 +147,20 @@ export class VoteDisplay extends Component<Props, any> {
     });
 
     return (
-      <span
-        className={classNames({
-          "text-info": myVote === 1,
-        })}
+      <button
+      type="button"
+      className={`btn btn-animate btn-sm btn-link ${
+        this.props.myVote === 1 ? "text-info" : "text-muted"
+      }`}
+      
         aria-label={upvotesTippy}
+        disabled={!UserService.Instance.myUserInfo}
         data-tippy-content={upvotesTippy}
+        onClick={linkEvent(this, handleUpvote)}
       >
-        <Icon icon="arrow-up" classes="me-1 icon-inline small" />
+        <Icon icon="hexbear" classes="me-1 icon-inline hexbear-score-icon" />
         {upvotesStr}
-      </span>
+      </button>
     );
   }
 
