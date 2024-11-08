@@ -303,6 +303,15 @@ export class Home extends Component<HomeRouteProps, HomeState> {
     this.handleFeaturePost = this.handleFeaturePost.bind(this);
     this.handleHidePost = this.handleHidePost.bind(this);
 
+    if (!FirstLoadService.isFirstLoad) {
+      this.state = {
+        ...this.state,
+        tagline: this.hexbear_setupTagline(
+          this.state?.siteRes?.tagline?.content ?? ""
+        ),
+      };
+    }
+
     // Only fetch the data if coming from another route
     if (FirstLoadService.isFirstLoad) {
       const { commentsRes, postsRes } = this.isoData.routeData;
@@ -314,8 +323,9 @@ export class Home extends Component<HomeRouteProps, HomeState> {
         isIsomorphic: true,
       };
     }
-
-    this.state.tagline = this.state?.siteRes?.tagline?.content;
+    this.state.tagline = this.hexbear_setupTagline(
+      this.state?.siteRes?.tagline?.content ?? ""
+    );
   }
 
   async componentWillMount() {
@@ -406,7 +416,7 @@ export class Home extends Component<HomeRouteProps, HomeState> {
         />
         {site_setup && (
           <div className="row">
-            <main role="main" className="col-12 col-md-8 col-lg-9">
+            <main role="main" className="col-12 col-md-8 col-lg-9 hexbear-main">
               {tagline && (
                 <div
                   id="tagline"
@@ -418,7 +428,7 @@ export class Home extends Component<HomeRouteProps, HomeState> {
               <div className="d-block d-md-none">{this.mobileView}</div>
               {this.posts}
             </main>
-            <aside className="d-none d-md-block col-md-4 col-lg-3">
+            <aside className="d-none d-md-block col-md-4 col-lg-3 hexbear-aside safe-inline">
               {this.mySidebar}
             </aside>
           </div>
@@ -1111,5 +1121,39 @@ export class Home extends Component<HomeRouteProps, HomeState> {
       }
       return s;
     });
+  }
+
+  hexbear_setupTagline(tagline: string): string {
+    return tagline
+      .replace("<MOSCOW_TIME>", getMoscowTime())
+      .replace("<CURRENT_USER>", getCurrentUsername())
+      .replace("<CURRENT_YEAR>", getCurrentYear())
+      .replace(
+        /<RANDOM:(\d+):(\d+)>/,
+        (_value, min, max) => `${getRandomNumber(min, max)}`
+      );
+    function getRandomNumber(minimum: number, maximum: number): number {
+      return (Math.random() * (maximum - minimum + 1)) << 0;
+    }
+    function getMoscowTime(): string {
+      const localDate = new Date();
+
+      const utc = localDate.getTime() + localDate.getTimezoneOffset() * 60000;
+
+      // create new Date object for different city
+      // using supplied offset
+      const moscowTime = new Date(utc + 3600000 * 3);
+      return moscowTime.toLocaleString().split(", ")[1];
+    }
+    function getCurrentYear(): string {
+      const localYear = new Date().getFullYear();
+      return localYear.toString();
+    }
+    function getCurrentUsername(): string {
+      return (
+        UserService.Instance?.myUserInfo?.local_user_view.person.name ??
+        "Someone"
+      );
+    }
   }
 }

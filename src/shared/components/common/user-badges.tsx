@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { Component } from "inferno";
 import { I18NextService } from "../../services";
 import { tippyMixin } from "../mixins/tippy-mixin";
+import { Icon } from "./icon";
 
 interface UserBadgesProps {
   isBanned?: boolean;
@@ -72,13 +73,14 @@ export class UserBadges extends Component<UserBadgesProps> {
           )}
 
           {this.props.isPostCreator && (
-            <span className="col">
-              {getRoleLabelPill({
+            <span className="col creator-badge">
+              {/* {getRoleLabelPill({
                 label: I18NextService.i18n.t("op").toUpperCase(),
                 tooltip: I18NextService.i18n.t("creator"),
                 classes: "text-info border border-info",
                 shrink: false,
-              })}
+              })} */}
+              <Icon icon="hexagon" inline />
             </span>
           )}
           {this.props.isMod && (

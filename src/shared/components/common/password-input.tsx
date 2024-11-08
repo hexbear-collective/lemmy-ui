@@ -34,7 +34,7 @@ const passwordStrengthOptions: Options<string> = [
     id: 1,
     value: "weak",
     minDiversity: 2,
-    minLength: 10,
+    minLength: 4,
   },
   {
     id: 2,
@@ -103,7 +103,7 @@ class PasswordInput extends Component<PasswordInputProps, PasswordInputState> {
                 required={required !== false}
                 pattern=".+"
                 title={I18NextService.i18n.t("invalid_password")}
-                minLength={isNew ? 10 : undefined}
+                minLength={isNew ? 4 : undefined}
                 maxLength={isNew ? 60 : undefined}
               />
               <button

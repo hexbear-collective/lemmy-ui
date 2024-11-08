@@ -78,7 +78,7 @@ export class MarkdownTextArea extends Component<
 
   state: MarkdownTextAreaState = {
     content: this.props.initialContent,
-    languageId: this.props.initialLanguageId,
+    languageId: 37,
     previewMode: false,
     loading: false,
     submitted: false,

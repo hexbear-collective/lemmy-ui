@@ -614,7 +614,6 @@ export class EmojiForm extends Component<Record<never, never>, EmojiFormState> {
       );
     }
     return {
-      data: { categories: [], emojis: [], aliases: [] },
       maxFrequentRows: 0,
       dynamicWidth: true,
       custom,
