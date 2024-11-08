@@ -6,7 +6,7 @@
   "license": "AGPL-3.0",
   "scripts": {
     "analyze": "webpack --mode=none",
-    "build:dev": "webpack --env COMMIT_HASH=$(git rev-parse --short HEAD) --mode=development",
+    "build:dev": "webpack --mode=development",
     "build:prod": "webpack --env COMMIT_HASH=$(git rev-parse --short HEAD) --mode=production",
     "clean": "pnpm rimraf dist",
     "dev": "node generate_translations.js && pnpm build:dev --watch",

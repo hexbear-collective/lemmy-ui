@@ -110,7 +110,7 @@ export class Navbar extends Component<NavbarProps, NavbarState> {
             onMouseUp={linkEvent(this, handleCollapseClick)}
           >
             {siteView?.site.icon && showAvatars() && (
-              <PictrsImage src={siteView.site.icon} icon />
+              <PictrsImage src={siteView.site.icon} header />
             )}
             {siteView?.site.name}
           </NavLink>

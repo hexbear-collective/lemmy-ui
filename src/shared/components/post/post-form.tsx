@@ -341,14 +341,14 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
         communitySearchOptions: [selectedCommunityChoice].concat(
           (this.props.initialCommunities?.map(communityToChoice) ?? []).filter(
             option => option.value !== selectedCommunityChoice.value,
-          ),
+          ).sort((a, b) => a.label.localeCompare(b.label)),
         ),
       };
     } else {
       this.state = {
         ...this.state,
         communitySearchOptions:
-          this.props.initialCommunities?.map(communityToChoice) ?? [],
+          this.props.initialCommunities?.map(communityToChoice).sort((a, b) => a.label.localeCompare(b.label)) ?? [],
       };
     }
 
@@ -423,7 +423,7 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
 
   render() {
     const firstLang = this.state.form.language_id;
-    const selectedLangs = firstLang ? Array.of(firstLang) : undefined;
+    const selectedLangs = firstLang ? Array.of(firstLang) : [37]; // hexbear english;
 
     const url = this.state.form.url;
 
@@ -869,7 +869,6 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
     if (selectedCommunityChoice) {
       newOptions.push(selectedCommunityChoice);
     }
-
     if (text.length > 0) {
       newOptions.push(...(await fetchCommunities(text)).map(communityToChoice));
 
@@ -877,7 +876,6 @@ export class PostForm extends Component<PostFormProps, PostFormState> {
         communitySearchOptions: newOptions,
       });
     }
-
     this.setState({
       communitySearchLoading: false,
     });
