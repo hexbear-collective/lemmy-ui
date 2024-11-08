@@ -14,6 +14,7 @@ import {
   AdminSettings,
   AdminSettingsFetchConfig,
 } from "./components/home/admin-settings";
+import { CodeOfConduct } from "./components/home/code-of-conduct";
 import {
   Home,
   HomeFetchConfig,
@@ -27,6 +28,7 @@ import {
   getLoginQueryParams,
 } from "./components/home/login";
 import { LoginReset } from "./components/home/login-reset";
+import { PPB } from "./components/home/ppb";
 import { Setup } from "./components/home/setup";
 import { Signup } from "./components/home/signup";
 import {
@@ -34,6 +36,7 @@ import {
   ModlogFetchConfig,
   getModlogQueryParams,
 } from "./components/modlog";
+import { TOS } from "./components/home/tos";
 import { Inbox, InboxFetchConfig } from "./components/person/inbox";
 import { PasswordChange } from "./components/person/password-change";
 import {
@@ -230,4 +233,7 @@ export const routes: IRoutePropsWithFetch<RouteData, any, any>[] = [
     fetchInitialData: RemoteFetch.fetchInitialData,
     getQueryParams: getRemoteFetchQueryParams,
   } as RemoteFetchFetchConfig,
+  { path: `/tos`, component: TOS },
+  { path: `/code_of_conduct`, component: CodeOfConduct },
+  { path: `/ppb`, component: PPB },
 ];

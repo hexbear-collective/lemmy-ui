@@ -9,6 +9,7 @@ import {
   voteDisplayMode,
 } from "@utils/app";
 import { scrollMixin } from "../mixins/scroll-mixin";
+import { getHttpBase } from "@utils/env";
 import {
   capitalizeFirstLetter,
   futureDaysToUnixTime,
@@ -61,6 +62,7 @@ import {
   LockPost,
   MarkCommentReplyAsRead,
   MarkPersonMentionAsRead,
+  Person,
   PersonView,
   PostResponse,
   PurgeComment,
@@ -103,6 +105,8 @@ import { cakeDate } from "@utils/helpers";
 import { isBrowser } from "@utils/browser";
 import DisplayModal from "../common/modal/display-modal";
 
+import * as cookie from "cookie";
+
 type ProfileData = RouteDataResponse<{
   personRes: GetPersonDetailsResponse;
   uploadsRes: ListMediaResponse;
@@ -123,6 +127,7 @@ interface ProfileState {
   siteRes: GetSiteResponse;
   isIsomorphic: boolean;
   showRegistrationDialog: boolean;
+  relatedPersons: Person[];
 }
 
 interface ProfileProps {
@@ -210,6 +215,7 @@ export class Profile extends Component<ProfileRouteProps, ProfileState> {
     isIsomorphic: false,
     showRegistrationDialog: false,
     registrationRes: EMPTY_REQUEST,
+    relatedPersons: [],
   };
 
   loadingSettled() {
@@ -280,6 +286,14 @@ export class Profile extends Component<ProfileRouteProps, ProfileState> {
     if (!this.state.isIsomorphic && isBrowser()) {
       await this.fetchUserData(this.props, true);
     }
+    let relatedPersons: Person[] = [];
+    try {
+      if (this.state.personRes.state == "success" && UserService.Instance.myUserInfo?.local_user_view.local_user.admin) {
+        relatedPersons = await this.hexbear_getRelatedUsers(this.state.personRes.data.person_view.person.id);
+        this.setState({relatedPersons})
+      }
+    }
+    catch { }
   }
 
   componentWillReceiveProps(nextProps: ProfileRouteProps) {
@@ -541,8 +555,11 @@ export class Profile extends Component<ProfileRouteProps, ProfileState> {
             </div>
 
             <div className="col-12 col-md-4">
+              {this.hexbearRelatedUsers()}
               <Moderates moderates={personRes.moderates} />
               {this.amCurrentUser && <Follows />}
+            </div>
+            <div>
             </div>
           </div>
         );
@@ -952,6 +969,37 @@ export class Profile extends Component<ProfileRouteProps, ProfileState> {
     this.props.history.push(`/u/${username}${getQueryString(queryParams)}`);
   }
 
+  hexbearRelatedUsers() {
+    let isAdmin = UserService.Instance.myUserInfo?.local_user_view.local_user.admin;
+    if (!isAdmin)
+      return (<></>);
+    return (
+      <div className="card border-secondary mb-3">
+        <div className="card-body">
+          <h5>Related Users</h5>
+          <ul className="list-unstyled mb-0">
+            {this.state.relatedPersons.map(u => (
+              <li key={u.id}>
+                <PersonListing
+                  person={u}
+                  realLink={true}
+                  useApubName={false}
+                  muted
+                  hideAvatar={true}
+                />
+                {u.banned && (
+                  <li className="list-inline-item badge badge-danger ml-2">
+                    {I18NextService.i18n.t("banned")}
+                  </li>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  }
+
   handlePageChange(page: number) {
     this.updateUrl({ page });
   }
@@ -1313,5 +1361,15 @@ export class Profile extends Component<ProfileRouteProps, ProfileState> {
       }
       return s;
     });
+  }
+
+  async hexbear_getRelatedUsers(person_id: number) : Promise<Person[]>{
+    const auth = cookie.parse(document.cookie)["jwt"];
+    const relatedUsersResponse = await fetch(`${getHttpBase()}/api/v3/admin/find_related_users?person_id=${person_id}`, {
+      method: "GET",
+      headers: {"Content-Type": "application/json", "Authorization" : `Bearer ${auth}`},
+    });
+    let relatedPersons = (await relatedUsersResponse.json()) as Person[];
+    return relatedPersons;
   }
 }

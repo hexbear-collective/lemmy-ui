@@ -1,4 +1,6 @@
 import { Site } from "lemmy-js-client";
+import { readFile } from "fs/promises";
+import path from "path";
 import { fetchIconPng } from "./fetch-icon-png";
 import { getStaticDir } from "@utils/env";
 

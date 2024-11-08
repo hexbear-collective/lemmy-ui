@@ -43,7 +43,7 @@ export class PersonListing extends Component<PersonListingProps, any> {
     }
 
     const classes = classNames(
-      "person-listing d-inline-flex align-items-baseline",
+      "person-listing d-inline-flex align-items-baseline text-person",
       {
         "text-muted": this.props.muted,
         "text-info": !this.props.muted,
@@ -72,10 +72,12 @@ export class PersonListing extends Component<PersonListingProps, any> {
       <>
         {!this.props.hideAvatar &&
           !this.props.person.banned &&
-          showAvatars() && (
+          showAvatars() &&
+          avatar && (
             <PictrsImage
               src={avatar ?? `${getStaticDir()}/assets/icons/icon-96x96.png`}
               icon
+              rounded
             />
           )}
         <span>{name}</span>

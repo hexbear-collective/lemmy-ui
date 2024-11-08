@@ -2,7 +2,6 @@ import { getStaticDir } from "@utils/env";
 import { Helmet } from "inferno-helmet";
 import { renderToString } from "inferno-server";
 import serialize from "serialize-javascript";
-import sharp from "sharp";
 import { favIconPngUrl, favIconUrl } from "../../shared/config";
 import { IsoDataOptionalSite } from "../../shared/interfaces";
 import { buildThemeList } from "./build-themes-list";
@@ -20,8 +19,6 @@ export async function createSsrHtml(
   cspNonce: string,
   userLanguages: readonly string[],
 ) {
-  const site = isoData.site_res;
-
   const fallbackTheme = `<link rel="stylesheet" type="text/css" href="/css/themes/${
     (await buildThemeList())[0]
   }.css" />`;
@@ -33,29 +30,28 @@ export async function createSsrHtml(
   );
 
   if (!appleTouchIcon) {
-    try {
-      appleTouchIcon = site?.site_view.site.icon
-        ? `data:image/png;base64,${await sharp(
-            await fetchIconPng(site.site_view.site.icon),
-          )
-            .resize(180, 180)
-            .extend({
-              bottom: 20,
-              top: 20,
-              left: 20,
-              right: 20,
-              background: "#222222",
-            })
-            .png()
-            .toBuffer()
-            .then(buf => buf.toString("base64"))}`
-        : favIconPngUrl;
-    } catch {
-      console.log(
-        "Could not fetch site logo for apple touch icon. Using default icon.",
-      );
-      appleTouchIcon = favIconPngUrl;
-    }
+    // try {
+    //   appleTouchIcon = site?.site_view.site.icon
+    //     ? `data:image/png;base64,${await sharp(
+    //         await fetchIconPng(site.site_view.site.icon)
+    //       )
+    //         .resize(180, 180)
+    //         .extend({
+    //           bottom: 20,
+    //           top: 20,
+    //           left: 20,
+    //           right: 20,
+    //           background: "#222222",
+    //         })
+    //         .png()
+    //         .toBuffer()
+    //         .then(buf => buf.toString("base64"))}`
+    //     : favIconPngUrl;
+    // } catch {
+    //   console.log(`unable to fetch from ${site?.site_view.site.icon}`);
+    //   appleTouchIcon = favIconPngUrl;
+    // }
+    appleTouchIcon = favIconPngUrl;
   }
 
   const erudaStr =
@@ -124,7 +120,7 @@ export async function createSsrHtml(
        id="favicon"
        rel="shortcut icon"
        type="image/x-icon"
-       href=${site?.site_view.site.icon ?? favIconUrl}
+       href=${favIconUrl}
      />
   
     <!-- Web app manifest -->
