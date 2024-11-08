@@ -19,6 +19,8 @@ interface PictrsImageProps {
   iconOverlay?: boolean;
   pushup?: boolean;
   cardTop?: boolean;
+  header?: boolean;
+  rounded?: boolean;
 }
 
 interface PictrsImageState {
@@ -76,6 +78,8 @@ export class PictrsImage extends Component<PictrsImageProps, PictrsImageState> {
               "object-fit-cover img-icon me-1": icon,
               "img-blur-icon": icon && blurImage,
               "img-blur-thumb": thumbnail && blurImage,
+              "img-icon me-2": this.props.header,
+              "rounded-circle": this.props.rounded,
               "ms-2 mb-0 rounded-circle object-fit-cover avatar-overlay":
                 iconOverlay,
               "avatar-pushup": pushup,

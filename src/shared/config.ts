@@ -3,9 +3,9 @@ import { getStaticDir } from "@utils/env";
 export const favIconUrl = `${getStaticDir()}/assets/icons/favicon.svg`;
 export const favIconPngUrl = `${getStaticDir()}/assets/icons/apple-touch-icon.png`;
 
-export const repoUrl = "https://github.com/LemmyNet";
+export const repoUrl = "https://github.com/hexbear-collective";
 export const joinLemmyUrl = "https://join-lemmy.org";
-export const donateLemmyUrl = `${joinLemmyUrl}/donate`;
+export const donateLemmyUrl = `https://chapo.chat`;
 export const docsUrl = `${joinLemmyUrl}/docs/en/index.html`;
 export const helpGuideUrl = `${joinLemmyUrl}/docs/en/users/01-getting-started.html`; // TODO find a way to redirect to the non-en folder
 export const markdownHelpUrl = `${joinLemmyUrl}/docs/en/users/02-media.html`;

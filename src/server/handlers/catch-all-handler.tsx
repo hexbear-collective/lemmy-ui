@@ -80,7 +80,7 @@ export default async (req: Request, res: Response) => {
 
     if (try_site.state === "success") {
       site = try_site.data;
-      initializeSite(site);
+      initializeSite(site, true);
       LanguageService.updateLanguages(languages);
 
       if (path !== "/setup" && !site.site_view.local_site.site_setup) {
@@ -152,7 +152,7 @@ export default async (req: Request, res: Response) => {
     );
 
     // Another request could have initialized a new site.
-    initializeSite(site);
+    initializeSite(site,true);
     LanguageService.updateLanguages(languages);
 
     const root = renderToString(wrapper);
