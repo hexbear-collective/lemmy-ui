@@ -25,7 +25,8 @@ import {
   SavePost,
   TransferCommunity,
 } from "lemmy-js-client";
-import { I18NextService } from "../../services";
+import { FirstLoadService, I18NextService } from "../../services";
+import { Icon } from "../common/icon";
 import { PostListing } from "./post-listing";
 import { RequestState } from "../../services/HttpService";
 
@@ -39,6 +40,7 @@ interface PostListingsProps {
   voteDisplayMode: LocalUserVoteDisplayMode;
   enableNsfw?: boolean;
   viewOnly?: boolean;
+  communityId?: number;
   onPostEdit(form: EditPost): Promise<RequestState<PostResponse>>;
   onPostVote(form: CreatePostLike): Promise<RequestState<PostResponse>>;
   onPostReport(form: CreatePostReport): Promise<void>;
@@ -59,11 +61,27 @@ interface PostListingsProps {
   onHidePost(form: HidePost): Promise<void>;
 }
 
-export class PostListings extends Component<PostListingsProps, any> {
+interface PostListingsState {
+  showFeaturedPosts: boolean;
+}
+
+export class PostListings extends Component<
+  PostListingsProps,
+  PostListingsState
+> {
   duplicatesMap = new Map<number, PostView[]>();
 
   constructor(props: any, context: any) {
     super(props, context);
+
+    let showFeaturedPosts = true;
+    if (!FirstLoadService.isFirstLoad) {
+      showFeaturedPosts =
+        (localStorage.getItem("featuredPostToggle") ?? "true") == "true";
+    }
+    this.state = {
+      showFeaturedPosts: showFeaturedPosts,
+    };
   }
 
   get posts() {
@@ -73,10 +91,80 @@ export class PostListings extends Component<PostListingsProps, any> {
   }
 
   render() {
+    const featuredPosts = this.posts.filter(
+      x =>
+        (x.post.featured_local && this.props.communityId === undefined) ||
+        (x.post.featured_community &&
+          x.post.community_id === this.props.communityId)
+    );
+    const normalPosts = this.posts.filter(
+      x =>
+        !x.post.featured_local &&
+        ((x.post.featured_community &&
+          this.props.communityId != x.post.community_id) ||
+          !x.post.featured_community)
+    );
     return (
-      <div className="post-listings">
-        {this.posts.length > 0 ? (
-          this.posts.map((post_view, idx) => (
+      <div>
+        {featuredPosts.length > 0 && (
+          <div className="featured-posts">
+            <div
+              className="featured-posts-toggle"
+              onClick={this.toggleFeaturedPosts}
+            >
+              <div>
+                <Icon icon="broadcast" classes={`icon-inline`} />
+                <span>Featured Posts</span>
+              </div>
+              {!this.state?.showFeaturedPosts && (
+                <Icon icon="plus" classes={`icon-inline`} />
+              )}
+              {this.state?.showFeaturedPosts && (
+                <Icon icon="minus" classes={`icon-inline`} />
+              )}
+            </div>
+            {this.state?.showFeaturedPosts &&
+              featuredPosts.map(post_view => (
+                <>
+                  <PostListing
+                    post_view={post_view}
+                    crossPosts={this.duplicatesMap.get(post_view.post.id)}
+                    showCommunity={this.props.showCommunity}
+                    enableDownvotes={this.props.enableDownvotes}
+                    enableNsfw={this.props.enableNsfw}
+                    viewOnly={this.props.viewOnly}
+                    allLanguages={this.props.allLanguages}
+                    voteDisplayMode={this.props.voteDisplayMode}
+                    siteLanguages={this.props.siteLanguages}
+                    onPostEdit={this.props.onPostEdit}
+                    onPostVote={this.props.onPostVote}
+                    onPostReport={this.props.onPostReport}
+                    onBlockPerson={this.props.onBlockPerson}
+                    onLockPost={this.props.onLockPost}
+                    onDeletePost={this.props.onDeletePost}
+                    onRemovePost={this.props.onRemovePost}
+                    onSavePost={this.props.onSavePost}
+                    onFeaturePost={this.props.onFeaturePost}
+                    onPurgePerson={this.props.onPurgePerson}
+                    onPurgePost={this.props.onPurgePost}
+                    onBanPersonFromCommunity={
+                      this.props.onBanPersonFromCommunity
+                    }
+                    onBanPerson={this.props.onBanPerson}
+                    onAddModToCommunity={this.props.onAddModToCommunity}
+                    onAddAdmin={this.props.onAddAdmin}
+                    onTransferCommunity={this.props.onTransferCommunity}
+                    onMarkPostAsRead={this.props.onMarkPostAsRead}
+                    
+                onHidePost={this.props.onHidePost}
+                  />
+                  <hr className="hexbear-divider" />
+                </>
+              ))}
+          </div>
+        )}
+        {normalPosts.length > 0 ? (
+          normalPosts.map(post_view => (
             <>
               <PostListing
                 post_view={post_view}
@@ -107,7 +195,7 @@ export class PostListings extends Component<PostListingsProps, any> {
                 onMarkPostAsRead={this.props.onMarkPostAsRead}
                 onHidePost={this.props.onHidePost}
               />
-              {idx + 1 !== this.posts.length && <hr className="my-3" />}
+              <hr className="hexbear-divider" />
             </>
           ))
         ) : (
@@ -123,6 +211,12 @@ export class PostListings extends Component<PostListingsProps, any> {
       </div>
     );
   }
+
+  toggleFeaturedPosts = () => {
+    const newValue = (!this.state?.showFeaturedPosts).toString();
+    localStorage.setItem("featuredPostToggle", newValue);
+    this.setState({ showFeaturedPosts: newValue === "true" });
+  };
 
   removeDuplicates(): PostView[] {
     // Must use a spread to clone the props, because splice will fail below otherwise.

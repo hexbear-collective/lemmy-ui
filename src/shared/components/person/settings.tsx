@@ -101,6 +101,8 @@ interface SettingsState {
     avatar?: string;
     banner?: string;
     display_name?: string;
+    pronoun_1?: string;
+    pronoun_2?: string;
     email?: string;
     bio?: string;
     matrix_user_id?: string;
@@ -323,6 +325,8 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
           avatar,
           banner,
           display_name,
+          pronoun_1: this.hexbear_parsePronouns(display_name!, 1),
+          pronoun_2: this.hexbear_parsePronouns(display_name!, 2),
           show_avatars,
           bot_account,
           show_bot_accounts,
@@ -727,8 +731,9 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
       <>
         <h2 className="h5">{I18NextService.i18n.t("settings")}</h2>
         <form onSubmit={linkEvent(this, this.handleSaveSettingsSubmit)}>
-          <div className="mb-3 row">
-            <label className="col-sm-3 col-form-label" htmlFor="display-name">
+          {this.hexbear_setupPronouns()}
+          <div className="form-group row">
+            <label className="col-sm-5 col-form-label" htmlFor="display-name">
               {I18NextService.i18n.t("display_name")}
             </label>
             <div className="col-sm-9">
@@ -741,6 +746,7 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
                 onInput={linkEvent(this, this.handleDisplayNameChange)}
                 pattern="^(?!@)(.+)$"
                 minLength={3}
+                disabled
               />
             </div>
           </div>
@@ -1264,6 +1270,115 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
       </>
     );
   }
+  hexbear_setupPronouns() {
+    const options = [
+      "none/use name",
+      "any",
+      "comrade/them",
+      "ae/aer",
+      "des/pair",
+      "doe/deer",
+      "e/em/eir",
+      "ee/ees",
+      "em/ems",
+      "ey/em",
+      "fae/faer",
+      "he/him",
+      "hy/hym",
+      "it/its",
+      "love/loves",
+      "null/void",
+      "pup/pup's",
+      "sae/saer",
+      "she/her",
+      "sie/hir",
+      "they/them",
+      "thon/thons",
+      "undecided",
+      "xe/xem",
+      "xey/xem",
+      "ze/hir",
+      "ze/zir",
+    ];
+    return (
+      <>
+        <div className="form-group row">
+          <label className="col-sm-3 col-form-label" htmlFor="pronouns">
+            Pronouns
+          </label>
+          <div className="col-sm-9">
+            <select
+              id="pronouns"
+              value={this.state.saveUserSettingsForm.pronoun_1}
+              onChange={linkEvent(
+                { settings: this, index: 1 },
+                this.handlePronounChange
+              )}
+              className="custom-select w-auto"
+            >
+              {options.map(x => (
+                <option value={x} key={x}>
+                  {x}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+        <div className="form-group row">
+          <label
+            className="col-sm-3 col-form-label"
+            htmlFor="additionalpronouns"
+          >
+            Additional Pronouns
+          </label>
+          <div className="col-sm-9">
+            <select
+              id="additionalpronouns"
+              value={this.state.saveUserSettingsForm.pronoun_2}
+              onChange={linkEvent(
+                { settings: this, index: 2 },
+                this.handlePronounChange
+              )}
+              className="custom-select w-auto"
+            >
+              {options.map(x => (
+                <option value={x} key={x}>
+                  {x}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+      </>
+    );
+  }
+  hexbear_parsePronouns(displayName: string, index: number) {
+    if (!displayName || displayName.length == 0) return "none/use name";
+    var matches = displayName.match(/([^[]+(?=]))/g);
+    if ((matches?.length ?? 0) == 0) return "none/use name";
+    const pronouns = matches!
+      .at(-1)!
+      .split(",")
+      .map(x => x.trim());
+    if (pronouns.length >= 1 && index == 1) {
+      return pronouns[0];
+    }
+    if (pronouns.length >= 2 && index == 2) return pronouns[1];
+    return "none/use name";
+  }
+
+  hexbear_setPronouns = () => {
+    let display_name = "";
+    if (this.state.saveUserSettingsForm.pronoun_2 != "none/use name")
+      display_name = `${UserService.Instance.myUserInfo?.local_user_view.person.name} [${this.state.saveUserSettingsForm.pronoun_1}, ${this.state.saveUserSettingsForm.pronoun_2}]`;
+    else
+      display_name = `${UserService.Instance.myUserInfo?.local_user_view.person.name} [${this.state.saveUserSettingsForm.pronoun_1}]`;
+    let state = this.state;
+    let form = this.state.saveUserSettingsForm;
+    form.display_name = display_name;
+    state.saveUserSettingsForm = form;
+    this.setState(state);
+  };
 
   async handleToggle2fa(totp: string, enabled: boolean) {
     this.setState({ updateTotpRes: LOADING_REQUEST });
@@ -1575,6 +1690,14 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
     );
   }
 
+  handlePronounChange(i: { settings: Settings; index: number }, event: any) {
+    if (i.index == 1)
+      i.settings.state.saveUserSettingsForm.pronoun_1 = event.target.value;
+    else i.settings.state.saveUserSettingsForm.pronoun_2 = event.target.value;
+
+    i.settings.setState(i.settings.state);
+  }
+
   handleDiscussionLanguageChange(val: number[]) {
     this.setState(
       s => ((s.saveUserSettingsForm.discussion_languages = val), s),
@@ -1651,6 +1774,7 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
     event.preventDefault();
     i.setState({ saveRes: LOADING_REQUEST });
 
+    i.hexbear_setPronouns();
     const saveRes = await HttpService.client.saveUserSettings({
       ...i.state.saveUserSettingsForm,
     });

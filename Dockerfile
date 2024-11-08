@@ -32,7 +32,7 @@ COPY src src
 COPY .git .git
 
 # Set UI version 
-RUN echo "export const VERSION = '$(git describe --tag)';" > "src/shared/version.ts"
+RUN echo "export const VERSION = '0.19.7';" > "src/shared/version.ts"
 RUN echo "export const BUILD_DATE_ISO8601 = '$(date -u +"%Y-%m-%dT%H:%M:%SZ")';" > "src/shared/build-date.ts"
 
 RUN pnpm i
@@ -51,7 +51,7 @@ RUN apk update && apk add --no-cache curl vips-cpp && rm -rf /var/cache/apk/*
 COPY --from=builder /usr/src/app/dist /app/dist
 COPY --from=builder /usr/src/app/node_modules /app/node_modules
 
-RUN chown -R node:node /app
+#RUN chown -R node:node /app
 
 LABEL org.opencontainers.image.authors="The Lemmy Authors"
 LABEL org.opencontainers.image.source="https://github.com/LemmyNet/lemmy-ui"
@@ -60,7 +60,7 @@ LABEL org.opencontainers.image.description="The official web app for Lemmy."
 
 HEALTHCHECK --interval=60s --start-period=10s --retries=2 --timeout=10s CMD curl -ILfSs http://localhost:1234/ > /dev/null || exit 1
 
-USER node
+#USER node
 EXPOSE 1234
 WORKDIR /app
 
