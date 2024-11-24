@@ -245,9 +245,9 @@ export class CommentNode extends Component<CommentNodeProps, CommentNodeState> {
               )}
 
 {/* HEXBEAR: Hide extra link button and language */}
-              {/* {this.getLinkButton(true)}
+              {this.props.viewOnly && this.getLinkButton(true)}
 
-              {language_id !== 0 && (
+              {/* {language_id !== 0 && (
                 <span className="badge text-bg-light d-none d-sm-inline me-2">
                   {
                     this.props.allLanguages.find(
