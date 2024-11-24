@@ -207,6 +207,9 @@ export function setupMarkdown(is_server: boolean) {
     //hexbear handling of legacy :emoji: syntax in markdown
     md.renderer.rules.emoji = function (token, idx) {
       const emoji = customEmojisLookup.get(token[idx].markup)!;
+      if (!emoji){
+        return '';
+      }
       return `<img class="icon icon-emoji" src="${emoji.custom_emoji.image_url}" title="${emoji.custom_emoji.shortcode}" alt="${emoji.custom_emoji.alt_text}"/>`;
     };
   }
