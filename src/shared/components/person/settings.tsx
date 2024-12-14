@@ -1287,6 +1287,7 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
       "hy/hym",
       "it/its",
       "love/loves",
+      "mirror/your pronouns",
       "null/void",
       "pup/pup's",
       "sae/saer",
