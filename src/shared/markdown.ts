@@ -227,10 +227,10 @@ export function setupMarkdown(is_server: boolean) {
     const url = item.attrs.length > 0 ? item.attrs[0][1] : "";
     const customEmoji = customEmojisLookup.get(title);
     const isLocalEmoji = customEmoji !== undefined;
-    const imgHostName = hostname(url);
-    if (!isImageHostWhitelisted(imgHostName)) {
-      return `<i>*removed externally hosted image*</i>`;
-    }
+    //const imgHostName = hostname(url);
+    // if (!isImageHostWhitelisted(imgHostName)) {
+    //   return `<i>*removed externally hosted image*</i>`;
+    // }
     if (!isLocalEmoji) {
       const a = defaultRenderer?.(tokens, idx, options, env, self);
       if (a) return hexbear_getInlineImage(a, isEmoji);
