@@ -233,7 +233,7 @@ export function setupMarkdown(is_server: boolean) {
     // }
     if (!isLocalEmoji) {
       const a = defaultRenderer?.(tokens, idx, options, env, self);
-      if (a) return hexbear_getInlineImage(a, isEmoji);
+      if (a) return hexbear_getInlineImage(a, isEmoji,is_server);
       return "";
     }
     return `<img class="icon icon-emoji" src="${
@@ -477,13 +477,22 @@ function isImageHostWhitelisted(host: string): boolean {
   return false;
 }
 
-function hexbear_getInlineImage(imgElement: string, isEmoji: boolean): string {
-  return `<div class='inline-image'>
-    <span class='inline-image-toggle inline-image-toggle-btn' onclick='toggleInlineImage(this)'>Show</span>
-    <span class='img-blur-double ${
+function hexbear_getInlineImage(imgElement: string, isEmoji: boolean, is_server: boolean): string {
+  const blurImages = (is_server) ? true : (localStorage?.getItem("blurImages") ?? "true") == "true";
+  if (!blurImages){
+    return `<div class='inline-image'>
+    <span class='${
       isEmoji ? "icon icon-emoji" : ""
-    }' onclick='toggleInlineImage(this)'>${imgElement}</span>
-  </div>`;
+    }'>${imgElement}</span>
+  </div>`
+  }
+  else
+    return `<div class='inline-image'>
+      <span class='inline-image-toggle inline-image-toggle-btn' onclick='toggleInlineImage(this)'>Show</span>
+      <span class='img-blur-double ${
+        isEmoji ? "icon icon-emoji" : ""
+      }' onclick='toggleInlineImage(this)'>${imgElement}</span>
+    </div>`;
 }
 
 globalThis.toggleInlineImage = (e) => {

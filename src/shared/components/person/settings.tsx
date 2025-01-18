@@ -144,6 +144,7 @@ interface SettingsState {
   importSettingsRes: RequestState<any>;
   exportSettingsRes: RequestState<any>;
   settingsFile?: File;
+  blurImages: boolean;
 }
 
 type FilterType = "user" | "community" | "instance";
@@ -246,6 +247,7 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
     show2faModal: false,
     importSettingsRes: EMPTY_REQUEST,
     exportSettingsRes: EMPTY_REQUEST,
+    blurImages: true
   };
 
   constructor(props: any, context: any) {
@@ -345,6 +347,7 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
     }
 
     // Only fetch the data if coming from another route
+    let blurImages = true;
     if (FirstLoadService.isFirstLoad) {
       const { instancesRes } = this.isoData.routeData;
 
@@ -354,6 +357,13 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
         isIsomorphic: true,
       };
     }
+    else{
+      blurImages = (localStorage.getItem("blurImages") ?? "true") == "true";
+    }
+    this.state = {
+      ...this.state,
+      blurImages
+    };
   }
 
   async componentWillMount() {
@@ -1138,6 +1148,23 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
               </label>
             </div>
           </div>
+          <div className="input-group mb-3">
+            <div className="form-check">
+              <input
+                className="form-check-input"
+                id="blur-images-input"
+                type="checkbox"
+                checked={this.state.blurImages}
+                onChange={linkEvent(this, this.handleBlurImages)}
+              />
+              <label
+                className="form-check-label"
+                htmlFor="blur-images-input"
+              >
+                Blur Images
+              </label>
+            </div>
+          </div>
           {this.totpSection()}
           <div className="input-group mb-3">
             <button type="submit" className="btn d-block btn-secondary me-4">
@@ -1600,6 +1627,12 @@ export class Settings extends Component<SettingsRouteProps, SettingsState> {
         (s.saveUserSettingsForm.open_links_in_new_tab = event.target.checked), s
       ),
     );
+  }
+
+  handleBlurImages(i: Settings, event: any) {
+    const newValue = event.target.checked;
+    localStorage.setItem("blurImages", newValue);
+    i.setState( {blurImages: newValue});
   }
 
   handleShowScoresChange(i: Settings, event: any) {
