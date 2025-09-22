@@ -225,7 +225,7 @@ export function setupMarkdown(is_server: boolean) {
     const splitTitle = title.split(/ (.*)/, 2);
     const isEmoji = splitTitle[0] === "emoji";
     const imgElement =
-      defaultImageRenderer?.(tokens, idx, options, env, self) ?? "";
+      defaultRenderer?.(tokens, idx, options, env, self) ?? "";
     if (imgElement) {
       return isEmoji
         ? `<span class="icon icon-emoji">${imgElement}</span>`

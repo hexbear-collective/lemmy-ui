@@ -301,11 +301,10 @@ export class Home extends Component<HomeRouteProps, HomeState> {
     this.handleHidePost = this.handleHidePost.bind(this);
 
     if (!FirstLoadService.isFirstLoad) {
+      let random = getRandomFromList(this.state?.siteRes?.taglines ?? []);
       this.state = {
         ...this.state,
-        tagline: this.hexbear_setupTagline(
-          this.state?.siteRes?.tagline?.content ?? ""
-        ),
+        tagline: this.hexbear_setupTagline(random?.content ?? ''),
       };
     }
 
@@ -320,10 +319,8 @@ export class Home extends Component<HomeRouteProps, HomeState> {
         isIsomorphic: true,
       };
     }
-
-    this.state.tagline = this.hexbear_setupTagline(getRandomFromList(
-      this.state?.siteRes?.taglines ?? [],
-    )?.content);
+    let random = getRandomFromList(this.state?.siteRes?.taglines ?? []);
+    this.state.tagline = this.hexbear_setupTagline(random?.content ?? '');
   }
 
   async componentWillMount() {
