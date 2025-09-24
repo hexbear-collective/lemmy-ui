@@ -221,17 +221,24 @@ export function setupMarkdown(is_server: boolean) {
   ) {
     //Provide custom renderer for our emojis to allow us to add a css class and force size dimensions on them. Also, prevent images to 3rd party domains
     const item = tokens[idx] as any;
-    const title = item.attrs.length > 2 ? item.attrs[2][1] : "";
+    let title = item.attrs.length >= 3 ? item.attrs[2][1] : "";
     const splitTitle = title.split(/ (.*)/, 2);
     const isEmoji = splitTitle[0] === "emoji";
-    const imgElement =
-      defaultRenderer?.(tokens, idx, options, env, self) ?? "";
-    if (imgElement) {
-      return isEmoji
-        ? `<span class="icon icon-emoji">${imgElement}</span>`
-        : imgElement;
+    if (isEmoji) {
+      title = splitTitle[1];
     }
-    return "";
+    const customEmoji = customEmojisLookup.get(title);
+    const isLocalEmoji = customEmoji !== undefined;
+    if (!isLocalEmoji) {
+      const a = defaultRenderer?.(tokens, idx, options, env, self);
+      if (a) return hexbear_getInlineImage(a, isEmoji,is_server);
+      return "";
+    }
+    return `<img class="icon icon-emoji" src="${
+      customEmoji!.custom_emoji.image_url
+    }" title="${customEmoji!.custom_emoji.shortcode}" alt="${
+      customEmoji!.custom_emoji.alt_text
+    }"/>`;
   };
   md.renderer.rules.table_open = function () {
     return '<table class="table">';
