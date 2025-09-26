@@ -67,7 +67,7 @@ export class PictrsImage extends Component<PictrsImageProps, PictrsImageState> {
             src={src}
             alt={this.alt()}
             title={this.alt()}
-            loading="lazy"
+            loading="eager"
             className={classNames("overflow-hidden pictrs-image", {
               "img-fluid": !(icon || iconOverlay),
               banner,

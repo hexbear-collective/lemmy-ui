@@ -384,7 +384,7 @@ export async function setupTribute() {
         },
         values: Array.from(customEmojisLookup.entries()).map(k => ({
               key: k[0],
-              val: `<img class="icon icon-emoji" src="${md.utils.escapeHtml(k[1].custom_emoji.image_url)}" title="${md.utils.escapeHtml(k[1].custom_emoji.shortcode)}" alt="${md.utils.escapeHtml(k[1].custom_emoji.alt_text)}" loading="lazy" />`,
+              val: `<img class="icon icon-emoji" src="${md.utils.escapeHtml(k[1].custom_emoji.image_url)}" title="${md.utils.escapeHtml(k[1].custom_emoji.shortcode)}" alt="${md.utils.escapeHtml(k[1].custom_emoji.alt_text)}" loading="eager" />`,
             })),
         allowSpaces: false,
         autocompleteMode: true,
