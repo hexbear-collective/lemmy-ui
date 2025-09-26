@@ -382,16 +382,10 @@ export async function setupTribute() {
           else
             return `![${customEmoji.alt_text}](${customEmoji.image_url} "emoji ${customEmoji.shortcode}")`;
         },
-        values: Object.entries(emojiShortName)
-          .map(e => {
-            return { key: e[1], val: e[0] };
-          })
-          .concat(
-            Array.from(customEmojisLookup.entries()).map(k => ({
+        values: Array.from(customEmojisLookup.entries()).map(k => ({
               key: k[0],
               val: `<img class="icon icon-emoji" src="${md.utils.escapeHtml(k[1].custom_emoji.image_url)}" title="${md.utils.escapeHtml(k[1].custom_emoji.shortcode)}" alt="${md.utils.escapeHtml(k[1].custom_emoji.alt_text)}" loading="lazy" />`,
             })),
-          ),
         allowSpaces: false,
         autocompleteMode: true,
         menuShowMinLength: 2,
