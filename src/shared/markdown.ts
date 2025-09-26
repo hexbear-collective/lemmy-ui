@@ -227,8 +227,17 @@ export function setupMarkdown(is_server: boolean) {
     if (isEmoji) {
       title = splitTitle[1];
     }
+    
     const customEmoji = customEmojisLookup.get(title);
     const isLocalEmoji = customEmoji !== undefined;
+    console.log({
+      firsttitle: item.attrs.length >= 3 ? item.attrs[2][1] : "",
+      title,
+      splitTitle,
+      isEmoji,
+      customEmoji,
+      customEmojisLookup
+    });
     if (!isLocalEmoji) {
       const a = defaultRenderer?.(tokens, idx, options, env, self);
       if (a) return hexbear_getInlineImage(a, isEmoji,is_server);
