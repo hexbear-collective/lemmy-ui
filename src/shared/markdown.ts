@@ -386,6 +386,10 @@ export async function setupTribute() {
               key: k[0],
               val: `<img class="icon icon-emoji" src="${md.utils.escapeHtml(k[1].custom_emoji.image_url)}" title="${md.utils.escapeHtml(k[1].custom_emoji.shortcode)}" alt="${md.utils.escapeHtml(k[1].custom_emoji.alt_text)}" loading="eager" />`,
             })),
+        lookup: function (item) {
+          const customEmoji = customEmojisLookup.get(item.key);
+          return [...customEmoji!.keywords.map(y => y.keyword), customEmoji!.custom_emoji.shortcode].join(',');
+        },
         allowSpaces: false,
         autocompleteMode: true,
         menuShowMinLength: 2,
