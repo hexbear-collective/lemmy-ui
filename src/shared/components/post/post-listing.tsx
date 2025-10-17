@@ -36,7 +36,8 @@ import {
 } from "lemmy-js-client";
 import { relTags, torrentHelpUrl } from "../../config";
 import { IsoDataOptionalSite, VoteContentType } from "../../interfaces";
-import { mdToHtml, mdToHtmlInline } from "../../markdown";
+// import { mdToHtml, mdToHtmlInline } from "../../markdown";
+import { mdToHtml } from "../../markdown";
 import { I18NextService, UserService } from "../../services";
 import { tippyMixin } from "../mixins/tippy-mixin";
 import { Icon } from "../common/icon";
@@ -655,6 +656,7 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
     return (
       <>
         <div className="post-title">
+          {url && this.urlLine()}
           <h1 className="h5 d-inline text-break">
             {url && this.props.showBody ? (
               <a
@@ -766,6 +768,19 @@ export class PostListing extends Component<PostListingProps, PostListingState> {
             )}
           </p>
         );
+      } else {
+        <p className="small m-0">
+          {url && !(hostname(url) === getExternalHost()) && (
+            <a
+              className="fst-italic link-dark link-opacity-75 link-opacity-100-hover"
+              href={url}
+              title={url}
+              rel={relTags}
+            >
+              {linkName}
+            </a>
+          )}
+        </p>;
       }
     }
   }
