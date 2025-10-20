@@ -15,6 +15,7 @@ import { groupBy } from "./group-by";
 import hostname from "./hostname";
 import hsl from "./hsl";
 import isCakeDay, { cakeDate } from "./is-cake-day";
+import isAccountNew, { sproutDate } from "./is-account-new";
 import numToSI from "./num-to-si";
 import poll from "./poll";
 import randomStr from "./random-str";
@@ -46,11 +47,13 @@ export {
   hostname,
   hsl,
   isCakeDay,
+  isAccountNew,
   numToSI,
   poll,
   randomStr,
   resourcesSettled,
   sleep,
+  sproutDate,
   validEmail,
   validInstanceTLD,
   validTitle,

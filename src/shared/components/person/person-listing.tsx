@@ -1,6 +1,6 @@
 import { showAvatars } from "@utils/app";
 import { getStaticDir } from "@utils/env";
-import { hostname, isCakeDay } from "@utils/helpers";
+import { hostname, isCakeDay, isAccountNew } from "@utils/helpers";
 import classNames from "classnames";
 import { Component } from "inferno";
 import { Link } from "inferno-router";
@@ -8,6 +8,7 @@ import { Person } from "lemmy-js-client";
 import { relTags } from "../../config";
 import { PictrsImage } from "../common/pictrs-image";
 import { CakeDay } from "./cake-day";
+import { Sprout } from "./sprout";
 
 interface PersonListingProps {
   person: Person;
@@ -62,6 +63,7 @@ export class PersonListing extends Component<PersonListingProps, any> {
         )}
 
         {isCakeDay(person.published) && <CakeDay creatorName={name} />}
+        {isAccountNew(person.published) && <Sprout createDate={person.published} />}        
       </>
     );
   }
