@@ -16,514 +16,425 @@ export class CodeOfConduct extends Component<any, any> {
       <div className="mx-5">
         <div className="ui " style="margin-top: 1rem;">
           <div className="ui  segment markdown">
-            <h1 id="user-content-code-of-conduct">Code of Conduct</h1>
-            <p>Last updated: June 21st, 2023</p>
-            <h2 id="user-content-community-rules">Community Rules</h2>
+      <div className="mx-5">
+        <div className="ui " style="margin-top: 1rem;">
+          <div className="ui  segment markdown">
+            <h1 id="user-content-code-of-conduct">Hexbear Code of Conduct</h1>
+            <p>Last updated: November 7, 2025</p>
             <hr />
-            <h3 id="user-content-general-rules">General Rules</h3>
-            <ul>
-              <li>
-                <p>
-                  {" "}
-                  We are committed to providing a friendly, safe and welcoming
-                  environment for all, regardless of gender identity and
-                  expression, sexual orientation, disability, personal
-                  appearance, body size, race, ethnicity, age, religion,
-                  nationality, or other similar characteristic.
-                </p>
-              </li>
-              <li>
-                <p>
-                  {" "}
-                  Do not use homophobic, transphobic, racist, sexist, ableist,
-                  and other reactionary aliases or other nicknames.
-                  &#34;Ironic&#34; prejudice is just prejudice.
-                </p>
-              </li>
-              <li>
-                <p>
-                  {" "}
-                  Please &#34;remember the human&#34; and be kind to your fellow
-                  leftists.{" "}
-                </p>
-              </li>
-              <li>
-                <p>
-                  {" "}
-                  Respect that people have differences of opinion and that every
-                  leftist has a place in our community. Discussing differences
-                  in theory is fine and encouraged, just don&#39;t make it
-                  personal. Remember: Sectarianism is liberalism.
-                </p>
-              </li>
-              <li>
-                <p>
-                  {" "}
-                  Do not publish, comment, message, or post personally
-                  identifiable information about other users. We also strongly
-                  discourage posting any personally identifiable information
-                  about yourself.
-                </p>
-              </li>
-              <li>
-                <p>
-                  {" "}
-                  We will ban you if you insult, demean or harass anyone. That
-                  is not welcome behavior. This is distinctly different than
-                  ribbing or grilling someone.
-                </p>
-              </li>
-              <li>
-                <p>
-                  {" "}
-                  Private harassment is also unacceptable. No matter who you
-                  are, if you feel you have been or are being harassed or made
-                  uncomfortable by a community member, please contact one of the
-                  comm mod&#39;s or any of the sitemod team immediately. Whether
-                  you&#39;re a regular user or a newcomer, we care about making
-                  this community a safe place for you and we&#39;ve got your
-                  back.
-                </p>
-              </li>
-              <li>
-                <p>
-                  {" "}
-                  Likewise any spamming, trolling, flaming, baiting or other
-                  attention-stealing behavior is not welcome and will be banned.
-                </p>
-              </li>
-              <li>
-                <p>
-                  {" "}
-                  We are a platform that welcomes anyone who wants to be here in
-                  good faith. With that said, we are also an intentionally
-                  leftist platform; conservative and reactionary ideologies will
-                  not be tolerated here.
-                </p>
-              </li>
-              <li>
-                <p>
-                  {" "}
-                  We do not platform fascists and refuse to engage in any form
-                  of debate with them on this platform. If you don&#39;t
-                  understand why engaging in debates with fascists is a terrible
-                  idea, go ask in one of the communities and/or use a search
-                  engine.
-                </p>
-              </li>
-              <li>
-                <p>
-                  {" "}
-                  Direct calls to violence that target{" "}
-                  <em>specific identifiable living</em> individuals are not
-                  permitted on Hexbear.net. You can express your anger over
-                  landlords, slaveowners, etc, but try to phrase it in a way
-                  that focuses on the institution they represent. This policy
-                  also applies to any specific organizational bodies and groups
-                  (eg the DNC).{" "}
-                </p>
-              </li>
-              <li>
-                <p>
-                  Don&#39;t post anything illegal under the laws of the USA, the
-                  UK, or your country of residence, or encourage others to break
-                  the law. Don&#39;t confess to crimes online.
-                </p>
-              </li>
-              <li>
-                <p>
-                  Hexbear is not a mental health service. Posts/ comments about
-                  an active mental health crisis will be removed when they are
-                  brought to our attention. Our mod team is not equipped to
-                  provide mental healthcare, others can be harmed/triggered and
-                  trolls weaponize these events. If you’re having an emergency,
-                  you can find{" "}
-                  <a
-                    href="https://www.reddit.com/r/SuicideWatch/wiki/hotlines"
-                    rel="nofollow"
-                  >
-                    a directory of hotline numbers here
-                  </a>
-                  .
-                </p>
-              </li>
-              <li>
-                <p>
-                  Moderators of individual communities may require additional
-                  rules ontop of this code of conduct.
-                </p>
-              </li>
-              <li>
-                <p>
-                  We reserve the right to ban users and remove content for
-                  reasons not listed in this code of conduct at a
-                  moderator&#39;s discretion. Trying to &#34;technically&#34; be
-                  just within the bounds of acceptable behavior will likely
-                  still result in a ban if its consistent behavior.
-                  Rule-policing is still policing, ACAB.
-                </p>
-              </li>
-              <li>
-                <p>
-                  Any pictures of food containing animal products, including but
-                  not limited to meat, cheese, or egg, must be tagged nsfw along
-                  with food discussion content warnings (CW: Food).
-                </p>
-              </li>
-              <li>
-                <p>
-                  Animal Liberation is essential to any leftist movement,
-                  including platforms like Hexbear. Volunteers, comments, and
-                  posts, should not be anti-vegan, although users and volunteers
-                  are not required to be vegan.
-                </p>
-              </li>
-              <li>
-                <p>Any discussions may be opted out of by disengaging.</p>
-              </li>
-              <li>
-                <p>
-                  Direct links to reactionary sources are not permitted; use an
-                  archiver tool like{" "}
-                  <a href="https://archive.today/" rel="nofollow">
-                    https://archive.today
-                  </a>{" "}
-                  instead.
-                </p>
-              </li>
-            </ul>
+            <h2 id="user-content-community-statements">Community Statements</h2>
             <p>
-              <strong>Airbud Double Negative Rule</strong>
+                We are committed to providing a friendly, safe and welcoming 
+                environment for all, regardless of gender identity and expression,
+                sexual orientation, disability, personal appearance, body size, race, 
+                ethnicity, age, religion, nationality, or other similar characteristic.
+            </p>    
+            <hr>
+            <h4 id="user-content-palestine">Palestine, and zionism:</h4>
+            <p>
+                "Israel", the zionist entity, is an explicitly settler-colonial 
+                genocidal ethnonationalist project, predicated on the dispossession 
+                and murder of the native Palestinians.
             </p>
             <p>
-              You may still be banned from the site even if there is no rule
-              saying you can&#39;t do something. We reserve the right to remove
-              individuals as needed.
-            </p>
-            <h3>Content warnings</h3>
-            <p>
-              A content warning (CW) should be before the content and spoiler both the warning itself and the content (the following example does not contain extreme content):
-
-              <p>::: spoiler Mushrooms
-              I cut up hella mushrooms and then ate them all raw
-              :::
-              </p>
+                The primary mode of discrimination within the entity is Jewish 
+                supremacy, and it is supported by the global forces of capitalism, 
+                imperialism, and white supremacy.
             </p>
             <p>
-              <strong>Topics that _must_ be CW'd</strong>
+                To help maintain support domestically and abroad, the entity falsely 
+                claims to represent and protect all Jews.
             </p>
-            <ul>
-              <li><strong>Violence towards self</strong> such as self-harm and suicide</li>
-              <li><strong>Violence towards animals or humans</strong> such as corpses and carnist products and especially ||abuse, gore, and sexual violence</li>
-              <li><strong>Traumatic societal harms</strong> such as transphobia, sexual and gender oppression, fatphobia and lookism, ableism, sanism, racism, ageism and other bigotry</li>
-              <li><strong>Other common triggers</strong> such as discussion of weight and calories, ableist slurs, abortion, NSFW, rape and sexual assault, police brutality, ethnic cleansing and genocide, etc.</li>
-            </ul>
+            <hr>
+            <h4 id="user-content-imperialism">Anti-Imperalism, AES, and Critical Support:</h4>
             <p>
-            Do not abbreviate your CWs. Not everyone knows what the abbreviation stands for.
-            </p>
-            <h3 id="user-content-be-aware-of-your-own-enjoyment-of-the-site">
-              Be aware of your own enjoyment of the site.{" "}
-            </h3>
-            <ul>
-              <li>
-                If you find yourself no longer having fun, do something else.
-                There are many different comms on Hexbear, and many different
-                ways to shitpost and have fun.{" "}
-              </li>
-              <li>
-                If the site as a whole is just not cutting it for you, take a
-                break. We&#39;ll still be here when you get back. Nothing should
-                compel you to stay.{" "}
-              </li>
-              <li>
-                The site is deliberately designed to be a relaxing sort of fun
-                rather than an addictive one. We do not want you to remain on
-                Hexbear if remaining on the site is no longer fun for you.{" "}
-              </li>
-              <li>
-                If you find yourself logging into the site while not really
-                wanting to, or while knowing that you shouldn&#39;t, please
-                contact a moderator and we can provide a ban.
-              </li>
-              <li>
-                If we ultimately determine that a user has become toxic and is
-                fixated on complaining about the site, we will ban them. We are
-                always open to feedback and suggestions, but if we notice
-                someone that constantly posts / comments about how much they
-                dislike everything then it&#39;s probably better for them to
-                find somewhere else to spend their time. The rest of the
-                community has a right to a positive environment.
-              </li>
-            </ul>
-            <h3 id="user-content-be-kind-to-the-staff">
-              Be kind to the staff.
-            </h3>
-            <p>
-              Hexbear staff, devs, mods, and admins are people just like you. We
-              appreciate your kindness, understanding and patience just as much
-              as you appreciate ours.
+                We generally oppose wars supported by the so-called "west", because 
+                they serve to maintain the global hierarchy that keeps countries 
+                outside the imperial core weak and easily exploitable.
             </p>
             <p>
-              <strong>Help the mods avoid burnout</strong>
+                "Critical Support" means that while we may not agree with every policy 
+                of a country that is being targeted by the US Empire, we support them in 
+                their struggle to remain independent.
             </p>
-            <ul>
-              <li>
-                Moderators on Hexbear are volunteers with limited time.
-                They&#39;re chosen to help cover across timezones, but 24/7 mod
-                coverage isn&#39;t guaranteed.{" "}
-              </li>
-              <li>
-                If something happens when there isn&#39;t a mod to deal with it
-                at the moment, use the report button beneath each comment or
-                post and a moderator will pick up the problem when they next log
-                on.{" "}
-              </li>
-              <li>
-                Content remaining up on the site is not an endorsement of that
-                content by the mod team, it very likely was either not reported
-                or hasn&#39;t been seen yet.{" "}
-              </li>
-            </ul>
             <p>
-              <strong>Other Rules</strong>
+                We do not condemn countries that have achieved Actually Existing 
+                Socialism for not 100% matching purist ideals about what "socialism" 
+                looks like in theory.  We recognize that socialism is a process, not 
+                a destination.
             </p>
-            <ul>
-              <li>
-                Never be afraid or unsure about seeking mod intervention. Never
-                think &#34;Someone else will report that&#34; - they won&#39;t.
-                - Problems tend to get bigger over time until we receive a flood
-                of complaints all at once about someone who&#39;s been doing
-                toxic things for months or days on end. We cannot see
-                everything. We rely on your reports.
-              </li>
-              <li>
-                Lying about moderator interactions (eg saying you were banned or
-                warned for no reason when you were really banned for
-                sectarianism) damages trust in the moderators and makes it less
-                likely that others will come forward with reports about other
-                users, allowing wreckers to fly under the radar and making the
-                site less safe for everyone. Lying about moderator interactions,
-                in any capacity, will lead to a permanent ban without warning.
-              </li>
-            </ul>
+            <hr>
+            <h4 id="user-content-covid">COVID:</h4>
             <p>
-              <strong>Interacting with Developers and other Staff</strong>
+                Considering immunocompromized or otherwise vulnerable comrades 
+                expendable is eugenics. Refusing to acknowledge the harm COVID 
+                has done and continues to do plays into the hand of fascists. An 
+                inability to see who is and has been most harmed by COVID is a 
+                failure in basic solidarity and humanity. Most of all, COVID is a 
+                working class issue.
             </p>
-            <ul>
-              <li>
-                <p>
-                  Don&#39;t act like staff or devs if you&#39;re not staff or
-                  devs. Don&#39;t speak for the staff or try to act on their
-                  behalf. Do not make commitments or speak for the labor of the
-                  dev team. Guessing at how a mod or admin would respond to a
-                  given situation is a good way to start people speculating
-                  wildly about mods intentions and trying to interpret the
-                  meaning of things that we have not actually said. The mods can
-                  speak for themselves.
-                </p>
-              </li>
-              <li>
-                <p>
-                  Hexbear is an open-source project of volunteers. This means
-                  that development of new features and bug fixes happens
-                  gradually as folks find time to pitch in. If you feel strongly
-                  about prioritizing a feature or bug, please visit{" "}
-                  <a href="https://www.hexbear.net/c/hexbear" rel="nofollow">
-                    !hexbear
-                  </a>{" "}
-                  to learn how to get started with contributing to development.{" "}
-                </p>
-              </li>
-              <li>
-                <p>
-                  We are always looking for software feedback and suggestions,
-                  but please be courteous when doing so. Posts demanding new
-                  features or insulting the dev team for not building something
-                  &#34;fast enough&#34; will be removed and violates the Code of
-                  Conduct. We have zero tolerance for abusive behavior directed
-                  towards developers.
-                </p>
-              </li>
-            </ul>
-            <h2 id="user-content-moderation">Moderation</h2>
-            <hr />
             <p>
-              These are the policies for upholding our community&#39;s standards
-              of conduct. If you feel that a thread needs moderation, please
-              contact the Hexbear moderation team and/or report the content.
+                Don't debate people about masking/vaccines on Hexbear. Anti-vax or 
+                anti-mask attitudes are not welcome on Hexbear as the science on this 
+                is clear.  Staying aware of and protecting yourself and others from 
+                covid is an act of solidarity.
+            </p>
+            <hr>
+            <h4 id="user-content-veganism">Veganism:</h4>
+            <p>
+                Animal liberation is essential to any socialist movement. Users 
+                should not be anti-vegan, although we do not require users to be vegan.
+            </p>
+            <hr>
+            <h2 id="user-content-user-rules">Hexbear User Rules</h2>
+            <h4 id="user-content-users">Users:</h4>
+            <p>
+                A user is anyone who uses Hexbear. This includes everyone who 
+                signed up to Hexbear specifically, as well as users with additional 
+                permissions. Users with moderator permissions are referred to as mods. 
+                Users with administrator permissions are referred to as admins.
+            </p>
+            <hr>
+            <h3 id="user-content-hard-rules">Hard Rules</h3>
+            <p>
+                Users in violation of these rules shall be permanently banned 
+                without appeal. Mods in violation shall be immediately stripped of 
+                moderator privileges and permanently banned without appeal. Admin in 
+                violation shall be subject to the Hexbear administrator succession plan.
             </p>
             <ol>
-              <li>
-                {" "}
-                Remarks that violate the Hexbear standards of conduct, including
-                hateful, hurtful, oppressive, or exclusionary remarks, are not
-                allowed.
-              </li>
-              <li>
-                {" "}
-                Remarks that moderators find inappropriate, whether listed in
-                the code of conduct or not, are also not allowed.
-              </li>
-              <li>
-                {" "}
-                Moderators may first respond to such remarks by removing the
-                offending content. If the content is bad enough, the moderate
-                might immediately ban.
-              </li>
-              <li> If the warning is unheeded, the user may be banned. </li>
-              <li>
-                For bans and content removal, a mod may optionally leave a
-                reasoning for why in the mod log. This is encouraged, but not
-                required, particularly during spam brigades.
-              </li>
-              <li>
-                {" "}
-                If the user comes back under a new account and continues to make
-                trouble, they will be banned.
-              </li>
-              <li>
-                {" "}
-                Moderators may choose at their discretion to un-ban the user if
-                it was a first offense and they offer the offended party a
-                genuine apology.
-              </li>
-              <li>
-                {" "}
-                Complaints about bans at the comm level are not allowed.
-              </li>
-              <li>
-                {" "}
-                Moderators are held to a higher standard than other community
-                members. If a moderator creates an inappropriate situation, they
-                should expect less leeway than others.
-              </li>
-              <li>
-                {" "}
-                Egregious violations of our code of conduct or terms of service
-                will result in an immediate ban.
-              </li>
-              <li>
-                Moderators of individual communities may have further rules in
-                addition to this code of conduct. If those rules are more
-                restrictive, they should be respected in that comm and its mods
-                have every right to enforce them.
-              </li>
+                <li>
+                    Usernames or posts/comments containing extreme transphobia, 
+                    homophobia, sexism, racism, ableism, zionism, anti-veganism, or 
+                    trivializing and downplaying COVID. This includes satire or parody 
+                    accounts that ironically use bigotry rather than "punch up" to power.
+                </li>
+                <li>
+                    Posting information that could reveal the personal identity of any 
+                    user, mod, or admin. Personally identifiable information includes 
+                    address, legal name(s), specific current location. Users won't be 
+                    banned for naming their home country, state/province, or age but 
+                    should consider not doing so.
+                </li>
+                <li>
+                    Do not make yourself or Hexbear a target for law enforcement. No 
+                    direct calls to violence, or expressions of violence, towards users, 
+                    or specific identifiable living individuals. This applies to specific
+                    identifiable organizations as well. Do not post anything illegal
+                    under local or international law. Do not encourage others to break 
+                    the law. Do not plan or confess to crimes online.
+                </li>
             </ol>
-            <h3 id="user-content-tips-for-how-to-respond-to-moderation">
-              Tips for how to respond to moderation
-            </h3>
+            <hr>
+            <h3 id="user-content-hard-rules">Soft(er) Rules</h3>
             <p>
-              If a mod has to take action on your post or comment, take their
-              advice, quit doing the thing, and get on with your life. Do not:
+                Users in in violation of these rules shall be subject to the Hexbear 
+                moderator escalation plan. Users may appeal moderator actions in c/hexbear.
+            </p>
+            <ol start=4>
+                <li>
+                    Usernames or posts/comments containing transphobia, homophobia, 
+                    sexism, racism, ableism, zionism, anti-veganism, or trivializing 
+                    COVID. No self-described or obvious fascists, conservatives, or 
+                    reactionaries.
+                </li>
+                <li>
+                    No public or private harassment, insulting, or demeaning of users.
+                </li>
+                <li>
+                    Use content warnings to address problematic content &amp; animal 
+                    products.
+                </li>
+                <li>
+                    Respect proper requests for disengagement.
+                </li>
+                <li>
+                    No sectarianism, also when engaging with your fellow users please 
+                    take the most charitable interpretation and assume good faith.
+                </li>
+                <li>
+                    Try to post content in the proper community.
+                </li>
+                <li>
+                    Do not post about an active mental-health or medical crisis.
+                </li>
+                <li>
+                    Mods and Admins are to abide by the Moderation Escalation Plan.
+                </li>
+                <li>
+                    No body shaming or lookism, regardless of the target.
+                </li>
+                <li>
+                    Doctored images, fake social media posts, generated content, 
+                    and satire/parody that appears real should be clearly marked as 
+                    fake and/or posted in the designated communities.
+                </li>
+            </ol>
+            <hr>
+            <h3 id="user-content-content-warnings">Content Warnings</h3>
+            <p>
+                A content warning must be placed at the beginning of a post title 
+                or directly before the following topics or depictions:
             </p>
             <ul>
-              <li>
-                Carry on doing the same thing but in a slightly different way
-                and then complain about how the rules aren&#39;t specific
-                enough;
-              </li>
-              <li>
-                Prattle on endlessly to other users about The Injustice Of It
-                All;
-              </li>
-              <li>
-                Grumble passive-aggressively about how you&#39;re no longer
-                allowed to send people vore in the megathread;
-              </li>
-              <li>
-                Try to rope the mod into a lengthy discussion about your
-                interpretation of the rules, or how RandomUser once did the same
-                thing that SomeGuy&#39;s done twenty times and RandomUser never
-                got banned for it but they banned SomeGuy after the 19th time,
-                etc;
-              </li>
-              <li>
-                Something to remember: the full details of mod interventions are
-                often not public information, and in the above scenario,
-                it&#39;s extremely unlikely you would have known whether or not
-                RandomUser was banned for the reason you think either way. We
-                try to give as much context as possible in the mod log, but
-                it&#39;s not always possible.
-              </li>
-              <li>
-                Mods are not obligated to justify bans and build a
-                &#34;case&#34; explaining the reasoning for a ban.
-              </li>
+                <li>Self-Harm including medically assisted procedures</li>
+                <li>Suicide/Suicidal Ideation</li>
+                <li>Violence towards humans or animals including corpses or gore. 
+                    This includes animal corpses used as food, animal products, 
+                    and animal abuse.</li>
+                <li>Traumatic societal harms such as Transphobia, Sexism, Gender 
+                    Oppression, Fatphobia, Lookism, Sanism, Ableism, Racism, 
+                    Ageism and other bigotry.</li>
+                <li>Weight, Eating Disorders, Calories, Ableist Slurs, Abortion, 
+                    Sexual Assault, Sexual Violence, Police Brutality, Ethnic 
+                    Cleansing and Genocide, etc.</li>
+                <li>Epilepsy and Flashing Lights</li>
             </ul>
             <p>
-              In the Hexbear community we strive to go the extra step to look
-              out for each other. Don&#39;t just aim to be technically
-              unimpeachable, try to be your best self. In particular, avoid
-              flirting with offensive or sensitive issues, particularly if
-              they&#39;re off-topic; this all too often leads to unnecessary
-              fights, hurt feelings, and damaged trust; worse, it can drive
-              people away from the community entirely.
+                Triggering content should be placed inside a spoiler tag. Post 
+                images that depict triggering content should be marked NSFW. 
+                Post titles should contain warnings at the beginning. Use 
+                established abbreviations where possible.
             </p>
             <p>
-              If someone takes issue with something you said or did, resist the
-              urge to be defensive. Just stop doing what it was they complained
-              about and apologize. Even if you feel you were misinterpreted or
-              unfairly accused, chances are good there was something you
-              could&#39;ve communicated better --- remember that it&#39;s your
-              responsibility to make others comfortable. Everyone wants to get
-              along and we are all here first and foremost because we want to
-              shitpost in a leftist community. You will find that people will be
-              eager to assume good intent and forgive as long as you earn their
-              trust.
+                Here is a screenshot of where to find the spoiler button:
             </p>
-            <hr />
-            <h2 id="user-content-closing">Closing</h2>
+            <img src="https://hexbear.net/pictrs/image/a43eeab8-0036-4291-a6bb-ee0b896198c2.png">
+            
             <p>
-              The enforcement policies listed above apply to all official
-              Hexbear venues; including git repositories under{" "}
-              <a href="https://github.com/hexbear-collective" rel="nofollow">
-                our project
-              </a>{" "}
-              and all comms under{" "}
-              <a href="https://hexbear.net/" rel="nofollow">
-                Hexbear.net
-              </a>
-              . For other projects adopting the Rust Code of Conduct, please
-              contact the maintainers of those projects for enforcement. If you
-              wish to use this code of conduct for your own project, consider
-              explicitly mentioning your moderation policy or making a copy with
-              your own moderation policy so as to avoid confusion.
+                Failure to use content warnings properly can result in your post 
+                being removed and/or further moderator action.
+            </p>
+            <hr>
+            <h3 id="user-content-tone-indicators">Tone Indicators</h3>
+            <p>
+                Users should work to introduce the use of tone indicators into 
+                their posts and comments. Place tone indicators at the end of the 
+                relevant content.
             </p>
             <p>
-              Adapted from the{" "}
-              <a
-                href="https://www.rust-lang.org/policies/code-of-conduct"
-                rel="nofollow"
-              >
-                Rust Code of Conduct
-              </a>
-              , which is based on the{" "}
-              <a
-                href="http://blog.izs.me/post/30036893703/policy-on-trolling"
-                rel="nofollow"
-              >
-                Node.js Policy on Trolling
-              </a>{" "}
-              as well as the{" "}
-              <a
-                href="https://www.contributor-covenant.org/version/1/3/0/"
-                rel="nofollow"
-              >
-                Contributor Covenant v1.3.0
-              </a>
-              .
+                There is no punishment for failing to use tone indicators. 
+                However it is a helpful practice for neurodivergent comrades 
+                and overall communication on the site.
             </p>
             <p>
-              Hexbear reserves the right to update this Code of Conduct without
-              prior notification or warning at any time. For major changes, we
-              might post in announcements, but have no obligation to do so.
-              Users should check back periodically to remain familiar with
-              current conduct standards.
+                Some communities, like the ones that forbid low-quality posts, 
+                may enforce the use of tone indicators at the discretion of the 
+                respective moderator(s).
+            </p>
+            <hr>
+            <h3 id="user-content-disengage">Use of Disengage</h3>
+            <p>
+                Any user may disengage from any discussion by posting a two word,
+                 and only two word, reply: "I'm Disengaging". Stipulations:
+            </p>
+            <ul>
+                <li>Do not post a lengthy reply and then end it with "I'm 
+                disengaging."</li>
+                <li>Do not disengage yet continue to reply directly/indirectly to 
+                the user or about the user.</li>
+                <li>Do not complain when someone properly uses the feature on 
+                you.</li>
+                <li>Do not try to circumvent these restrictions by vague posting 
+                or bringing it up later in another thread.</li>
+                <li>Do not retroactively use disengage through editing posts or 
+                comments. Abusing disengage, failure to abide a proper 
+                disengagement, or circumventing the stipulations can result in 
+                moderator action.</li>
+            </ul>
+            <hr>
+            <h3 id="user-content-debate-sectarianism">Debate &amp; Sectarianism</h3>
+            <p>
+                We don't expect every user to be perfect on every issue, but users 
+                should work to meet these community guidelines.
+            </p>
+            <ul>
+                <li>Do not demean or harass others for caring about a topic or 
+                details of a topic more than you do.</li>
+                <li>Sectarianism is not tolerated.</li>
+                <li>Constructive engagement is more important than "dunking".</li>
+                <li>Users are allowed to ask good faith questions, however there 
+                is little tolerance for debate against the community statements.</li>
+                <li>Users must try and take the most charitable interpretation of 
+                fellow users.</li>
+                <li>Users unwilling to change their minds or accept the community 
+                statements will face moderator action.</li>
+                <li>Users unwilling to engage others in good faith or who are constantly overly antagonistic will be subject to moderator action.</li>
+            </ul>
+            <hr>
+            <h3 id="user-content-correct-comm">Posting in the Correct Community</h3>
+            <p>
+                Try not to post content for specific communities outside of the 
+                communities created for that content. Here is a non-exhaustive list:
+            </p>
+            <p><a href="https://www.hexbear.net/c/hexbear">c/hexbear</a>  
+                Non-technical suggestions for the site and moderator action appeals. 
+                Meta-posting about the site.</p>
+            <p><a href="https://www.hexbear.net/c/feedback">c/feedback</a> Technical 
+                bugs &amp; suggestions</p>
+            <p><a href="https://www.hexbear.net/c/fakenews">c/fakenews</a>  
+                Original satirical content, parody,  fake social media posts, or news 
+                headlines/articles</p>
+            <p><a href="https://www.hexbear.net/c/badposting">c/badposting</a> Low 
+                quality humor or memes. Posts centered around low effort topics or 
+                self-referential humor. Anything purposefully bad or immature.</p>
+            <p><a href="https://www.hexbear.net/c/slop">c/slop</a>  Dunking and 
+                criticism of social media posts.</p>
+            <p>
+                Individual communities often have rules that are more specific or 
+                differ from site-wide rules. Posting certain content outside of the 
+                intended comm can result in the post being removed.
+            </p>
+            <hr>
+            <h3 id="user-content-mental-medical">Mental-health or Medical Crises</h3>
+            <p>
+                Users are not equipped to provide care for mental-health crises 
+                nor medical emergencies.
             </p>
             <p>
-              That last paragraph just means we can update the code of conduct
-              and adapt as we go.
+                Users experiencing an active mental health crisis, are encouraged 
+                to use local resources and try to contact someone who can properly 
+                address your needs. Users having a medical emergency, should contact 
+                your local emergency services.
             </p>
+            <p>
+                Making posts on these issues can be harmful to yourself or other 
+                users and may be removed.
+            </p>
+            <hr>
+            <h3 id="user-content-moderation-escalation">Moderation Escalation Guidelines</h3>
+            <ol>
+                <li>The user will receive their first verbal warning.</li>
+                <li>The user will receive their second verbal warning, and may be 
+                    banned from the community for 1 day. </li>
+                <li>The user will receive their third verbal warning, may be banned 
+                    from the community for up to 1 week, and/or banned from the site 
+                    for 1 day.</li>
+                <li>The user will receive their final verbal warning, may be 
+                    permanently banned from the community, and/or banned from the site 
+                    for up to 1 week.</li>
+                <li>Permanent ban from the site.</li>
+            </ol>
+            <p>
+                Mods are required to maintain the modlog by properly citing the 
+                offending rule/guideline for every action, including previous mod 
+                actions when appropriate.
+            </p>
+            <p>
+                Failure to document results in the action being reversed to the 
+                previous level without prejudice. Continuous failure to document 
+                can result in censure.
+            </p>
+            <p>
+                The escalation plan can be expedited in cases of egregious violation. 
+                Mods have discretion on locking or removing posts/comments, as 
+                long as it's properly documented.
+            </p>
+            <hr>
+            <h3 id="user-content-moderation-appeals">Appeals on Moderation Actions</h3>
+            <p>
+                Users can appeal moderator actions in 
+                <a href="https://www.hexbear.net/c/hexbear">c/hexbear</a>
+            </p>
+            <p>
+                Please provide the link to the original thread or reply (if it 
+                hasn't been removed), as well as any communications you received 
+                from the moderator.
+            </p>
+            <p>
+                You can also post a screenshot from the modlog. The more context 
+                you provide, the easier it will be for someone to action your appeal.
+            </p>
+            <p>
+                Moderators will provide additional communications, modlog 
+                entries, and any discussion between moderators in response.
+            </p>
+            <p>
+                An admin will adjudicate the appeal as soon as one is available 
+                and lock posts that are resolved.  Intentionally abusing the appeal 
+                process will result in a permanent site ban.
+            </p>
+            <hr>
+            <h3 id="user-content-community-moderators">Community Moderators</h3>
+            <p>
+                Moderators have the ability to remove posts, remove comments, 
+                ban users from a community, pin your comments in a post (speak 
+                as moderator), pin posts in the community, lock posts in the 
+                community, and change the community name &amp; details.
+            </p>
+            <h4 id="user-content-mod-guidelines">Mod Guidelines:</h4>
+            <p>
+                Every moderator action that asks for a reason (remove comments/post 
+                and banning) must cite the relevant rule and verbal warnings are 
+                strongly encouraged.
+            </p>
+            <p>
+                In addition to acting on reports, please 
+                actively moderate posts in the community when you have time.
+            </p>
+            <p>
+                Make use of warnings, either as a response or a pinned comment, 
+                then remove comments/posts, escalate temp bans (1 day, 3 days, 
+                1 week) and in severe cases, permanently ban users.
+            </p>
+            <p>
+                When banning a user the purge/remove content option is to be used 
+                for doxxing or extreme images (CSAM, Gore Shock Images, etc.) only.
+            </p>
+            <p>
+                No matter the content, the remove content option is entirely, 
+                exclusively, ONLY for doxxing or extreme image and nothing else! 
+                Using the "remove content" option inappropriately when banning 
+                users will result in revoking of moderator privileges.
+            </p>
+            <p>
+                When you have questions about taking a moderator action please 
+                communicate them with your fellow moderators either through 
+                Hexbear direct messages or matrix.
+            </p>
+            <p>
+                Do not hesitate to let an admin know about a user who is 
+                breaking the Code of Conduct in an egregious manner.
+            </p>
+            <h4 id="user-content-act-the-part">Act the part:</h4>
+            <p>
+                Remember that people often assume all posts or comments from 
+                moderators are official communication.
+            </p>
+            <p>
+                Your normal, non-distinguished comments carry weight!
+            </p>
+            <p>
+                It is essential that community moderators recognize the weight 
+                their moderator privilege holds.
+            </p>
+            <p>
+                When you use your moderator account you are speaking on the 
+                site's behalf. What you say and the actions you take impact 
+                site culture and health.
+            </p>
+            <p>
+                Be serious, grounded,  disciplined in your community moderation 
+                and for any community changes, discussion must be before we 
+                implement change!
+            </p>
+            <hr>
+            <h2 id="user-content-final-notes">Final Notes:</h2>
+            <p>
+                We are a volunteer-run internet forum. We don't have many admins 
+                and act off of consensus.
+            </p>
+            
+            <h3 id="user-content-air-bud">"Spirit of the Rules" Principle</h3>
+            <p>
+                The given rules in the Code of Conduct are not meant to be an 
+                exhaustive list of items that trigger moderator action.
+            </p>
+            <p>
+                User posts are subject to removal and users are subject to 
+                moderator action outside of the enumerated rules or guidelines.
+            </p>
+            
           </div>
           <hr />
           <div className="ui " style="margin-top: 1rem;">
@@ -531,7 +442,7 @@ export class CodeOfConduct extends Component<any, any> {
               <h2>
                 <strong>Security Statement AKA Warrant Canary</strong>
               </h2>
-              <p>Last Updated: Nov 1st, 2025</p>
+              <p>Last Updated: Nov 8th, 2025</p>
               <p>
                 This warrant canary will be updated periodically. Previous
                 versions can be viewed in the page revisions.{" "}
@@ -561,14 +472,6 @@ export class CodeOfConduct extends Component<any, any> {
                 paragraph between updates to this statement.{" "}
               </p>
               <hr />
-              <p>
-                Note: The original version of this statement can be found in the
-                Hexbear Privacy Policy. It contains a date error on it from when
-                the site&#39;s name changed, which we have corrected. We&#39;ve
-                switched to hosting this statement on our git&#39;s wiki so that
-                it can be updated more easily without having to push code to
-                production.
-              </p>
             </div>
           </div>
         </div>
