@@ -16,9 +16,6 @@ export class CodeOfConduct extends Component<any, any> {
       <div className="mx-5">
         <div className="ui " style="margin-top: 1rem;">
           <div className="ui  segment markdown">
-      <div className="mx-5">
-        <div className="ui " style="margin-top: 1rem;">
-          <div className="ui  segment markdown">
             <h1 id="user-content-code-of-conduct">Hexbear Code of Conduct</h1>
             <p>Last updated: November 7, 2025</p>
             <hr />
@@ -29,7 +26,7 @@ export class CodeOfConduct extends Component<any, any> {
                 sexual orientation, disability, personal appearance, body size, race, 
                 ethnicity, age, religion, nationality, or other similar characteristic.
             </p>    
-            <hr>
+            <hr />
             <h4 id="user-content-palestine">Palestine, and zionism:</h4>
             <p>
                 "Israel", the zionist entity, is an explicitly settler-colonial 
@@ -45,7 +42,7 @@ export class CodeOfConduct extends Component<any, any> {
                 To help maintain support domestically and abroad, the entity falsely 
                 claims to represent and protect all Jews.
             </p>
-            <hr>
+            <hr />
             <h4 id="user-content-imperialism">Anti-Imperalism, AES, and Critical Support:</h4>
             <p>
                 We generally oppose wars supported by the so-called "west", because 
@@ -63,7 +60,7 @@ export class CodeOfConduct extends Component<any, any> {
                 looks like in theory.  We recognize that socialism is a process, not 
                 a destination.
             </p>
-            <hr>
+            <hr />
             <h4 id="user-content-covid">COVID:</h4>
             <p>
                 Considering immunocompromized or otherwise vulnerable comrades 
@@ -79,13 +76,13 @@ export class CodeOfConduct extends Component<any, any> {
                 is clear.  Staying aware of and protecting yourself and others from 
                 covid is an act of solidarity.
             </p>
-            <hr>
+            <hr />
             <h4 id="user-content-veganism">Veganism:</h4>
             <p>
                 Animal liberation is essential to any socialist movement. Users 
                 should not be anti-vegan, although we do not require users to be vegan.
             </p>
-            <hr>
+            <hr />
             <h2 id="user-content-user-rules">Hexbear User Rules</h2>
             <h4 id="user-content-users">Users:</h4>
             <p>
@@ -94,7 +91,7 @@ export class CodeOfConduct extends Component<any, any> {
                 permissions. Users with moderator permissions are referred to as mods. 
                 Users with administrator permissions are referred to as admins.
             </p>
-            <hr>
+            <hr />
             <h3 id="user-content-hard-rules">Hard Rules</h3>
             <p>
                 Users in violation of these rules shall be permanently banned 
@@ -125,13 +122,13 @@ export class CodeOfConduct extends Component<any, any> {
                     the law. Do not plan or confess to crimes online.
                 </li>
             </ol>
-            <hr>
+            <hr />
             <h3 id="user-content-hard-rules">Soft(er) Rules</h3>
             <p>
                 Users in in violation of these rules shall be subject to the Hexbear 
                 moderator escalation plan. Users may appeal moderator actions in c/hexbear.
             </p>
-            <ol start=4>
+            <ol start="4">
                 <li>
                     Usernames or posts/comments containing transphobia, homophobia, 
                     sexism, racism, ableism, zionism, anti-veganism, or trivializing 
@@ -170,7 +167,7 @@ export class CodeOfConduct extends Component<any, any> {
                     fake and/or posted in the designated communities.
                 </li>
             </ol>
-            <hr>
+            <hr />
             <h3 id="user-content-content-warnings">Content Warnings</h3>
             <p>
                 A content warning must be placed at the beginning of a post title 
@@ -199,13 +196,13 @@ export class CodeOfConduct extends Component<any, any> {
             <p>
                 Here is a screenshot of where to find the spoiler button:
             </p>
-            <img src="https://hexbear.net/pictrs/image/a43eeab8-0036-4291-a6bb-ee0b896198c2.png">
+            <img src="https://hexbear.net/pictrs/image/a43eeab8-0036-4291-a6bb-ee0b896198c2.png"/>
             
             <p>
                 Failure to use content warnings properly can result in your post 
                 being removed and/or further moderator action.
             </p>
-            <hr>
+            <hr />
             <h3 id="user-content-tone-indicators">Tone Indicators</h3>
             <p>
                 Users should work to introduce the use of tone indicators into 
@@ -222,7 +219,7 @@ export class CodeOfConduct extends Component<any, any> {
                 may enforce the use of tone indicators at the discretion of the 
                 respective moderator(s).
             </p>
-            <hr>
+            <hr />
             <h3 id="user-content-disengage">Use of Disengage</h3>
             <p>
                 Any user may disengage from any discussion by posting a two word,
@@ -242,7 +239,7 @@ export class CodeOfConduct extends Component<any, any> {
                 disengagement, or circumventing the stipulations can result in 
                 moderator action.</li>
             </ul>
-            <hr>
+            <hr />
             <h3 id="user-content-debate-sectarianism">Debate &amp; Sectarianism</h3>
             <p>
                 We don't expect every user to be perfect on every issue, but users 
@@ -261,7 +258,7 @@ export class CodeOfConduct extends Component<any, any> {
                 statements will face moderator action.</li>
                 <li>Users unwilling to engage others in good faith or who are constantly overly antagonistic will be subject to moderator action.</li>
             </ul>
-            <hr>
+            <hr />
             <h3 id="user-content-correct-comm">Posting in the Correct Community</h3>
             <p>
                 Try not to post content for specific communities outside of the 
@@ -285,7 +282,7 @@ export class CodeOfConduct extends Component<any, any> {
                 differ from site-wide rules. Posting certain content outside of the 
                 intended comm can result in the post being removed.
             </p>
-            <hr>
+            <hr />
             <h3 id="user-content-mental-medical">Mental-health or Medical Crises</h3>
             <p>
                 Users are not equipped to provide care for mental-health crises 
@@ -301,7 +298,7 @@ export class CodeOfConduct extends Component<any, any> {
                 Making posts on these issues can be harmful to yourself or other 
                 users and may be removed.
             </p>
-            <hr>
+            <hr />
             <h3 id="user-content-moderation-escalation">Moderation Escalation Guidelines</h3>
             <ol>
                 <li>The user will receive their first verbal warning.</li>
@@ -330,7 +327,7 @@ export class CodeOfConduct extends Component<any, any> {
                 Mods have discretion on locking or removing posts/comments, as 
                 long as it's properly documented.
             </p>
-            <hr>
+            <hr />
             <h3 id="user-content-moderation-appeals">Appeals on Moderation Actions</h3>
             <p>
                 Users can appeal moderator actions in 
@@ -354,7 +351,7 @@ export class CodeOfConduct extends Component<any, any> {
                 and lock posts that are resolved.  Intentionally abusing the appeal 
                 process will result in a permanent site ban.
             </p>
-            <hr>
+            <hr />
             <h3 id="user-content-community-moderators">Community Moderators</h3>
             <p>
                 Moderators have the ability to remove posts, remove comments, 
@@ -418,7 +415,7 @@ export class CodeOfConduct extends Component<any, any> {
                 and for any community changes, discussion must be before we 
                 implement change!
             </p>
-            <hr>
+            <hr />
             <h2 id="user-content-final-notes">Final Notes:</h2>
             <p>
                 We are a volunteer-run internet forum. We don't have many admins 
