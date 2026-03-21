@@ -439,7 +439,7 @@ export class CodeOfConduct extends Component<any, any> {
               <h2>
                 <strong>Security Statement AKA Warrant Canary</strong>
               </h2>
-              <p>Last Updated: Nov 8th, 2025</p>
+              <p>Last Updated: Mar 20th, 2026</p>
               <p>
                 This warrant canary will be updated periodically. Previous
                 versions can be viewed in the page revisions.{" "}
