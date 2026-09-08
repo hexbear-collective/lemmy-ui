@@ -146,8 +146,7 @@ export class CodeOfConduct extends Component<any, any> {
                     Respect proper requests for disengagement.
                 </li>
                 <li>
-                    No sectarianism, also when engaging with your fellow users please 
-                    take the most charitable interpretation and assume good faith.
+                    No sectarianism. 
                 </li>
                 <li>
                     Try to post content in the proper community.
@@ -166,6 +165,10 @@ export class CodeOfConduct extends Component<any, any> {
                     and satire/parody that appears real should be clearly marked as 
                     fake and/or posted in the designated communities.
                 </li>
+		<li>
+		    Also, when engaging with your fellow users please 
+                    take the most charitable interpretation and assume good faith.
+	        </li>
             </ol>
             <hr />
             <h3 id="user-content-content-warnings">Content Warnings</h3>
@@ -439,7 +442,7 @@ export class CodeOfConduct extends Component<any, any> {
               <h2>
                 <strong>Security Statement AKA Warrant Canary</strong>
               </h2>
-              <p>Last Updated: June 10th, 2026</p>
+              <p>Last Updated: September 8th, 2026</p>
               <p>
                 This warrant canary will be updated periodically. Previous
                 versions can be viewed in the page revisions.{" "}
